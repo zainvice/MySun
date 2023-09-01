@@ -1,0 +1,20 @@
+/* Your initial styles for larger screens */
+.absolute.bg-black.bg-opacity-90.p-4.rounded-3xl.shadow-lg.sm\:w-96 {
+    /* Your initial styles here */
+  }
+  
+  /* Media query for screens smaller than 768px (typical mobile devices) */
+  @media (max-width: 768px) {
+    .absolute.bg-black.bg-opacity-90.p-4.rounded-3xl.shadow-lg.sm\:w-96 {
+      /* Styles for screens smaller than 768px */
+      width: 80%; /* Adjust as needed */
+      padding: 2rem; /* Adjust as needed */
+    }
+    
+    /* You can also modify individual elements within this media query */
+    .absolute.bg-black.bg-opacity-90.p-4.rounded-3xl.shadow-lg.sm\:w-96 input[type="email"],
+    .absolute.bg-black.bg-opacity-90.p-4.rounded-3xl.shadow-lg.sm\:w-96 input[type="password"] {
+      width: 80%; /* Adjust as needed */
+    }
+  }
+  

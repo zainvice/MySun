@@ -1,11 +1,30 @@
 /** @type {import('tailwindcss').Config} */
-module.exports = {
-  content: [
-    "./src/**/*.{js,jsx,ts,tsx}",
-  ],
-  theme: {
-    extend: {},
-  },
-  plugins: [],
-}
 
+export const content = [
+  "./src/**/*.{js,jsx,ts,tsx}",
+];
+export const theme = {
+  extend: {
+    spacing: {
+      '14': '3.5rem',
+    },
+    width: {
+      '64': '16rem',
+      '96': '24rem',
+    },
+    height: {
+      'custom': '32rem',
+    },
+    fontSize: {
+      '18': '1.125rem',
+    },
+    textColor: {
+      'custom': '#21D0B2',
+    },
+    borderColor: {
+      'custom': '#21D0B2',
+    },
+  },
+};
+export const variants = {};
+export const plugins = [];
