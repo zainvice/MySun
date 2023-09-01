@@ -1,14 +1,16 @@
 import "./index.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Login from "./Components/Login";
-import ForgotPassword from "./Components/ForgotPassword";
+import Login from "./pages/login";
+import ForgotPassword from "./pages/forgetPassword";
+import Dashboard from "./pages/admin/dashboard";
 function App() {
   return (
     <div className="App">
       <Router>
         <Routes>
           <Route path="/" element={<Login />} />
-          <Route path="/ForgotPassword" element={<ForgotPassword />} />
+          <Route path="/forgetpassword" element={<ForgotPassword />} />
+          <Route path="/dashboard" element={<Dashboard />} />
         </Routes>
       </Router>
     </div>
