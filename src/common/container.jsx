@@ -10,7 +10,7 @@ function Container({ children, showMoreButton }) {
     >
       {children}
       {showMore && (
-        <div className="w-full h-60 bg-gradient-to-t from-white from-35% absolute bottom-0 left-0 p-4 z-50">
+        <div className="w-full h-60 bg-gradient-to-t from-white from-35% absolute bottom-0 left-0 p-4 z-10">
           <button className="w-full " onClick={() => setShowMore(false)}>
             <span className="material-symbols-outlined mt-16 text-6xl font-semibold text-[#848484] animate-bounce">
               stat_minus_1
