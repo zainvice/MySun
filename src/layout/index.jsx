@@ -10,7 +10,9 @@ function Layout({ children }) {
       <Sidebar isSidebarOpen={isSidebarOpen} onSidebarClose={toggleSidebar} />
       <div className="flex-1">
         <Header onSidebarOpen={toggleSidebar} />
-        {children}
+        <div className="h-[calc(100vh-62px)] md:h-[calc(100vh-86px)] sm:h-[calc(100vh-68px)] overflow-auto p-2 sm:p-5">
+          {children}
+        </div>
       </div>
     </div>
   );

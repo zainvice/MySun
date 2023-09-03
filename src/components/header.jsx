@@ -4,7 +4,7 @@ function Header({onSidebarOpen}) {
   return (
     <div className="flex items-center w-full shadow-md p-2 sm:p-5">
       <div className="lg:hidden">
-        <button className="p-2" onClick={onSidebarOpen}>
+        <button className="p-2 flex items-center" onClick={onSidebarOpen}>
           <span className="material-symbols-outlined text-[#505050]">menu</span>
         </button>
       </div>
