@@ -2,7 +2,7 @@ import { Link, NavLink } from "react-router-dom";
 
 function Sidebar({isSidebarOpen, onSidebarClose}) {
   return (
-    <div className={`w-64 lg:w-28 h-screen bg-[#2D3037] flex flex-col items-center justify-start px-4 py-4 z-50 lg:z-auto absolute lg:relative ${isSidebarOpen ? 'translate-x-0': '-translate-x-full'} lg:translate-x-0 transition-transform duration-500`}>
+    <div className={`w-64 lg:w-28 h-screen bg-[#2D3037] flex flex-col items-center justify-start px-4 py-4 z-[1000] lg:z-auto absolute lg:relative ${isSidebarOpen ? 'translate-x-0': '-translate-x-full'} lg:translate-x-0 transition-transform duration-500`}>
       
       <div className="lg:hidden absolute right-2 top-2 ">
         <button className="p-2" onClick={onSidebarClose}>
