@@ -29,8 +29,8 @@ function TaskCard({ variant }) {
       <div className="mt-2 w-full">
         <p className="line-clamp-2 mb-2">Some description of project</p>
         <div className="relative h-7 rounded-full flex justify-center items-center text-sm text-[#00FFD3] bg-[#505050]">
-          <div className="absolute top-0 -left-[2px] rounded-full border-white h-full w-[100px] bg-white" />
-          <span className="z-10">75% Completed</span>
+          <div className="absolute top-0 -left-[2px] rounded-full border-white h-full w-[75%] bg-white" />
+          <span className="z-[1]">75% Completed</span>
         </div>
       </div>
       <div className="mt-3 text-sm">
