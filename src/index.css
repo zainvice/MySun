@@ -29,8 +29,12 @@ body {
 }
 
 input[type="date"]:not(.has-value)::before {
-  color: #adadad;
+  color: white;
   content: attr(placeholder);
+}
+
+input[type="date"]:not(.white-placeholder)::before{
+  color: #adadad;
 }
 
 input[type="date"]:in-range::-webkit-datetime-edit-year-field,

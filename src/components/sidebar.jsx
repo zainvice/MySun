@@ -1,4 +1,5 @@
 import { Link, NavLink } from "react-router-dom";
+import { publicUrl } from "../utils";
 
 function Sidebar({isSidebarOpen, onSidebarClose}) {
   return (
@@ -13,7 +14,7 @@ function Sidebar({isSidebarOpen, onSidebarClose}) {
       {/* Logo */}
       <Link to={"/dashboard"}>
         <img
-          src={"./images/logo1.png"}
+          src={`${publicUrl}/images/logo1.png`}
           alt="logo"
           className="lg:w-20 lg:14 w-18 h-12"
         />
@@ -21,28 +22,28 @@ function Sidebar({isSidebarOpen, onSidebarClose}) {
 
       <div className="mt-16 flex flex-col">
         <NavLink
-          to={"new-project"}
+          to={"/new-project"}
           className={"flex items-center gap-2 text-[#9DABA8] mb-6 lg:mb-12"}
         >
           <span className="material-symbols-outlined  text-2xl border-2 border-[#9DABA8] w-[28px] h-[28px] flex justify-center items-center rounded-full">add</span>
           <span className="inline-block lg:hidden text-lg">Create New</span>
         </NavLink>
         <NavLink
-          to={"new-project"}
+          to={"/dashboard"}
           className={"flex items-center gap-2 text-[#9DABA8] mb-6"}
         >
           <span className="material-symbols-outlined  text-2xl sm:text-3xl">dashboard</span>
           <span className="inline-block lg:hidden text-lg">Dashboard</span>
         </NavLink>
         <NavLink
-          to={"new-project"}
+          to={"/manage-projects"}
           className={"flex items-center gap-2 text-[#9DABA8] mb-6"}
         >
           <span className="material-symbols-outlined text-2xl sm:text-3xl">work</span>
           <span className="inline-block lg:hidden text-lg">Projects</span>
         </NavLink>
         <NavLink
-          to={"new-project"}
+          to={"/workers"}
           className={"flex items-center gap-2 text-[#9DABA8] mb-6"}
         >
           <span className="material-symbols-outlined text-2xl sm:text-3xl">person_pin</span>

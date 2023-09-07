@@ -1,11 +1,11 @@
 import { useState } from "react";
+import { useModal } from "../../hooks";
 import Layout from "../../layout";
 import Container from "../../common/container";
 import Heading from "../../common/heading";
 import DateInput from "../../common/dateInput";
 import Button from "../../common/button";
 import Modal from "../../common/modal";
-import { useModal } from "../../hooks/useModal";
 import WorkerOverlay from "../../components/workerOverlay";
 
 function NewProject() {
@@ -110,7 +110,7 @@ function NewProject() {
                       className="material-symbols-outlined w-10 h-12 animate-bounce"
                       src="./images/uploadFile.png"
                     />
-                    <p>Choose any excel file ( .xls ) </p>
+                    <p>Choose file to upload </p>
                   </div>
                 </label>
 

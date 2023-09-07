@@ -1,9 +1,9 @@
-import { isEven } from "../../utils";
-import Layout from "../../layout";
-import Heading from "../../common/heading";
-import Button from "../../common/button";
-import Container from "../../common/container";
-import TaskCard, { VARIANTS } from "../../components/taskCard";
+import { isEven } from "../../../utils";
+import Layout from "../../../layout";
+import Heading from "../../../common/heading";
+import Button from "../../../common/button";
+import Container from "../../../common/container";
+import TaskCard, { VARIANTS } from "../../../components/taskCard";
 
 function ManageProjects() {
   return (

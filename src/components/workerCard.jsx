@@ -1,10 +1,10 @@
-import React from "react";
+import { publicUrl } from "../utils";
 
 function WorkerCard() {
   return (
     <div className="w-full p-4 sm:p-6 rounded-3xl text-white shadow-lg bg-gradient-to-b from-[#00FFD3] from-60% to-[#37C19F]">
       <div className="flex items-center gap-4">
-        <img src="./images/avatarMale.png" />
+        <img src={`${publicUrl}/images/avatarMale.png`} />
         <div>
           <h2 className="font-semibold text-2xl line-clamp-1">
             Muhammad Faizan

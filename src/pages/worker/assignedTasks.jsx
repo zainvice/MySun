@@ -2,7 +2,7 @@ import React from "react";
 import Container from "../../common/container";
 import Layout from "../../layout";
 import Heading from "../../common/heading";
-import TaskCard, { VARIANTS, TITLE } from "../../components/taskCard";
+import TaskCard, { VARIANTS } from "../../components/taskCard";
 import { isEven } from "../../utils";
 
 function AssignedTasks() {
