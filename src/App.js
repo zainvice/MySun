@@ -8,6 +8,9 @@ import NewProject from "./pages/admin/newProject";
 import Workers from "./pages/admin/workers";
 import AssignedTasks from "./pages/worker/assignedTasks";
 import Project from "./pages/admin/manageProjects/[id]";
+import OTP from "./pages/otp";
+import Password from "./pages/password";
+import NewWorker from "./pages/admin/newWorker";
 
 function App() {
   return (
@@ -21,6 +24,9 @@ function App() {
           <Route path="/manage-projects/:id" element={<Project />} />
           <Route path="/new-project" element={<NewProject />} />
           <Route path="/workers" element={<Workers />} />
+          <Route path="/otp" element={<OTP />} />
+          <Route path="/password" element={<Password />} />
+          <Route path="/new-worker" element={<NewWorker />} />
           <Route path="/assigned-tasks" element={<AssignedTasks />} />
         </Routes>
       </Router>
