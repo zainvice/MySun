@@ -4,7 +4,7 @@ function Container({ children, showMoreButton }) {
   const [showMore, setShowMore] = useState(showMoreButton);
   return (
     <div
-      className={`h-[calc(100vh-62px)] md:h-[calc(100vh-86px)] lg:h-[calc(100vh-68px)] p-2 sm:p-5 relative ${
+      className={`w-full h-[calc(100vh-62px)] md:h-[calc(100vh-86px)] lg:h-[calc(100vh-68px)] p-2 sm:p-5 relative ${
         showMore ? "overflow-hidden" : "overflow-auto"
       }`}
     >

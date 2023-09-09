@@ -1,0 +1,20 @@
+label .w-8.h-8 {
+    background-color: white;
+    transition: background-color 0.3s;
+    cursor: pointer;
+  }
+  
+  /* Style for the custom checkbox image */
+  label .w-4.h-4 img {
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  
+  /* Show the white tickmark and change background when the checkbox is checked */
+  label input:checked + .w-8.h-8 {
+    background-color: black;
+  }
+  
+  label input:checked + .w-8.h-8 img {
+    opacity: 1;
+  }
