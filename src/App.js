@@ -10,7 +10,7 @@ import AssignedTasks from "./pages/worker/assignedTasks";
 import Project from "./pages/admin/manageProjects/[id]";
 import OTP from "./pages/otp";
 import Password from "./pages/password";
-import NewWorker from "./pages/admin/newWorker";
+// import NewWorker from "./pages/admin/newWorker";
 import NewTaskAssigned from "./pages/worker/newTaskAssigned";
 
 function App() {
@@ -27,7 +27,6 @@ function App() {
           <Route path="/workers" element={<Workers />} />
           <Route path="/otp" element={<OTP />} />
           <Route path="/password" element={<Password />} />
-          <Route path="/new-worker" element={<NewWorker />} />
           <Route path="/assigned-tasks" element={<AssignedTasks />} />
           <Route path="/new-task-assigned" element={<NewTaskAssigned/>} />
 
