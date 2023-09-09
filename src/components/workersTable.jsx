@@ -1,48 +1,41 @@
 import React from "react";
 
-const WorkersTable = () => {
+function WorkersTable() {
   return (
-    <div className="p-8">
-      <table className="w-full">
-        <thead>
+    <div className="w-full overflow-auto">
+      <table className="w-full border-separate border-spacing-y-3">
+        <thead className="align-top">
           <tr>
-            <th className="p-2 text-xl">Name</th>
-            <th className="p-2 text-xl">Email</th>
-            <th className="p-2 text-xl">Role</th>
-            <th className="p-2 text-xl">
+            <th className="min-w-[160px]">Name</th>
+            <th className="min-w-[160px]">Email</th>
+            <th className="min-w-[160px]">Role</th>
+            <th className="min-w-[200px]">
               Permissions
-              <div className="space-x-4 text-sm sm:space-x-16 xs:space-x-1">
-                <span>
-                  <label> Edit</label>
-                </span>
-                <span>
-                  <label>Download</label>
-                </span>
-                <span>
-                  <label>Share</label>
-                </span>
+              <div className="grid grid-cols-3 mt-2">
+                <span>Edit</span>
+                <span>Download</span>
+                <span>Share</span>
               </div>
             </th>
           </tr>
         </thead>
-        <tbody className=" bg-gray-200 rounded-3xl">
-          {/* Here, you can map through your data and render rows */}
-          {/* For each data row, create a single row for the entire data */}
-          <tr className="text-center h-auto p-2 text-lg">
-            <td className="rounded-l-3xl">Muskan</td>
-            <td>Muskan@gmail.com</td>
-            <td>Admin</td>
-            <td className="p-2 text-center rounded-r-3xl sm:space-x-24 xs:space-x-8">
-              <input type="checkbox" className="ml-2" />
-              <input type="checkbox" className="ml-2" />
-              <input type="checkbox" className="ml-2 " />
+        <tbody className="mt-4">
+          <tr className="bg-[#E7E7E7]  overflow-hidden text-center">
+            <td className="py-2 px-3 rounded-l-full">Muhammad Faizan</td>
+            <td>muhammadfaizan027915@gmail.com</td>
+            <td>Software Engineer</td>
+            <td className="rounded-r-full">
+              <div className="grid grid-cols-3">
+                <input type="checkbox" />
+                <input type="checkbox" />
+                <input type="checkbox" />
+              </div>
             </td>
           </tr>
-          {/* Repeat the above row structure for other data */}
         </tbody>
       </table>
     </div>
   );
-};
+}
 
 export default WorkersTable;

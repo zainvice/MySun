@@ -18,12 +18,17 @@ export const theme = {
     fontSize: {
       '18': '1.125rem',
     },
+    screen:{
+      'xs':'280',
+      'xsm':'400',
+    },
     textColor: {
       'custom': '#21D0B2',
     },
     borderColor: {
       'custom': '#21D0B2',
     },
+    
   },
 };
 export const variants = {};

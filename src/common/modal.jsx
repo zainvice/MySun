@@ -1,7 +1,6 @@
 import React from "react";
 
 function Modal({ children, isOpen, onClose }) {
-  // document.body.style.overflow = 'hidden'
   return (
     <>
       {isOpen && (

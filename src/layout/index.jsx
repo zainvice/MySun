@@ -8,9 +8,9 @@ function Layout({ children }) {
   return (
     <div className="flex">
       <Sidebar isSidebarOpen={isSidebarOpen} onSidebarClose={toggleSidebar} />
-      <div className="flex-1">
+      <div className="flex-1 w-screen lg:w-[calc(100vw-112px)]">
         <Header onSidebarOpen={toggleSidebar} />
-          {children}
+        {children}
       </div>
     </div>
   );
