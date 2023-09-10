@@ -228,6 +228,9 @@ function Project() {
             </p>
           </div>
         </div>
+          <div className="flex justify-end">
+            <Button title={'Export to Excel <span class="material-symbols-outlined">chevron_right</span>'} titleClasses={'flex items-center'}/>
+          </div>
       </Container>
     </Layout>
   );
