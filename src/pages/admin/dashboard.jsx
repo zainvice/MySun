@@ -9,7 +9,13 @@ function Dashboard() {
   return (
     <Layout>
       <Container>
-        <Heading title={"Recent Updates"} additionalClases={"mb-2"} />
+        <div className="flex justify-between mb-2">
+        <Heading title={"Recent Updates"} />
+
+        <select className="border-2 border-[#00FFD3] text-[#00FFD3] p-2 rounded-full focus-within:outline-none">
+          <option>showing for today</option>
+        </select>
+        </div>
         <div className="flex flex-col sm:flex-row gap-4 sm:gap-6">
           <div className="sm:w-1/2 md:min-w-[340px] md:w-1/3">
             <TaskCard variant={VARIANTS.GREEN} />
