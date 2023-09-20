@@ -1,6 +1,6 @@
 import React from "react";
 
-function WorkersTable() {
+function WorkersTable({ workers }) {
   return (
     <div className="w-full overflow-auto">
       <table className="w-full border-separate border-spacing-y-3">
@@ -20,18 +20,21 @@ function WorkersTable() {
           </tr>
         </thead>
         <tbody className="mt-4">
-          <tr className="bg-[#E7E7E7]  overflow-hidden text-center">
-            <td className="py-2 px-3 rounded-l-full">Muhammad Faizan</td>
-            <td>muhammadfaizan027915@gmail.com</td>
-            <td>Software Engineer</td>
-            <td className="rounded-r-full">
-              <div className="grid grid-cols-3">
-                <input type="checkbox" />
-                <input type="checkbox" />
-                <input type="checkbox" />
-              </div>
-            </td>
-          </tr>
+          {workers?.length > 0 &&
+            workers.map((worker, index) => (
+              <tr key={index} className="bg-[#E7E7E7]  overflow-hidden text-center">
+                <td className="py-2 px-3 rounded-l-full">{worker.fullName}</td>
+                <td>{worker.email}</td>
+                <td>{worker.role}</td>
+                <td className="rounded-r-full">
+                  <div className="grid grid-cols-3">
+                    <input type="checkbox" />
+                    <input type="checkbox" />
+                    <input type="checkbox" />
+                  </div>
+                </td>
+              </tr>
+            ))}
         </tbody>
       </table>
     </div>

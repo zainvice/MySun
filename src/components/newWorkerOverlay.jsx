@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import Heading from "../common/heading";
+import { createWorker } from "../api";
 
-function NewWorkerOverlay({ onClose, onSubmit }) {
+function NewWorkerOverlay({ onClose }) {
+  const [message, setMessage] = useState(null);
   const [inputValues, setInputValues] = useState({});
   const onChange = (e) => {
     const target = e.target ?? {};
@@ -26,6 +28,12 @@ function NewWorkerOverlay({ onClose, onSubmit }) {
     }));
   };
 
+  const onSubmit = async (event) => {
+    event.preventDefault();
+    const data = await createWorker({ ...inputValues });
+    setMessage(data.message);
+  };
+
   return (
     <div className="w-[95vw] lg:w-[50vw] max-w-[650px] bg-white rounded-3xl p-3 sm:p-6">
       <div className="flex items-center justify-between">
@@ -37,12 +45,17 @@ function NewWorkerOverlay({ onClose, onSubmit }) {
 
       <div className="mt-6">
         <form className="flex flex-col" onSubmit={onSubmit}>
+          {message && (
+            <div>
+              <p className="italic font-medium text-[#2ce6bd] ">{message}</p>
+            </div>
+          )}
+
           <label className="flex flex-col lg:flex-row gap-1 mb-4">
             <span className="md:w-1/4 text-lg font-medium">Full Name:</span>
             <input
               type="text"
-              name="workerName"
-              value={inputValues?.workerName}
+              name="fullName"
               onChange={onChange}
               placeholder="Enter the name of the Worker"
               className="h-10 flex-1 py-2 px-4 rounded-full border-[1px] border-[#8C8C8C] bg-white focus-within:outline-[#21D0B2]"
@@ -50,9 +63,22 @@ function NewWorkerOverlay({ onClose, onSubmit }) {
           </label>
 
           <label className="flex flex-col lg:flex-row gap-1 mb-4">
+            <span className="md:w-1/4 text-lg font-medium">Phone:</span>
+            <input
+              type="tel"
+              name="phone"
+              onChange={onChange}
+              placeholder="Enter the Phone of the Worker"
+              className="h-10 flex-1 py-2 px-4 rounded-full border-[1px] border-[#8C8C8C] bg-white focus-within:outline-[#21D0B2]"
+            />
+          </label>
+
+          <label className="flex flex-col lg:flex-row gap-1 mb-4">
             <span className="md:w-1/4 text-lg font-medium">Email:</span>
             <input
-              type="text"
+              type="email"
+              name="email"
+              onChange={onChange}
               placeholder="Enter the email of the Worker"
               className="h-10 flex-1 py-2 px-4 rounded-full border-[1px] border-[#8C8C8C] bg-white focus-within:outline-[#21D0B2]"
             />
@@ -63,6 +89,7 @@ function NewWorkerOverlay({ onClose, onSubmit }) {
             <input
               type="text"
               name="password"
+              onChange={onChange}
               value={inputValues?.password}
               placeholder="Enter the password of the Worker"
               className="h-10 flex-1 py-2 px-4 rounded-full border-[1px] border-[#8C8C8C] bg-white focus-within:outline-[#21D0B2]"
@@ -76,21 +103,36 @@ function NewWorkerOverlay({ onClose, onSubmit }) {
           </span>
 
           <div className="flex sm:items-center flex-col sm:flex-row">
-              <span className="text-lg font-medium mr-4">Choose Role:</span>
-              <div className="flex items-center flex-1 gap-4">
+            <span className="text-lg font-medium mr-4">Choose Role:</span>
+            <div className="flex items-center flex-1 gap-4">
               <div className="flex items-center">
                 <label className="text-lg mr-2">Admin</label>
-                <input type="checkbox" />
+                <input
+                  type="radio"
+                  name="role"
+                  value={"admin"}
+                  onChange={onChange}
+                />
               </div>
               <div className="flex items-center">
                 <label className="text-lg mr-2">Supervisor</label>
-                <input type="checkbox" />
+                <input
+                  type="radio"
+                  name="role"
+                  value={"supervisor"}
+                  onChange={onChange}
+                />
               </div>
               <div className="flex items-center">
                 <label className="text-lg mr-2">Worker</label>
-                <input type="checkbox" />
+                <input
+                  type="radio"
+                  name="role"
+                  value={"worker"}
+                  onChange={onChange}
+                />
               </div>
-              </div>
+            </div>
           </div>
 
           <div className="mb-4 mt-4 lg:mt-0 md:mt-0 sm:mt-0 xsm:mt-0 text-center">
