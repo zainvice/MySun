@@ -190,5 +190,4 @@ function WorkerDetail() {
     </Layout>
   );
 }
-
 export default WorkerDetail;
