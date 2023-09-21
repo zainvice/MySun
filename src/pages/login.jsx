@@ -18,7 +18,7 @@ const LoginPage = () => {
       const response = await loginUser(inputValues);
       const data = response.data;
       for (const key in data) {
-        localStorage.setItem(key, data[key]);
+        sessionStorage.setItem(key, data[key]);
       }
 
       if (data.Role === "admin") return navigate("/dashboard", { replace: true });

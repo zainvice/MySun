@@ -16,6 +16,7 @@ import { LanguageProvider } from './context/LanguageContext';
 import NewTaskAssigned from "./pages/worker/newTaskAssigned";
 import Auth from "./auth/authorize";
 import Authenticate from "./auth/authenticate";
+import { useEffect } from "react";
 
 function App() {
   useEffect(() => {

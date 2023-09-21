@@ -2,8 +2,8 @@ import React from "react";
 import { Navigate } from "react-router-dom";
 
 function Auth({ Component, isAdminPath = false }) {
-  const isAuthenticated = localStorage.getItem("accessToken").length > 0;
-  const isAdmin = localStorage.getItem('Role') === 'admin' 
+  const isAuthenticated = sessionStorage.getItem("accessToken")?.length > 0;
+  const isAdmin = sessionStorage.getItem('Role') === 'admin' 
   return (
     <>
       {isAuthenticated ? (
