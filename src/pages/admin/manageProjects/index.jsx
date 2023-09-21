@@ -8,7 +8,7 @@ import TaskCard, { VARIANTS } from "../../../components/taskCard";
 
 function ManageProjects() {
   return (
-    <Layout>
+    <Layout activePageName={"Projects"}>
       <Container showMoreButton={true}>
         <div className="flex justify-between mb-2">
           <Heading title={"Projects"} />

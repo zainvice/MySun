@@ -23,7 +23,7 @@ function Workers() {
 
   return (
     <>
-      <Layout>
+      <Layout activePageName={"Field Workers"}>
         <Container>
           <div className="flex justify-between mb-2">
             <Heading title={"Workers"} />

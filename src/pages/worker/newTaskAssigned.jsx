@@ -21,11 +21,11 @@ function NewTaskAssigned() {
     // Add the task to the offline tasks queue in local storage
     const updatedTasks = [...offlineTasks, task];
     setOfflineTasks(updatedTasks);
-    sessionStorage.setItem("offlineTasks", JSON.stringify(updatedTasks));
+    localStorage.setItem("offlineTasks", JSON.stringify(updatedTasks));
   };
 
   const sendOfflineTasksToDatabase = () => {
-    const tasks = JSON.parse(sessionStorage.getItem("offlineTasks"));
+    const tasks = JSON.parse(localStorage.getItem("offlineTasks"));
 
     if (tasks && tasks.length > 0) {
       // Send tasks to the database here
@@ -63,7 +63,7 @@ function NewTaskAssigned() {
   const remainingSeconds = seconds % 60;
 
   return (
-    <Layout>
+    <Layout activePageName={"Task Name"}>
       <Container>
         <div className="grid grid-cols-3 items-center m-4">
           <span>
