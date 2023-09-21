@@ -8,7 +8,7 @@ import { isEven } from "../../utils";
 
 function AssignedTasks() {
   return (
-    <Layout>
+    <Layout activePageName={"Dashboard"}>
       <Container>
         <div className="flex justify-between mb-2">
           <Heading title={"Assigned Tasks"} />

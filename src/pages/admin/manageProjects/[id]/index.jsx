@@ -61,7 +61,7 @@ function Project() {
   };
 
   return (
-    <Layout>
+    <Layout activePageName={"Project"}>
       <Container>
         <div className="flex flex-col lg:flex-row lg:items-center gap-3">
           <div className="lg:w-1/3 flex justify-between">

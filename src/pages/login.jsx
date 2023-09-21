@@ -1,7 +1,33 @@
-
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { loginUser } from "../api";
 
 const LoginPage = () => {
+  const navigate = useNavigate();
+  const [inputValues, setInputValues] = useState({});
+  const [error, setError] = useState("");
+
+  const onChange = (event) => {
+    const target = event.target ?? {};
+    setInputValues((prev) => ({ ...prev, [target.name]: target.value }));
+  };
+
+  const onSubmit = async (event) => {
+    event.preventDefault();
+    try {
+      const response = await loginUser(inputValues);
+      const data = response.data;
+      for (const key in data) {
+        sessionStorage.setItem(key, data[key]);
+      }
+
+      if (data.Role === "admin") return navigate("/dashboard", { replace: true });
+      navigate('/assigned-tasks', {replace: true})
+    } catch ({ response }) {
+      setError(response.data.message);
+    }
+  };
+
   return (
     <div
       className="min-h-screen flex items-center justify-center bg-cover bg-center relative"
@@ -15,14 +41,21 @@ const LoginPage = () => {
             className="w-[100px] h-[100px]"
           />
         </div>
-        <form className="w-full mt-20">
+        <form className="w-full mt-20" onSubmit={onSubmit}>
           <div className="md:max-w-sm mx-auto">
+            {error && (
+              <div>
+                <p className="italic font-medium text-[#2ce6bd] ">{error}</p>
+              </div>
+            )}
             <label htmlFor="email" className="block text-gray-300">
-              Email or Username
+              Enter an Email
             </label>
             <input
               type="email"
               id="email"
+              name="email"
+              onChange={onChange}
               className="w-full inline-block mx-auto  h-10 py-2 px-4 rounded-full bg-gray-500 text-gray-100 placeholder-white border border-green-500 focus:outline-none text-base"
               placeholder="Enter your Email or Username"
             />
@@ -34,6 +67,8 @@ const LoginPage = () => {
             <input
               type="password"
               id="password"
+              name="password"
+              onChange={onChange}
               className="w-full inline-block mx-auto  h-10 py-2 px-4 rounded-full bg-gray-500 text-gray-100 placeholder-white border border-green-500 focus:outline-none text-base"
               placeholder="Enter your Password"
             />

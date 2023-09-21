@@ -21,7 +21,7 @@ function NewProject() {
 
   return (
     <>
-      <Layout>
+      <Layout activePageName={"Creating New Project"}>
         <Container>
           <div className="h-full grid grid-cols-12 gap-2 sm:gap-4 text-[#505050]">
             <div className="col-span-12  md:col-span-8 h-full">
