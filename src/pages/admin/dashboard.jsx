@@ -9,7 +9,7 @@ import { useLanguage } from '../../context/LanguageContext'; // Import the useLa
 function Dashboard() {
    const { language, toggleLanguage } = useLanguage();
   return (
-    <Layout>
+    <Layout activePageName={"Dashboard"}>
       <Container>
         <div className="flex justify-between mb-2">
           <Heading title={"Recent Updates"} />

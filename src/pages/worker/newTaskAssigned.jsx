@@ -63,7 +63,7 @@ function NewTaskAssigned() {
   const remainingSeconds = seconds % 60;
 
   return (
-    <Layout>
+    <Layout activePageName={"Task Name"}>
       <Container>
         <div className="grid grid-cols-3 items-center m-4">
           <span>

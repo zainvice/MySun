@@ -6,7 +6,7 @@ import Heading from '../../common/heading'
 function projectTasks() {
   return (
     <>
-    <Layout>
+    <Layout activePageName={"Tasks"}>
       <Container>
       <div className="mt-10"> 
         <Heading title={"Project Tasks"}></Heading>

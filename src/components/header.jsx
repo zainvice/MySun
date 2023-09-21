@@ -1,6 +1,6 @@
 import React from "react";
 
-function Header({onSidebarOpen}) {
+function Header({ onSidebarOpen, activePageName }) {
   return (
     <div className="flex items-center w-full shadow-md p-2 sm:p-5">
       <div className="lg:hidden">
@@ -11,8 +11,7 @@ function Header({onSidebarOpen}) {
       <div className="flex items-center justify-end sm:justify-between flex-1">
         <div className="hidden sm:block">
           <p className="flex items-center gap-2 text-[#505050] font-semibold">
-            <span className="material-symbols-outlined">dashboard</span>
-            Dashboard
+            {activePageName}
           </p>
         </div>
         <div>

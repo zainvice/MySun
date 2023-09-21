@@ -7,7 +7,12 @@ const api = axios.create({
   withCredentials: true,
 });
 
-const loginUser = () => {};
+export const loginUser = async ({ email, password }) => {
+  return await api.post("/auth", {
+    email,
+    password,
+  });
+};
 
 export const createWorker = async ({
   email,
