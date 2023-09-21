@@ -129,7 +129,7 @@ function App() {
           />
           <Route path="/otp" element={<OTP />} />
           <Route
-            path="/password"
+            path="/resetPassword/:resetToken/:userId"
             element={<Authenticate Component={Password} />}
           />
           <Route
