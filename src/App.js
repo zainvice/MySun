@@ -9,6 +9,7 @@ import Workers from "./pages/admin/workers";
 import AssignedTasks from "./pages/worker/assignedTasks";
 import Project from "./pages/admin/manageProjects/[id]";
 import OTP from "./pages/otp";
+import ProjectTasks from "./pages/admin/projectTasks";
 import Password from "./pages/password";
 import { LanguageProvider } from './context/LanguageContext';
 // import NewWorker from "./pages/admin/newWorker";
@@ -107,6 +108,7 @@ function App() {
           <Route path="/new-project" element={<NewProject />} />
           <Route path="/workers" element={<Workers />} />
           <Route path="/otp" element={<OTP />} />
+          <Route path="/project-tasks" element={<ProjectTasks/>} />
           <Route path="/password" element={<Password />} />
           <Route path="/assigned-tasks" element={<AssignedTasks />} />
           <Route path="/new-task-assigned" element={<NewTaskAssigned/>} />
