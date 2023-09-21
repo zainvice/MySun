@@ -53,7 +53,7 @@ function Sidebar({isSidebarOpen, onSidebarClose}) {
 
       <div className="flex flex-col absolute bottom-0">
         <NavLink
-          to={"new-project"}
+          to={"/accounts"}
           className={"flex items-center gap-2 text-[#9DABA8] mb-6"}
         >
           <span className="material-symbols-outlined text-2xl sm:text-3xl">account_circle</span>

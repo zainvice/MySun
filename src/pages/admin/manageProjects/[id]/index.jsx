@@ -4,6 +4,8 @@ import Button from "../../../../common/button";
 import Container from "../../../../common/container";
 import DateInput from "../../../../common/dateInput";
 import { useDimensions } from "../../../../hooks";
+import { NavLink } from "react-router-dom";
+
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -56,10 +58,12 @@ function Project() {
             </div>
 
             {dimension >= 640 && (
-              <Button
-                title={`Show Tasks <span class='material-symbols-outlined'>chevron_right</span>`}
-                titleClasses={"flex items-center gap-2"}
-              />
+              <NavLink to="/assigned-tasks">
+                <Button
+                  title={`Show Tasks <span class='material-symbols-outlined'>chevron_right</span>`}
+                  titleClasses={"flex items-center gap-2"}
+                />
+              </NavLink>
             )}
           </div>
         </div>
@@ -153,21 +157,24 @@ function Project() {
           <div>
             <p className="flex items-center mb-2">
               <span className="w-10/12 md:w-60 line-clamp-1">
-                Surveys Completed by <span className="text-[#34F5C5]">Muhammad Faizan</span>
+                Surveys Completed by{" "}
+                <span className="text-[#34F5C5]">Muhammad Faizan</span>
               </span>
               <span className="before:content-[':'] before:mr-4">35</span>
             </p>
 
             <p className="flex items-center mb-2">
               <span className="w-10/12 md:w-60 line-clamp-1">
-                Surveys Completed by <span className="text-[#34F5C5]">Ali Abdullah</span>
+                Surveys Completed by{" "}
+                <span className="text-[#34F5C5]">Ali Abdullah</span>
               </span>
               <span className="before:content-[':'] before:mr-4">90</span>
             </p>
 
             <p className="flex items-center mb-2">
               <span className="w-10/12 md:w-60 line-clamp-1">
-                Surveys Completed by <span className="text-[#34F5C5]">Ahmer Shahid</span>
+                Surveys Completed by{" "}
+                <span className="text-[#34F5C5]">Ahmer Shahid</span>
               </span>
               <span className="before:content-[':'] before:mr-4">120</span>
             </p>
@@ -208,29 +215,37 @@ function Project() {
           <div className="mx-auto sm:w-fit">
             <p className="flex items-center mb-2">
               <span className="w-9/12 md:w-96 line-clamp-1">
-                Surveys Completed by <span className="text-[#34F5C5]">Muhammad Faizan</span>
+                Surveys Completed by{" "}
+                <span className="text-[#34F5C5]">Muhammad Faizan</span>
               </span>
               <span className="before:content-[':'] before:mr-4">35 hrs</span>
             </p>
 
             <p className="flex items-center mb-2">
               <span className="w-9/12 md:w-96 line-clamp-1">
-                Surveys Completed by <span className="text-[#34F5C5]">Ali Abdullah</span>
+                Surveys Completed by{" "}
+                <span className="text-[#34F5C5]">Ali Abdullah</span>
               </span>
               <span className="before:content-[':'] before:mr-4">90 hrs</span>
             </p>
 
             <p className="flex items-center mb-2">
               <span className="w-9/12 md:w-96 line-clamp-1">
-                Surveys Completed by <span className="text-[#34F5C5]">Ahmer Shahid</span>
+                Surveys Completed by{" "}
+                <span className="text-[#34F5C5]">Ahmer Shahid</span>
               </span>
               <span className="before:content-[':'] before:mr-4">120 hrs</span>
             </p>
           </div>
         </div>
-          <div className="flex justify-end">
-            <Button title={'Export to Excel <span class="material-symbols-outlined">chevron_right</span>'} titleClasses={'flex items-center'}/>
-          </div>
+        <div className="flex justify-end">
+          <Button
+            title={
+              'Export to Excel <span class="material-symbols-outlined">chevron_right</span>'
+            }
+            titleClasses={"flex items-center"}
+          />
+        </div>
       </Container>
     </Layout>
   );
