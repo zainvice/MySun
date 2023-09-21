@@ -30,7 +30,6 @@ const AdminPath = ({ Component, isAdmin }) => {
 };
 
 const WorkerPath = ({ Component, isWorker }) => {
-    console.log(isWorker)
   return isWorker ? (
     <Component />
   ) : (

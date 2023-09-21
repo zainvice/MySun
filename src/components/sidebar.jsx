@@ -1,8 +1,20 @@
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { publicUrl } from "../utils";
+import { logoutUser } from "../api";
 
 function Sidebar({ isSidebarOpen, onSidebarClose }) {
+  const navigate = useNavigate();
   const isAdmin = sessionStorage.getItem("Role") === "admin";
+
+  const onLogout = () => {
+    logoutUser().then(() => {
+      ["accessToken", "Name", "Role"].map((key) => {
+        sessionStorage.removeItem(key);
+      });
+      navigate("/", { replace: true });
+    });
+  };
+
   return (
     <div
       className={`w-64 lg:w-28 h-screen bg-[#2D3037] flex flex-col items-center justify-start px-4 py-4 z-[1000] lg:z-auto absolute lg:relative ${
@@ -79,12 +91,15 @@ function Sidebar({ isSidebarOpen, onSidebarClose }) {
           </span>
           <span className="inline-block lg:hidden text-lg">Account</span>
         </NavLink>
-        <a className={"flex items-center gap-2 text-[#9DABA8] mb-6"}>
+        <button
+          className={"flex items-center gap-2 text-[#9DABA8] mb-6"}
+          onClick={onLogout}
+        >
           <span className="material-symbols-outlined text-2xl sm:text-3xl">
             logout
           </span>
           <span className="inline-block lg:hidden text-lg">Logout</span>
-        </a>
+        </button>
       </div>
     </div>
   );
