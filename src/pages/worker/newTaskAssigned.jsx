@@ -1,10 +1,39 @@
 import React, { useState, useEffect } from "react";
 import Container from "../../common/container";
 import Layout from "../../layout";
+import Button from "../../common/button";
 
 function NewTaskAssigned() {
+
   const [timerRunning, setTimerRunning] = useState(false);
   const [seconds, setSeconds] = useState(0);
+  const [offlineTasks, setOfflineTasks] = useState([]);
+
+  useEffect(() => {
+    // Check if the app is online
+    if (navigator.onLine) {
+      // Try to send offline tasks to the database
+      sendOfflineTasksToDatabase();
+    }
+  }, []);
+
+  const addToOfflineTasks = (task) => {
+    // Add the task to the offline tasks queue in local storage
+    const updatedTasks = [...offlineTasks, task];
+    setOfflineTasks(updatedTasks);
+    localStorage.setItem("offlineTasks", JSON.stringify(updatedTasks));
+  };
+
+  const sendOfflineTasksToDatabase = () => {
+    const tasks = JSON.parse(localStorage.getItem("offlineTasks"));
+
+    if (tasks && tasks.length > 0) {
+      // Send tasks to the database here
+      // Handle success and error cases
+      // If successful, remove the tasks from the queue
+      // Handle retries for failed tasks
+    }
+  };
 
   useEffect(() => {
     let interval;
@@ -213,6 +242,10 @@ function NewTaskAssigned() {
             className="h-32 p-4 items-start bg-gray-200 rounded-3xl w-full sm:w-2/3 lg:w-1/2"
           />
         </div>
+        <div>
+        <Button title={"Save Progress"} onClick={addToOfflineTasks} />
+        </div>
+        
       </Container>
     </Layout>
   );

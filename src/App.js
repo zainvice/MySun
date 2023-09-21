@@ -10,6 +10,7 @@ import AssignedTasks from "./pages/worker/assignedTasks";
 import Project from "./pages/admin/manageProjects/[id]";
 import OTP from "./pages/otp";
 import Password from "./pages/password";
+import { LanguageProvider } from './context/LanguageContext';
 // import NewWorker from "./pages/admin/newWorker";
 import NewTaskAssigned from "./pages/worker/newTaskAssigned";
 import { useEffect } from "react";
@@ -95,7 +96,7 @@ function App() {
   
   return (
     <div className="App">
-      
+      <LanguageProvider>
       <Router>
         <Routes>
           <Route path="/" element={<Login />} />
@@ -112,6 +113,7 @@ function App() {
 
         </Routes>
       </Router>
+      </LanguageProvider>
     </div>
   );
 }

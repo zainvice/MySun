@@ -5,8 +5,9 @@ import TaskCard, { VARIANTS } from "../../components/taskCard";
 import WorkerCard from "../../components/workerCard";
 import Layout from "../../layout";
 import { NavLink } from "react-router-dom";
-
+import { useLanguage } from '../../context/LanguageContext'; // Import the useLanguage hook
 function Dashboard() {
+   const { language, toggleLanguage } = useLanguage();
   return (
     <Layout>
       <Container>
