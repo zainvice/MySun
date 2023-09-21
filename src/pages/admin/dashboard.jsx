@@ -4,21 +4,24 @@ import Heading from "../../common/heading";
 import TaskCard, { VARIANTS } from "../../components/taskCard";
 import WorkerCard from "../../components/workerCard";
 import Layout from "../../layout";
+import { NavLink } from "react-router-dom";
 
 function Dashboard() {
   return (
     <Layout>
       <Container>
         <div className="flex justify-between mb-2">
-        <Heading title={"Recent Updates"} />
+          <Heading title={"Recent Updates"} />
 
-        <select className="border-2 border-[#00FFD3] text-[#00FFD3] p-2 rounded-full focus-within:outline-none">
-          <option>showing for today</option>
-        </select>
+          <select className="border-2 border-[#00FFD3] text-[#00FFD3] p-2 rounded-full focus-within:outline-none">
+            <option>showing for today</option>
+          </select>
         </div>
         <div className="flex flex-col sm:flex-row gap-4 sm:gap-6">
           <div className="sm:w-1/2 md:min-w-[340px] md:w-1/3">
-            <TaskCard variant={VARIANTS.GREEN} />
+            <NavLink to="/manage-projects/:id">
+              <TaskCard variant={VARIANTS.GREEN} />
+            </NavLink>
           </div>
           <div className="flex-1 bg-gradient-to-b from-[#00FFD3] from-60% to-[#37C19F] rounded-3xl p-[3px] shadow-lg">
             <div className="p-4 sm:p- bg-white rounded-[20px] h-full">
