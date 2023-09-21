@@ -2,6 +2,7 @@ import React from "react";
 import Container from "../../common/container";
 import Layout from "../../layout";
 import Heading from "../../common/heading";
+import { NavLink } from "react-router-dom";
 import TaskCard, { VARIANTS } from "../../components/taskCard";
 import { isEven } from "../../utils";
 
@@ -21,10 +22,13 @@ function AssignedTasks() {
           {Array(2)
             .fill(0)
             .map((i, index) => (
+              <NavLink to="/new-task-assigned">
               <TaskCard
                 key={index}
                 variant={isEven(index + 1) ? VARIANTS.PURPLE : VARIANTS.GREEN}
               />
+            </NavLink>
+            
             ))}
         </div>
       </Container>

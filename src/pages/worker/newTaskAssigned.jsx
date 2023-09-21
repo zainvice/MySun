@@ -1,10 +1,39 @@
 import React, { useState, useEffect } from "react";
 import Container from "../../common/container";
 import Layout from "../../layout";
+import Button from "../../common/button";
 
 function NewTaskAssigned() {
+
   const [timerRunning, setTimerRunning] = useState(false);
   const [seconds, setSeconds] = useState(0);
+  const [offlineTasks, setOfflineTasks] = useState([]);
+
+  useEffect(() => {
+    // Check if the app is online
+    if (navigator.onLine) {
+      // Try to send offline tasks to the database
+      sendOfflineTasksToDatabase();
+    }
+  }, []);
+
+  const addToOfflineTasks = (task) => {
+    // Add the task to the offline tasks queue in local storage
+    const updatedTasks = [...offlineTasks, task];
+    setOfflineTasks(updatedTasks);
+    localStorage.setItem("offlineTasks", JSON.stringify(updatedTasks));
+  };
+
+  const sendOfflineTasksToDatabase = () => {
+    const tasks = JSON.parse(localStorage.getItem("offlineTasks"));
+
+    if (tasks && tasks.length > 0) {
+      // Send tasks to the database here
+      // Handle success and error cases
+      // If successful, remove the tasks from the queue
+      // Handle retries for failed tasks
+    }
+  };
 
   useEffect(() => {
     let interval;
@@ -60,7 +89,9 @@ function NewTaskAssigned() {
           </div>
 
           <div className=" flex justify-end items-center">
-              <span className="material-symbols-outlined text-[#34F5C5] text-4xl hidden sm:inline">schedule</span>
+            <span className="material-symbols-outlined text-[#34F5C5] text-4xl hidden sm:inline">
+              schedule
+            </span>
             <div className="ml-1">
               <span className="text-blue-600">
                 {hours.toString().padStart(2, "0")}:
@@ -75,112 +106,146 @@ function NewTaskAssigned() {
           </div>
         </div>
         <div className="text-white grid grid-cols-1 sm:grid-cols-2  md:grid-cols-3 gap-4">
-            <input
-              type="text"
-              placeholder="Building International Number"
-              className="rounded-full bg-gray-200 text-black px-4 h-12 w-full"
-            />
-            <input
-              type="text"
-              placeholder="Worker Name"
-              className="rounded-full bg-gray-200 text-black px-4 h-12 w-full"
-            />
-            <input
-              type="text"
-              placeholder="Address"
-              className="rounded-full bg-gray-200 text-black px-4 h-12 w-full"
-            />
-            <input
-              type="text"
-              placeholder="Physical Number"
-              className="rounded-full bg-gray-200 text-black px-4 h-12 w-full"
-            />
-            <input
-              type="text"
-              placeholder="Owner ID"
-              className="rounded-full bg-gray-200 text-black px-4 h-12 w-full"
-            />
-            <input
-              type="text"
-              placeholder="Owner Name"
-              className="rounded-full bg-gray-200 text-black px-4 h-12 w-full"
-            />
-            <input
-              type="text"
-              placeholder="Phone Number"
-              className="rounded-full bg-gray-200 text-black px-4 h-12 w-full"
-            />
-            <input
-              type="text"
-              placeholder="Old Area"
-              className="rounded-full bg-gray-200 text-black px-4 h-12 w-full"
-            />
-            <input
-              type="text"
-              placeholder="Property Type"
-              className="rounded-full bg-gray-200 text-black px-4 h-12 w-full"
-            />
-            <input
-              type="text"
-              placeholder="GOSH"
-              className="rounded-full bg-gray-200 text-black px-4 h-12 w-full"
-            />
-            <input
-              type="text"
-              placeholder="HELMA"
-              className="rounded-full bg-gray-200 text-black px-4 h-12 w-full"
-            />
-            <input
-              type="text"
-              placeholder="FLOOR"
-              className="rounded-full bg-gray-200 text-black px-4 h-12 w-full"
-            />
+          <input
+            type="text"
+            placeholder="Building International Number"
+            className="rounded-full bg-gray-200 text-black px-4 h-12 w-full"
+          />
+          <input
+            type="text"
+            placeholder="Worker Name"
+            className="rounded-full bg-gray-200 text-black px-4 h-12 w-full"
+          />
+          <input
+            type="text"
+            placeholder="Address"
+            className="rounded-full bg-gray-200 text-black px-4 h-12 w-full"
+          />
+          <input
+            type="text"
+            placeholder="Physical Number"
+            className="rounded-full bg-gray-200 text-black px-4 h-12 w-full"
+          />
+          <input
+            type="text"
+            placeholder="Owner ID"
+            className="rounded-full bg-gray-200 text-black px-4 h-12 w-full"
+          />
+          <input
+            type="text"
+            placeholder="Owner Name"
+            className="rounded-full bg-gray-200 text-black px-4 h-12 w-full"
+          />
+          <input
+            type="text"
+            placeholder="Phone Number"
+            className="rounded-full bg-gray-200 text-black px-4 h-12 w-full"
+          />
+          <input
+            type="text"
+            placeholder="Old Area"
+            className="rounded-full bg-gray-200 text-black px-4 h-12 w-full"
+          />
+          <input
+            type="text"
+            placeholder="Property Type"
+            className="rounded-full bg-gray-200 text-black px-4 h-12 w-full"
+          />
+          <input
+            type="text"
+            placeholder="GOSH"
+            className="rounded-full bg-gray-200 text-black px-4 h-12 w-full"
+          />
+          <input
+            type="text"
+            placeholder="HELMA"
+            className="rounded-full bg-gray-200 text-black px-4 h-12 w-full"
+          />
+          <input
+            type="text"
+            placeholder="FLOOR"
+            className="rounded-full bg-gray-200 text-black px-4 h-12 w-full"
+          />
         </div>
         <div className="mt-4 sm:mt-8 mx-2 grid grid-cols-2  md:grid-cols-3 lg:grid-cols-4 justify-center items-center">
-          <label className="inline-flex items-center mb-2 sm:mb-5">
-            <input type="checkbox" className="bg-red-400" />
-            <span className="text-gray-700 text-base ml-1 sm:text-lg">
+          <label className="inline-flex items-center mb-2 sm:mb-5 ">
+            <input type="checkbox" className="hidden peer" />
+            <span className="w-5 h-5 border rounded-full border-gray-800 mr-1 peer-checked:bg-gray-800 flex justify-center items-center">
+              <span class="material-symbols-outlined text-sm font-bold text-white peer-checked:inline-block">
+                done
+              </span>
+            </span>
+            <span className="text-gray-700 text-base sm:text-lg">
               Coordination Letter
             </span>
           </label>
-          <label className="inline-flex items-center mb-2 sm:mb-5">
-            <input type="checkbox" />
-            <span className="text-gray-700 text-base ml-1 sm:text-lg">
+          <label className="inline-flex items-center mb-2 sm:mb-5 ">
+            <input type="checkbox" className="hidden peer" />
+            <span className="w-5 h-5 border rounded-full border-gray-800 mr-1 peer-checked:bg-gray-800 flex justify-center items-center">
+              <span class="material-symbols-outlined text-sm font-bold text-white peer-checked:inline-block">
+                done
+              </span>
+            </span>
+            <span className="text-gray-700 text-base sm:text-lg">
               Refused Survey
             </span>
           </label>
-          <label className="inline-flex items-center mb-2 sm:mb-5">
-            <input type="checkbox" />
-            <span className="text-gray-700 text-base ml-1 sm:text-lg">
+          <label className="inline-flex items-center mb-2 sm:mb-5 ">
+            <input type="checkbox" className="hidden peer" />
+            <span className="w-5 h-5 border rounded-full border-gray-800 mr-1 peer-checked:bg-gray-800 flex justify-center items-center">
+              <span class="material-symbols-outlined text-sm font-bold text-white peer-checked:inline-block">
+                done
+              </span>
+            </span>
+            <span className="text-gray-700 text-base sm:text-lg">
               Aerial Mapping
             </span>
           </label>
-          <label className="inline-flex items-center mb-2 sm:mb-5">
-            <input type="checkbox" />
-            <span className="text-gray-700 text-base ml-1 sm:text-lg">
+          <label className="inline-flex items-center mb-2 sm:mb-5 ">
+            <input type="checkbox" className="hidden peer" />
+            <span className="w-5 h-5 border rounded-full border-gray-800 mr-1 peer-checked:bg-gray-800 flex justify-center items-center">
+              <span class="material-symbols-outlined text-sm font-bold text-white peer-checked:inline-block">
+                done
+              </span>
+            </span>
+            <span className="text-gray-700 text-base sm:text-lg">
               Missing Information
             </span>
           </label>
-          <label className="inline-flex items-center mb-2 sm:mb-5">
-            <input type="checkbox" />
-            <span className="text-gray-700 text-base ml-1 sm:text-lg">
+          <label className="inline-flex items-center mb-2 sm:mb-5 ">
+            <input type="checkbox" className="hidden peer" />
+            <span className="w-5 h-5 border rounded-full border-gray-800 mr-1 peer-checked:bg-gray-800 flex justify-center items-center">
+              <span class="material-symbols-outlined text-sm font-bold text-white peer-checked:inline-block">
+                done
+              </span>
+            </span>
+            <span className="text-gray-700 text-base sm:text-lg">
               Unite Address
             </span>
           </label>
-          <label className="inline-flex items-center mb-2 sm:mb-5">
-            <input type="checkbox" />
-            <span className="text-gray-700 text-base ml-1 sm:text-lg">
+          <label className="inline-flex items-center mb-2 sm:mb-5 ">
+            <input type="checkbox" className="hidden peer" />
+            <span className="w-5 h-5 border rounded-full border-gray-800 mr-1 peer-checked:bg-gray-800 flex justify-center items-center">
+              <span class="material-symbols-outlined text-sm font-bold text-white peer-checked:inline-block">
+                done
+              </span>
+            </span>
+            <span className="text-gray-700 text-base sm:text-lg">
               Under Construction
             </span>
           </label>
         </div>
-        <div >
+        <div>
           <textarea
             type="text"
             placeholder="Notes"
             className="h-32 p-4 items-start bg-gray-200 rounded-3xl w-full sm:w-2/3 lg:w-1/2"
           />
         </div>
+        <div>
+        <Button title={"Save Progress"} onClick={addToOfflineTasks} />
+        </div>
+        
       </Container>
     </Layout>
   );
