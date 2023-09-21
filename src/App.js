@@ -12,10 +12,90 @@ import OTP from "./pages/otp";
 import Password from "./pages/password";
 // import NewWorker from "./pages/admin/newWorker";
 import NewTaskAssigned from "./pages/worker/newTaskAssigned";
+import { useEffect } from "react";
 
 function App() {
+  useEffect(() => {
+    // Function to display a notification
+
+    const showOfflineNotification = () => {
+      if (!navigator.onLine) {
+        // Check if the browser supports notifications
+        if ('Notification' in window) {
+          // Request permission to show notifications (required in modern browsers)
+          Notification.requestPermission().then((permission) => {
+            if (permission === 'granted') {
+              // Create and display the notification
+              new Notification('No Internet Connection', {
+                body: 'You are currently offline. Proceed as you do till connection restores, do not reload!',
+                icon: '/offline.png', // Replace with your own icon path
+              });
+            }
+          });
+        } else {
+          // Fallback for browsers that don't support notifications
+          alert('You are currently offline. Proceed as you do till connection restores, do not reload!');
+        }
+      }
+    };
+
+    // Add an event listener to detect online/offline status changes
+    window.addEventListener('offline', showOfflineNotification);
+    window.addEventListener('online', () => {
+      // When the connection is restored, close any existing notifications
+      if ('Notification' in window) {
+       /*  Notification.close(); */
+      }
+    });
+
+    // Clean up event listeners when the component unmounts
+    return () => {
+      window.removeEventListener('offline', showOfflineNotification);
+      window.removeEventListener('online', () => {
+        if ('Notification' in window) {
+         /*  Notification.close(); */
+        }
+      });
+    };
+  }, []);
+
+
+    useEffect(() => {
+      // Function to display a notification when online
+      const showOnlineNotification = () => {
+        if (navigator.onLine) {
+          // Check if the browser supports notifications
+          if ('Notification' in window) {
+            // Request permission to show notifications (required in modern browsers)
+            Notification.requestPermission().then((permission) => {
+              if (permission === 'granted') {
+                // Create and display the online notification
+                new Notification('Connection restored!', {
+                  body: 'You are back online. Syncing in progress!',
+                  icon: '/online.png', // Replace with your own icon path
+                });
+              }
+            });
+          }
+        }
+      };
+  
+      // Add an event listener to detect online/offline status changes
+      window.addEventListener('online', showOnlineNotification);
+  
+      // Clean up event listeners when the component unmounts
+      return () => {
+        window.removeEventListener('online', showOnlineNotification);
+      };
+    }, []);
+  
+    
+  
+
+  
   return (
     <div className="App">
+      
       <Router>
         <Routes>
           <Route path="/" element={<Login />} />
