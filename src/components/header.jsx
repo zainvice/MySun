@@ -1,6 +1,7 @@
 import React from "react";
 
 function Header({ onSidebarOpen, activePageName }) {
+  const username = sessionStorage.getItem("Name");
   return (
     <div className="flex items-center w-full shadow-md p-2 sm:p-5">
       <div className="lg:hidden">
@@ -17,7 +18,7 @@ function Header({ onSidebarOpen, activePageName }) {
         <div>
           <h1 className="font-bold sm:text-lg">
             Welcome,{" "}
-            <span className="text-[#00C191] font-medium">Muhammad!</span>
+            <span className="text-[#00C191] font-medium">{username}</span>
           </h1>
         </div>
       </div>

@@ -14,6 +14,10 @@ export const loginUser = async ({ email, password }) => {
   });
 };
 
+export const logoutUser = async () => {
+  return await api.post("/auth/logout");
+};
+
 export const createWorker = async ({
   email,
   fullName,
