@@ -5,7 +5,7 @@ import Container from "../../../../common/container";
 import DateInput from "../../../../common/dateInput";
 import { useDimensions } from "../../../../hooks";
 import { NavLink } from "react-router-dom";
-
+import { exportToExcel } from "../../../../global";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -32,6 +32,34 @@ const dateInputClasses = `!font-semibold !text-white !bg-[#34F5C5] border-none f
 
 function Project() {
   const dimension = useDimensions();
+  const handleExport = async () => {
+    const projectData = [
+      {
+        'Classification': "Commercial",
+        "Property number": "saddar",
+        "Payment number": "123",
+        "Classification explained": "nothing",
+        "Property old area": "msjkj",
+        "Owner Type": "Company",
+        "Owner Id": "000",
+        "Property Address": "Business Rd",
+        "Owner name": "muskan",
+        'Notes':
+          "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+      },
+    ];
+
+    const blob = await exportToExcel(projectData);
+
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "projects.xlsx";
+    a.click();
+
+    window.URL.revokeObjectURL(url);
+  };
+
   return (
     <Layout>
       <Container>
@@ -244,6 +272,7 @@ function Project() {
               'Export to Excel <span class="material-symbols-outlined">chevron_right</span>'
             }
             titleClasses={"flex items-center"}
+            onClick={handleExport}
           />
         </div>
       </Container>
