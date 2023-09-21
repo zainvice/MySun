@@ -118,7 +118,7 @@ function App() {
           <Route path="/project-tasks" element={<ProjectTasks/>} />
           <Route path="/worker-detail" element={<WorkerDetail/>}/>
           <Route
-            path="/password"
+            path="/resetPassword/:resetToken/:userId"
             element={<Authenticate Component={Password} />}
           />
           <Route

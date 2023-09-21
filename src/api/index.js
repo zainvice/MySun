@@ -1,4 +1,5 @@
 import axios from "axios";
+import { async } from "q";
 
 const BASE_URL = "http://localhost:3500/api/v1/";
 
@@ -17,6 +18,16 @@ export const loginUser = async ({ email, password }) => {
 export const logoutUser = async () => {
   return await api.post("/auth/logout");
 };
+
+export const resquestReset = async (email) => {
+  return await api.post("/resetPassword/auth/requestResetPassword", { email });
+};
+
+export const resetPassword = async ({userId, token, password}) => {
+  return await api.post("/resetPassword/auth/resetPassword", {
+    userId, token, password
+  })
+}
 
 export const createWorker = async ({
   email,
