@@ -11,6 +11,7 @@ import Project from "./pages/admin/manageProjects/[id]";
 import OTP from "./pages/otp";
 import ProjectTasks from "./pages/admin/projectTasks";
 import Password from "./pages/password";
+import WorkerDetail from "./pages/worker/workerDetail";
 import { LanguageProvider } from './context/LanguageContext';
 // import NewWorker from "./pages/admin/newWorker";
 import NewTaskAssigned from "./pages/worker/newTaskAssigned";
@@ -128,6 +129,8 @@ function App() {
             element={<Auth Component={Workers} isAdminPath />}
           />
           <Route path="/otp" element={<OTP />} />
+          <Route path="/project-tasks" element={<ProjectTasks/>} />
+          <Route path="/worker-detail" element={<WorkerDetail/>}/>
           <Route
             path="/password"
             element={<Authenticate Component={Password} />}
