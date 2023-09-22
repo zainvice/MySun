@@ -21,10 +21,14 @@ function ManageProjects() {
           {Array(50)
             .fill(0)
             .map((i, index) => (
-              <TaskCard
+              <div
                 key={index}
-                variant={isEven(index + 1) ? VARIANTS.PURPLE : VARIANTS.GREEN}
-              />
+                className="relative group bg-white rounded-lg shadow-sm hover:shadow-lg transform hover:scale-105 transition-transform duration-300"
+              >
+                <TaskCard
+                  variant={isEven(index + 1) ? VARIANTS.PURPLE : VARIANTS.GREEN}
+                />
+              </div>
             ))}
         </div>
       </Container>
