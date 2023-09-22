@@ -3,6 +3,7 @@ import Container from "../../common/container";
 import Heading from "../../common/heading";
 import TaskCard, { VARIANTS } from "../../components/taskCard";
 import WorkerCard from "../../components/workerCard";
+import WorkerDetail from "../worker/workerDetail";
 import Layout from "../../layout";
 import { NavLink } from "react-router-dom";
 import { useLanguage } from "../../context/LanguageContext"; // Import the useLanguage hook
@@ -65,13 +66,19 @@ function Dashboard() {
         </div>
         <Heading title={"Top Workers"} additionalClases={"mb-2 mt-2 sm:mt-4"} />
         <div className="flex flex-col lg:flex-row gap-4 sm:gap-6">
-          <div className="lg:w-3/5 grid sm:grid-cols-2 gap-4">
-            {Array(2)
-              .fill(0)
-              .map((i, index) => (
-                <WorkerCard key={index} />
-              ))}
-          </div>
+        <div className="lg:w-3/5 grid sm:grid-cols-2 gap-4">
+      {Array(2)
+        .fill(0)
+        .map((_, index) => (
+          <NavLink
+            to="/worker-detail"
+            key={index}
+            className="hover:transform hover:scale-105 hover:shadow-lg transition-transform duration-300"
+          >
+            <WorkerCard />
+          </NavLink>
+        ))}
+    </div>
           <div className="flex-1"></div>
         </div>
       </Container>
