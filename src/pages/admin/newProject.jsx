@@ -118,7 +118,7 @@ function NewProject() {
                   <Button
                     title={"Create Project"}
                     additionalClasses={
-                      "border-2 border-[#21D0B2]  !text-[#21D0B2] bg-transparent"
+                      "border-2 transform hover:scale-105 transition-transform duration-300"
                     }
                   />
                 </div>
@@ -135,7 +135,7 @@ function NewProject() {
           </div>
         </Container>
       </Layout>
-      <Modal isOpen={isOpen} onClose={onClose} >
+      <Modal isOpen={isOpen} onClose={onClose}>
         <WorkerOverlay />
       </Modal>
     </>

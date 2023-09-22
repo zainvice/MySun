@@ -35,7 +35,7 @@ function Project() {
   const handleExport = async () => {
     const projectData = [
       {
-        'Classification': "Commercial",
+        Classification: "Commercial",
         "Property number": "saddar",
         "Payment number": "123",
         "Classification explained": "nothing",
@@ -44,7 +44,7 @@ function Project() {
         "Owner Id": "000",
         "Property Address": "Business Rd",
         "Owner name": "muskan",
-        'Notes':
+        Notes:
           "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
       },
     ];
@@ -77,11 +77,11 @@ function Project() {
             <div className="flex-1 flex gap-4 justify-between sm:justify-start">
               <DateInput
                 placeholder={"Select from"}
-                additionalClasses={dateInputClasses}
+                additionalClasses={`${dateInputClasses} transition-transform transform hover:scale-105`}
               />
               <DateInput
                 placeholder={"Select to"}
-                additionalClasses={dateInputClasses}
+                additionalClasses={`${dateInputClasses} transition-transform transform hover:scale-105`}
               />
             </div>
 

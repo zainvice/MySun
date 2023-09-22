@@ -5,21 +5,23 @@ import TaskCard, { VARIANTS } from "../../components/taskCard";
 import WorkerCard from "../../components/workerCard";
 import Layout from "../../layout";
 import { NavLink } from "react-router-dom";
-import { useLanguage } from '../../context/LanguageContext'; // Import the useLanguage hook
+import { useLanguage } from "../../context/LanguageContext"; // Import the useLanguage hook
 function Dashboard() {
-   const { language, toggleLanguage } = useLanguage();
+  const { language, toggleLanguage } = useLanguage();
   return (
     <Layout activePageName={"Dashboard"}>
       <Container>
         <div className="flex justify-between mb-2">
           <Heading title={"Recent Updates"} />
 
-          <select className="border-2 border-[#00FFD3] text-[#00FFD3] p-2 rounded-full focus-within:outline-none">
-            <option>showing for today</option>
+          <select className="border-2 border-[#00FFD3] text-[#00FFD3] p-2 rounded-full focus-within:outline-none transform transition-transform hover:scale-105 hover:bg-[#00FFD3] hover:text-white">
+            <option className="border-2 border-[#00FFD3] text-[#00FFD3] p-2 rounded-full focus-within:outline-none transform transition-transform hover:scale-105 hover:bg-[#00FFD3] hover:text-white">
+              showing for today
+            </option>
           </select>
         </div>
         <div className="flex flex-col sm:flex-row gap-4 sm:gap-6">
-          <div className="sm:w-1/2 md:min-w-[340px] md:w-1/3">
+          <div className="sm:w-1/2 md:min-w-[340px] md:w-1/3 transform transition-transform hover:scale-105 hover:shadow-lg">
             <NavLink to="/manage-projects/:id">
               <TaskCard variant={VARIANTS.GREEN} />
             </NavLink>

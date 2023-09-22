@@ -52,7 +52,7 @@ const ForgotPassword = () => {
               <div className="flex justify-center mt-4">
                 <button
                   type="submit"
-                  className="w-28 h-8 mt-2 bg-transparent border-green-500 text-green-500 border rounded-full focus:outline-none"
+                  className="w-28 h-8 mt-2 bg-transparent border-green-500 text-green-500 transition-transform transform hover:bg-white border rounded-full focus:outline-none hover:scale-105"
                 >
                   RESET
                 </button>

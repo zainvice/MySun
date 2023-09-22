@@ -37,27 +37,23 @@ function WorkerDetail() {
           <div className="lg:w-1/3 flex justify-between">
             <Heading title={"Worker Details"} />
             {dimension <= 1000 && (
-             <div className="flex flex-col items-center gap-2">
-            
-                <img src='./images/avatarFemale.png' className="w-40 h-40"/>
+              <div className="flex flex-col items-center gap-2">
+                <img src="./images/avatarFemale.png" className="w-40 h-40" />
                 <span className="text-sm text-black">XXX</span>
-                
               </div>
             )}
           </div>
           <div className="flex-1 w-full flex justify-between">
-            <div className="flex-1 flex gap-4  justify-between sm:justify-start">
+            <div className="flex-1 flex gap-4 justify-between sm:justify-start">
               <DateInput
                 placeholder={"Select from"}
-                additionalClasses={dateInputClasses}
+                additionalClasses={`${dateInputClasses} transition-transform transform hover:scale-105`}
               />
               <DateInput
                 placeholder={"Select to"}
-                additionalClasses={dateInputClasses}
+                additionalClasses={`${dateInputClasses} transition-transform transform hover:scale-105`}
               />
             </div>
-
-           
           </div>
         </div>
 
@@ -80,11 +76,9 @@ function WorkerDetail() {
 
             {dimension > 1000 && (
               <div className="flex flex-col items-center mx-auto gap-2">
-                
-                <img src='./images/avatarFemale.png' className="w-60 h-60"/>
+                <img src="./images/avatarFemale.png" className="w-60 h-60" />
                 <span className="text-sm text-black">XXX</span>
               </div>
-              
             )}
 
             <p className="">

@@ -38,9 +38,10 @@ function NewWorkerOverlay({ onClose }) {
     <div className="w-[95vw] lg:w-[50vw] max-w-[650px] bg-white rounded-3xl p-3 sm:p-6">
       <div className="flex items-center justify-between">
         <Heading title={"Adding new Worker"} className="items-center" />
-        <button onClick={onClose}>
-          <span className="material-symbols-outlined">close</span>
-        </button>
+        <button onClick={onClose} className="hover:text-[#21D0B2] transform hover:scale-105 transition-transform duration-300">
+  <span className="material-symbols-outlined">close</span>
+</button>
+
       </div>
 
       <div className="mt-6">
@@ -96,7 +97,7 @@ function NewWorkerOverlay({ onClose }) {
             />
           </label>
           <span
-            className="ml-auto mt-[-16] text-[#00946f] font-medium hover:underline cursor-pointer"
+            className="ml-auto mt-[-16] text-[#00946f] font-medium hover:underline cursor-pointer transform hover:scale-105 transition-transform duration-300"
             onClick={generateRandomPassword}
           >
             Generate default
@@ -136,12 +137,13 @@ function NewWorkerOverlay({ onClose }) {
           </div>
 
           <div className="mb-4 mt-4 lg:mt-0 md:mt-0 sm:mt-0 xsm:mt-0 text-center">
-            <button
-              type="submit"
-              className="w-32 h-10 mt-2 xs:mt-auto bg-transparent border-[#2ce6bd] text-[#2ce6bd] border-2 rounded-full focus:outline-none"
-            >
-              Create Account
-            </button>
+          <button
+  type="submit"
+  className="w-32 h-10 mt-2 xs:mt-auto bg-transparent border-[#2ce6bd] text-[#2ce6bd] border-2 rounded-full focus:outline-none transform hover:scale-105 transition-transform duration-300 hover:bg-[#2ce6bd] hover:text-white"
+>
+  Create Account
+</button>
+
           </div>
         </form>
       </div>

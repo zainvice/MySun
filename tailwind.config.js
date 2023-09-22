@@ -28,6 +28,7 @@ export const theme = {
     borderColor: {
       'custom': '#21D0B2',
     },
+
     
   },
 };

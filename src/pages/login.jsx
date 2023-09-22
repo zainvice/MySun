@@ -72,21 +72,23 @@ const LoginPage = () => {
               className="w-full inline-block mx-auto  h-10 py-2 px-4 rounded-full bg-gray-500 text-gray-100 placeholder-white border border-green-500 focus:outline-none text-base"
               placeholder="Enter your Password"
             />
-            <Link
-              to="/ForgotPassword"
-              className="text-green-500 inline-block mt-2 "
-            >
-              Forgot your password ?
-            </Link>
+           <Link
+  to="/ForgotPassword"
+  className="text-green-500 inline-block mt-2 transition-colors hover:text-white hover:scale-105"
+>
+  Forgot your password?
+</Link>
+
           </div>
           <div className="flex justify-center mt-2">
-            <button
-              type="submit"
-              className="w-28 h-8 mt-2 bg-transparent border-green-500 text-green-500 border rounded-full focus:outline-none"
-            >
-              LOG IN
-            </button>
-          </div>
+  <button
+    type="submit"
+    className="w-28 h-8 mt-2 bg-transparent border-green-500 text-green-500 border rounded-full focus:outline-none transform transition-transform hover:scale-105 hover:bg-white"
+  >
+    LOG IN
+  </button>
+</div>
+
         </form>
       </div>
     </div>
