@@ -24,7 +24,9 @@ const LoginPage = () => {
         sessionStorage.setItem(key, data[key]);
       }
 
-      if (data.Role === "admin")
+      const role = data.Role.toLowerCase();
+
+      if (role === "admin" || role === "supervisor")
         return navigate("/dashboard", { replace: true });
       navigate("/assigned-tasks", { replace: true });
     } catch ({ response }) {
