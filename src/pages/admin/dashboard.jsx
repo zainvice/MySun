@@ -7,7 +7,6 @@ import WorkerDetail from "../worker/workerDetail";
 import Layout from "../../layout";
 import { NavLink } from "react-router-dom";
 function Dashboard() {
-  
   return (
     <Layout activePageName={"Dashboard"}>
       <Container>
@@ -15,22 +14,30 @@ function Dashboard() {
           <Heading title={"Recent Updates"} />
 
           <select className="border-2 border-[#00FFD3] text-[#00FFD3] p-2 rounded-full focus-within:outline-none transform transition-transform hover:scale-105 hover:bg-[#00FFD3] hover:text-white">
-           SHOWING FOR 
-            <option value={1} className="border-2 border-[#00FFD3] text-[#00FFD3] p-2 rounded-full focus-within:outline-none transform transition-transform hover:scale-105 hover:bg-[#00FFD3] hover:text-white">
-              {'TODAY'}
-            
+            Showing for
+            <option
+              value={1}
+              className="border-2 border-[#00FFD3] text-[#00FFD3] p-2 rounded-full focus-within:outline-none transform transition-transform hover:scale-105 hover:bg-[#00FFD3] hover:text-white"
+            >
+              {"Today"}
             </option>
-            <option value={7} className="border-2 border-[#00FFD3] text-[#00FFD3] p-2 rounded-full focus-within:outline-none transform transition-transform hover:scale-105 hover:bg-[#00FFD3] hover:text-white">
-               {'7 Days'}
-            
+            <option
+              value={7}
+              className="border-2 border-[#00FFD3] text-[#00FFD3] p-2 rounded-full focus-within:outline-none transform transition-transform hover:scale-105 hover:bg-[#00FFD3] hover:text-white"
+            >
+              {"7 Days"}
             </option>
-            <option value={15} className="border-2 border-[#00FFD3] text-[#00FFD3] p-2 rounded-full focus-within:outline-none transform transition-transform hover:scale-105 hover:bg-[#00FFD3] hover:text-white">
-               {'15 Days'}
-            
+            <option
+              value={15}
+              className="border-2 border-[#00FFD3] text-[#00FFD3] p-2 rounded-full focus-within:outline-none transform transition-transform hover:scale-105 hover:bg-[#00FFD3] hover:text-white"
+            >
+              {"15 Days"}
             </option>
-            <option value={30} className="border-2 border-[#00FFD3] text-[#00FFD3] p-2 rounded-full focus-within:outline-none transform transition-transform hover:scale-105 hover:bg-[#00FFD3] hover:text-white">
-              {'LAST MONTH'}
-            
+            <option
+              value={30}
+              className="border-2 border-[#00FFD3] text-[#00FFD3] p-2 rounded-full focus-within:outline-none transform transition-transform hover:scale-105 hover:bg-[#00FFD3] hover:text-white"
+            >
+              {"Last Month"}
             </option>
           </select>
         </div>
@@ -79,19 +86,19 @@ function Dashboard() {
         </div>
         <Heading title={"Top Workers"} additionalClases={"mb-2 mt-2 sm:mt-4"} />
         <div className="flex flex-col lg:flex-row gap-4 sm:gap-6">
-        <div className="lg:w-3/5 grid sm:grid-cols-2 gap-4">
-      {Array(2)
-        .fill(0)
-        .map((_, index) => (
-          <NavLink
-            to="/worker-detail"
-            key={index}
-            className="hover:transform hover:scale-105 hover:shadow-lg transition-transform duration-300"
-          >
-            <WorkerCard />
-          </NavLink>
-        ))}
-    </div>
+          <div className="lg:w-3/5 grid sm:grid-cols-2 gap-4">
+            {Array(2)
+              .fill(0)
+              .map((_, index) => (
+                <NavLink
+                  to="/worker-detail"
+                  key={index}
+                  className="hover:transform hover:scale-105 hover:shadow-lg transition-transform duration-300"
+                >
+                  <WorkerCard />
+                </NavLink>
+              ))}
+          </div>
           <div className="flex-1"></div>
         </div>
       </Container>
