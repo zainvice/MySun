@@ -5,6 +5,7 @@ import { logoutUser } from "../api";
 function Sidebar({ isSidebarOpen, onSidebarClose }) {
   const navigate = useNavigate();
   const isAdmin = sessionStorage.getItem("Role") === "admin";
+  const isSupervisor = sessionStorage.getItem("Role") === "supervisor";
 
   const onLogout = () => {
     logoutUser().then(() => {
@@ -14,6 +15,11 @@ function Sidebar({ isSidebarOpen, onSidebarClose }) {
       navigate("/", { replace: true });
     });
   };
+
+  const isActive = ({ isActive }) =>
+    isActive
+      ? "flex items-center gap-2 text-[#00FFD3] mb-6"
+      : "flex items-center gap-2 text-[#9DABA8] mb-6";
 
   return (
     <div
@@ -30,7 +36,7 @@ function Sidebar({ isSidebarOpen, onSidebarClose }) {
       </div>
 
       {/* Logo */}
-      <Link to={isAdmin ? "/dashboard" : "/assigned-tasks"}>
+      <Link to={isAdmin || isSupervisor ? "/dashboard" : "/assigned-tasks"}>
         <img
           src={`${publicUrl}/images/logo1.png`}
           alt="logo"
@@ -42,17 +48,19 @@ function Sidebar({ isSidebarOpen, onSidebarClose }) {
         {isAdmin && (
           <NavLink
             to={"/new-project"}
-            className={"flex items-center gap-2 text-[#9DABA8] mb-6 lg:mb-12"}
+            className={({ isActive }) =>
+              isActive
+                ? "text-[#00FFD3] flex items-center gap-2 mb-6 lg:mb-12 border-2 border-[#00FFD3] w-[28px] h-[28px] rounded-full"
+                : "text-[#9DABA8] flex items-center gap-2 mb-6 lg:mb-12 border-2 border-[#9DABA8] w-[28px] h-[28px] rounded-full"
+            }
           >
-            <span className="material-symbols-outlined  text-2xl border-2 border-[#9DABA8] w-[28px] h-[28px] flex justify-center items-center rounded-full">
-              add
-            </span>
+            <span className="material-symbols-outlined  text-2xl">add</span>
             <span className="inline-block lg:hidden text-lg">Create New</span>
           </NavLink>
         )}
         <NavLink
-          to={isAdmin ? "/dashboard" : "/assigned-tasks"}
-          className={"flex items-center gap-2 text-[#9DABA8] mb-6"}
+          to={isAdmin || isSupervisor ? "/dashboard" : "/assigned-tasks"}
+          className={isActive}
         >
           <span className="material-symbols-outlined  text-2xl sm:text-3xl">
             dashboard
@@ -60,8 +68,10 @@ function Sidebar({ isSidebarOpen, onSidebarClose }) {
           <span className="inline-block lg:hidden text-lg">Dashboard</span>
         </NavLink>
         <NavLink
-          to={isAdmin ? "/manage-projects" : "/new-task-assigned"}
-          className={"flex items-center gap-2 text-[#9DABA8] mb-6"}
+          to={
+            isAdmin || isSupervisor ? "/manage-projects" : "/new-task-assigned"
+          }
+          className={isActive}
         >
           <span className="material-symbols-outlined text-2xl sm:text-3xl">
             work
@@ -71,7 +81,7 @@ function Sidebar({ isSidebarOpen, onSidebarClose }) {
         {isAdmin && (
           <NavLink
             to={"/workers"}
-            className={"flex items-center gap-2 text-[#9DABA8] mb-6"}
+            className={isActive}
           >
             <span className="material-symbols-outlined text-2xl sm:text-3xl">
               person_pin
@@ -82,17 +92,19 @@ function Sidebar({ isSidebarOpen, onSidebarClose }) {
       </div>
 
       <div className="flex flex-col absolute bottom-0">
-        <NavLink
-          to={"/accounts"}
-          className={"flex items-center gap-2 text-[#9DABA8] mb-6"}
+        <p
+          className={`relative flex items-center gap-2 text-[#9DABA8] mb-6 cursor-pointer hover:text-[#34F5C5]`}
         >
-          <span className="material-symbols-outlined text-2xl sm:text-3xl">
+          <span className="material-symbols-outlined text-2xl sm:text-3xl peer">
             account_circle
           </span>
           <span className="inline-block lg:hidden text-lg">Account</span>
-        </NavLink>
+          <span className="z-[100000] hidden absolute -top-[70%] -left-[100%] px-1 rounded bg-[#34F5C5] w-24  h-6 text-ellipsis line-clamp-1 text-black peer-hover:block">
+            {sessionStorage.getItem("Name").split(' ')[0]}
+          </span>
+        </p>
         <button
-          className={"flex items-center gap-2 text-[#9DABA8] mb-6"}
+          className={"flex items-center gap-2 text-[#9DABA8] mb-6 hover:text-[#34F5C5]"}
           onClick={onLogout}
         >
           <span className="material-symbols-outlined text-2xl sm:text-3xl">

@@ -7,14 +7,17 @@ import Container from "../../../common/container";
 import TaskCard, { VARIANTS } from "../../../components/taskCard";
 
 function ManageProjects() {
+  const isAdmin = sessionStorage.getItem("Role") === "admin";
   return (
     <Layout activePageName={"Projects"}>
       <Container showMoreButton={true}>
         <div className="flex justify-between mb-2">
           <Heading title={"Projects"} />
-          <NavLink to="/new-project">
-            <Button title={"Add New Projects"} />
-          </NavLink>
+          {isAdmin && (
+            <NavLink to="/new-project">
+              <Button title={"Add New Projects"} />
+            </NavLink>
+          )}
         </div>
 
         <div className="mt-4 grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">

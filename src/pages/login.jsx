@@ -52,7 +52,7 @@ const LoginPage = () => {
               Enter an Email
             </label>
             <input
-              type="email"
+              type="text"
               id="email"
               name="email"
               onChange={onChange}
