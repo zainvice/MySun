@@ -7,19 +7,23 @@ import Modal from "../../common/modal";
 import NewWorkerOverlay from "../../components/newWorkerOverlay";
 import WorkersTable from "../../components/workersTable";
 import { getWorkers } from "../../api";
+import { useModal } from "../../hooks";
+import Spinner from "../../common/spinner";
 
 function Workers() {
   const [workers, setWorkers] = useState([]);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  // Create a function to toggle the modal visibility
-  const toggleModal = () => {
-    setIsModalOpen(!isModalOpen);
-  };
+  const { isOpen, onOpen, onClose } = useModal();
+  const [isloading, setloading] = useState(false);
 
   useEffect(() => {
-    if (!isModalOpen) getWorkers().then((data) => setWorkers(data));
-  }, [isModalOpen]);
+    if (!isOpen) {
+      setloading(true);
+      getWorkers().then((data) => {
+        setWorkers(data);
+        setloading(false);
+      });
+    }
+  }, [isOpen]);
 
   return (
     <>
@@ -28,14 +32,21 @@ function Workers() {
           <div className="flex justify-between mb-2">
             <Heading title={"Workers"} />
             {/*  Add an onClick event to open the modal */}
-            <Button title={"Add New Worker"} onClick={toggleModal} />
+            <Button title={"Add New Worker"} onClick={onOpen} />
           </div>
-          <WorkersTable workers={workers} />
+
+          {isloading ? (
+            <div className="h-96 w-full flex items-center justify-center">
+              <Spinner />
+            </div>
+          ) : (
+            <WorkersTable workers={workers} />
+          )}
         </Container>
       </Layout>
       {/* Conditionally render the NewWorker component inside the Modal */}
-      <Modal isOpen={isModalOpen} onClose={toggleModal}>
-        <NewWorkerOverlay onClose={toggleModal} />
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <NewWorkerOverlay onClose={onClose} />
       </Modal>
     </>
   );
