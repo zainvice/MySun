@@ -5,17 +5,17 @@ import { NavLink } from "react-router-dom";
 import Button from "../../../common/button";
 import Container from "../../../common/container";
 import TaskCard, { VARIANTS } from "../../../components/taskCard";
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
 
 function ManageProjects() {
-  const isAdmin = sessionStorage.getItem("Role") === "admin";
+  const { t } = useTranslation();
   return (
-    <Layout activePageName={t('projectsHeading')}>
+    <Layout activePageName={t("projectsHeading")}>
       <Container showMoreButton={true}>
         <div className="flex justify-between mb-2">
-          <Heading title={t('projectsHeading')} />
+          <Heading title={t("projectsHeading")} />
           <NavLink to="/new-project">
-            <Button title={t('addnewProj')} />
+            <Button title={t("addnewProj")} />
           </NavLink>
         </div>
 
