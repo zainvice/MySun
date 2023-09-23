@@ -12,6 +12,8 @@ import OTP from "./pages/otp";
 import ProjectTasks from "./pages/admin/projectTasks";
 import WorkerDetail from "./pages/worker/workerDetail";
 import Password from "./pages/password";
+import { I18nextProvider } from 'react-i18next';
+import i18n from './context/i18n';
 
 import { LanguageProvider } from './context/LanguageContext';
 
@@ -86,7 +88,7 @@ function App() {
 
   return (
     <div className="App">
-      <LanguageProvider>
+      <I18nextProvider i18n={i18n}>
       <Router>
         <Routes>
           <Route path="/" element={<Authenticate Component={Login} />} />
@@ -131,7 +133,7 @@ function App() {
           />
         </Routes>
       </Router>
-      </LanguageProvider>
+      </I18nextProvider>
     </div>
   );
 }

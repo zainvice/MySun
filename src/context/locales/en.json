@@ -1,0 +1,11 @@
+{
+   
+        "error": "Error",
+        "emailLabel": "Enter an Email or Username",
+        "emailPlaceholder": "Enter your Email or Username",
+        "passwordLabel": "Password",
+        "passwordPlaceholder": "Enter your Password",
+        "forgotPasswordLink": "Forgot your password?",
+        "loginButton": "LOG IN"
+ 
+}

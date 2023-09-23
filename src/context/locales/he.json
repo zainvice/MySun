@@ -1,0 +1,11 @@
+{
+    
+        "error": "שגיאה",
+        "emailLabel": "הזן אימייל או שם משתמש",
+        "emailPlaceholder": "הזן את האימייל או שם המשתמש שלך",
+        "passwordLabel": "סיסמה",
+        "passwordPlaceholder": "הזן את הסיסמה שלך",
+        "forgotPasswordLink": "שכחת את הסיסמה שלך?",
+        "loginButton": "כניסה"
+     
+}
