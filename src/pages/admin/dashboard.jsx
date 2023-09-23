@@ -45,8 +45,8 @@ function Dashboard() {
           </select>
         </div>
         <div className="flex flex-col sm:flex-row gap-4 sm:gap-6">
-          <div className="sm:w-1/2 md:min-w-[340px] md:w-1/3 transform transition-transform hover:scale-105 hover:shadow-lg">
-            <NavLink to="/manage-projects/:id">
+          <div className="sm:w-1/2 md:min-w-[340px] md:w-1/3 ">
+            <NavLink to="/manage-projects/:id" className={'block text-white transform transition-transform hover:scale-105'}>
               <TaskCard variant={VARIANTS.GREEN} />
             </NavLink>
           </div>
@@ -101,7 +101,7 @@ function Dashboard() {
                 <NavLink
                   to="/worker-detail"
                   key={index}
-                  className="hover:transform hover:scale-105 hover:shadow-lg transition-transform duration-300"
+                  className="block transform hover:scale-105 transition-transform duration-300"
                 >
                   <WorkerCard />
                 </NavLink>
