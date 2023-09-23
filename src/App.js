@@ -10,8 +10,13 @@ import AssignedTasks from "./pages/worker/assignedTasks";
 import Project from "./pages/admin/manageProjects/[id]";
 import OTP from "./pages/otp";
 import ProjectTasks from "./pages/admin/projectTasks";
+import WorkerDetail from "./pages/worker/workerDetail";
 import Password from "./pages/password";
+import { I18nextProvider } from 'react-i18next';
+import i18n from './context/i18n';
+
 import { LanguageProvider } from './context/LanguageContext';
+
 // import NewWorker from "./pages/admin/newWorker";
 import NewTaskAssigned from "./pages/worker/newTaskAssigned";
 import Auth from "./auth/authorize";
@@ -24,82 +29,66 @@ function App() {
 
     const showOfflineNotification = () => {
       if (!navigator.onLine) {
-        
-        if ('Notification' in window) {
-         
+        if ("Notification" in window) {
           Notification.requestPermission().then((permission) => {
-            if (permission === 'granted') {
-              
-              new Notification('No Internet Connection', {
-                body: 'You are currently offline. Proceed as you do till connection restores, do not reload!',
-                icon: '/offline.png',
+            if (permission === "granted") {
+              new Notification("No Internet Connection", {
+                body: "You are currently offline. Proceed as you do till connection restores, do not reload!",
+                icon: "/offline.png",
               });
             }
           });
         } else {
-          
-          alert('You are currently offline. Proceed as you do till connection restores, do not reload!');
+          alert(
+            "You are currently offline. Proceed as you do till connection restores, do not reload!"
+          );
         }
       }
     };
 
-   
-    window.addEventListener('offline', showOfflineNotification);
-    window.addEventListener('online', () => {
-     
-      if ('Notification' in window) {
-       /*  Notification.close(); */
+    window.addEventListener("offline", showOfflineNotification);
+    window.addEventListener("online", () => {
+      if ("Notification" in window) {
+        /*  Notification.close(); */
       }
     });
 
-    
     return () => {
-      window.removeEventListener('offline', showOfflineNotification);
-      window.removeEventListener('online', () => {
-        if ('Notification' in window) {
-         /*  Notification.close(); */
+      window.removeEventListener("offline", showOfflineNotification);
+      window.removeEventListener("online", () => {
+        if ("Notification" in window) {
+          /*  Notification.close(); */
         }
       });
     };
   }, []);
 
-
-    useEffect(() => {
-     
-      const showOnlineNotification = () => {
-        if (navigator.onLine) {
-        
-          if ('Notification' in window) {
-            
-            Notification.requestPermission().then((permission) => {
-              if (permission === 'granted') {
-                
-                new Notification('Connection restored!', {
-                  body: 'You are back online. Syncing in progress!',
-                  icon: '/online.png', 
-                });
-              }
-            });
-          }
+  useEffect(() => {
+    const showOnlineNotification = () => {
+      if (navigator.onLine) {
+        if ("Notification" in window) {
+          Notification.requestPermission().then((permission) => {
+            if (permission === "granted") {
+              new Notification("Connection restored!", {
+                body: "You are back online. Syncing in progress!",
+                icon: "/online.png",
+              });
+            }
+          });
         }
-      };
-  
-      
-      window.addEventListener('online', showOnlineNotification);
-  
-     
-      return () => {
-        window.removeEventListener('online', showOnlineNotification);
-      };
-    }, []);
-  
-    
-  
+      }
+    };
 
-  
+    window.addEventListener("online", showOnlineNotification);
+
+    return () => {
+      window.removeEventListener("online", showOnlineNotification);
+    };
+  }, []);
+
   return (
     <div className="App">
-      <LanguageProvider>
+      <I18nextProvider i18n={i18n}>
       <Router>
         <Routes>
           <Route path="/" element={<Authenticate Component={Login} />} />
@@ -128,6 +117,8 @@ function App() {
             element={<Auth Component={Workers} isAdminPath />}
           />
           <Route path="/otp" element={<OTP />} />
+          <Route path="/project-tasks" element={<ProjectTasks/>} />
+          <Route path="/worker-detail" element={<WorkerDetail/>}/>
           <Route
             path="/resetPassword/:resetToken/:userId"
             element={<Authenticate Component={Password} />}
@@ -142,7 +133,7 @@ function App() {
           />
         </Routes>
       </Router>
-      </LanguageProvider>
+      </I18nextProvider>
     </div>
   );
 }

@@ -27,13 +27,15 @@ function Sidebar({ isSidebarOpen, onSidebarClose }) {
         isSidebarOpen ? "translate-x-0" : "-translate-x-full"
       } lg:translate-x-0 transition-transform duration-500`}
     >
-      <div className="lg:hidden absolute right-2 top-2 ">
-        <button className="p-2" onClick={onSidebarClose}>
-          <span className="material-symbols-outlined text-[#9DABA8]">
-            close
-          </span>
-        </button>
-      </div>
+  <div className="lg:hidden absolute right-2 top-2">
+  <button
+    className="p-2 "
+    onClick={onSidebarClose}
+  >
+    <span className="material-symbols-outlined text-[#9DABA8] ">close</span>
+  </button>
+</div>
+
 
       {/* Logo */}
       <Link to={isAdmin || isSupervisor ? "/dashboard" : "/assigned-tasks"}>
@@ -62,10 +64,10 @@ function Sidebar({ isSidebarOpen, onSidebarClose }) {
           to={isAdmin || isSupervisor ? "/dashboard" : "/assigned-tasks"}
           className={isActive}
         >
-          <span className="material-symbols-outlined  text-2xl sm:text-3xl">
+          <span className="material-symbols-outlined  text-2xl sm:text-3xl hover:text-[#2ce6bd] active:text-[#2ce6bd] focus:text-[#2ce6bd]">
             dashboard
           </span>
-          <span className="inline-block lg:hidden text-lg">Dashboard</span>
+          <span className="inline-block lg:hidden text-lg hover:text-[#2ce6bd] active:text-[#2ce6bd]">Dashboard</span>
         </NavLink>
         <NavLink
           to={
@@ -73,20 +75,20 @@ function Sidebar({ isSidebarOpen, onSidebarClose }) {
           }
           className={isActive}
         >
-          <span className="material-symbols-outlined text-2xl sm:text-3xl">
+          <span className="material-symbols-outlined text-2xl sm:text-3xl hover:text-[#2ce6bd] active:text-[#2ce6bd]">
             work
           </span>
-          <span className="inline-block lg:hidden text-lg">Projects</span>
+          <span className="inline-block lg:hidden text-lg hover:text-[#2ce6bd] active:text-[#2ce6bd]">Projects</span>
         </NavLink>
         {isAdmin && (
           <NavLink
             to={"/workers"}
             className={isActive}
           >
-            <span className="material-symbols-outlined text-2xl sm:text-3xl">
+            <span className="material-symbols-outlined text-2xl sm:text-3xl hover:text-[#2ce6bd] active:text-[#2ce6bd]">
               person_pin
             </span>
-            <span className="inline-block lg:hidden text-lg">Workers</span>
+            <span className="inline-block lg:hidden text-lg hover:text-[#2ce6bd] active:text-[#2ce6bd]">Workers</span>
           </NavLink>
         )}
       </div>
@@ -107,10 +109,10 @@ function Sidebar({ isSidebarOpen, onSidebarClose }) {
           className={"flex items-center gap-2 text-[#9DABA8] mb-6 hover:text-[#34F5C5]"}
           onClick={onLogout}
         >
-          <span className="material-symbols-outlined text-2xl sm:text-3xl">
+          <span className="material-symbols-outlined text-2xl sm:text-3xl hover:text-[#2ce6bd] active:text-[#2ce6bd]">
             logout
           </span>
-          <span className="inline-block lg:hidden text-lg">Logout</span>
+          <span className="inline-block lg:hidden text-lg hover:text-[#2ce6bd] active:text-[#2ce6bd]">Logout</span>
         </button>
       </div>
     </div>

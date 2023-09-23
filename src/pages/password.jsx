@@ -29,16 +29,16 @@ const Password = () => {
     <>
       <div
         className="min-h-screen flex items-center justify-center bg-cover bg-center relative"
-        style={{ backgroundImage: `url("/images/ForgotPasswordImg.jpeg")` }}
+        style={{ backgroundImage: `url("/images/ForgotPasswordImg.jpg")` }}
       >
         <div className="absolute bg-gray-900 bg-opacity-80 p-4 rounded-lg shadow-lg h-[90%] w-[90%] sm:w-[70%]">
           <div className="w-full">
             {/* Added the logo image and Login heading */}
             <div className="flex justify-center items-center mb-2 mt-9">
               <img
-                src={"/images/logo.png"} // Used the imported logo image source
+                src={"/images/logo.png"} 
                 alt="Logo"
-                className="w-[100px] h-[100px]" // Adjusted width and height as needed
+                className="w-[100px] h-[100px]" 
               />
             </div>
             <form className="w-full mt-20" onSubmit={onResetPassword}>
@@ -65,7 +65,7 @@ const Password = () => {
               <div className="flex justify-center mt-4">
                 <button
                   type="submit"
-                  className="w-28 h-8 mt-2 bg-transparent border-green-500 text-green-500 border rounded-full focus:outline-none"
+                  className="w-28 h-8 mt-2 bg-transparent border-green-500 text-green-500 hover:scale-120 hover:bg-white border rounded-full focus:outline-none"
                 >
                   RESET
                 </button>
@@ -76,7 +76,7 @@ const Password = () => {
                   Password Reset Successfully!{" "}
                   <Link
                     to={"/"}
-                    className="text-green-500 underline italic font-semibold"
+                    className="text-green-500 underline italic font-semibold hover:text-white"
                     replace={true}
                   >
                     Go to Login

@@ -3,23 +3,26 @@ import Container from "../../common/container";
 import Heading from "../../common/heading";
 import TaskCard, { VARIANTS } from "../../components/taskCard";
 import WorkerCard from "../../components/workerCard";
+import WorkerDetail from "../worker/workerDetail";
 import Layout from "../../layout";
 import { NavLink } from "react-router-dom";
-import { useLanguage } from '../../context/LanguageContext'; // Import the useLanguage hook
+import { useLanguage } from "../../context/LanguageContext"; // Import the useLanguage hook
 function Dashboard() {
-   const { language, toggleLanguage } = useLanguage();
+  const { language, toggleLanguage } = useLanguage();
   return (
     <Layout activePageName={"Dashboard"}>
       <Container>
         <div className="flex justify-between mb-2">
           <Heading title={"Recent Updates"} />
 
-          <select className="border-2 border-[#00FFD3] text-[#00FFD3] p-2 rounded-full focus-within:outline-none">
-            <option>showing for today</option>
+          <select className="border-2 border-[#00FFD3] text-[#00FFD3] p-2 rounded-full focus-within:outline-none transform transition-transform hover:scale-105 hover:bg-[#00FFD3] hover:text-white">
+            <option className="border-2 border-[#00FFD3] text-[#00FFD3] p-2 rounded-full focus-within:outline-none transform transition-transform hover:scale-105 hover:bg-[#00FFD3] hover:text-white">
+              showing for today
+            </option>
           </select>
         </div>
         <div className="flex flex-col sm:flex-row gap-4 sm:gap-6">
-          <div className="sm:w-1/2 md:min-w-[340px] md:w-1/3">
+          <div className="sm:w-1/2 md:min-w-[340px] md:w-1/3 transform transition-transform hover:scale-105 hover:shadow-lg">
             <NavLink to="/manage-projects/:id">
               <TaskCard variant={VARIANTS.GREEN} />
             </NavLink>
@@ -63,13 +66,19 @@ function Dashboard() {
         </div>
         <Heading title={"Top Workers"} additionalClases={"mb-2 mt-2 sm:mt-4"} />
         <div className="flex flex-col lg:flex-row gap-4 sm:gap-6">
-          <div className="lg:w-3/5 grid sm:grid-cols-2 gap-4">
-            {Array(2)
-              .fill(0)
-              .map((i, index) => (
-                <WorkerCard key={index} />
-              ))}
-          </div>
+        <div className="lg:w-3/5 grid sm:grid-cols-2 gap-4">
+      {Array(2)
+        .fill(0)
+        .map((_, index) => (
+          <NavLink
+            to="/worker-detail"
+            key={index}
+            className="hover:transform hover:scale-105 hover:shadow-lg transition-transform duration-300"
+          >
+            <WorkerCard />
+          </NavLink>
+        ))}
+    </div>
           <div className="flex-1"></div>
         </div>
       </Container>

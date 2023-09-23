@@ -19,16 +19,16 @@ const OTP = () => {
   return (
     <div
       className="min-h-screen flex items-center justify-center bg-cover bg-center relative"
-      style={{ backgroundImage: `url("./images/ForgotPasswordImg.jpeg")` }}
+      style={{ backgroundImage: `url("./images/ForgotPasswordImg.jpg")` }}
     >
       <div className="absolute bg-gray-900 bg-opacity-80 p-4 rounded-lg shadow-lg h-[96%] w-[90%] sm:w-[70%]">
         <div className="w-full">
           {/* Added the logo image and Login heading */}
           <div className="flex justify-center items-center mb-2 mt-9">
             <img
-              src={"./images/logo.png"} // Used the imported logo image source
+              src={"./images/logo.png"} 
               alt="Logo"
-              className="w-[100px] h-[100px]" // Adjusted width and height as needed
+              className="w-[100px] h-[100px]" 
             />
           </div>
           <form className="w-full mt-20 flex flex-col justify-center">
@@ -86,11 +86,11 @@ const OTP = () => {
               </div>
               <p className="text-gray-300 text-sm text-center mt-4">
                 Enter the 6-digit OTP you received in your mail. Not received?{" "}
-                <label className="text-[#2ce6bd] hover:underline cursor-pointer">Resend!</label>
+                <label className="text-[#2ce6bd] hover:underline cursor-pointer hover:text-white">Resend!</label>
               </p>
               <button
                 type="submit"
-                className="w-28 h-10 inline-block mt-2 mx-auto bg-transparent border-[#2ce6bd] text-[#2ce6bd] border rounded-full focus:outline-none"
+                className="w-28 h-10 inline-block mt-2 mx-auto bg-transparent border-[#2ce6bd] text-[#2ce6bd] border rounded-full focus:outline-none transition-transform transform hover:scale-105 hover:bg-white"
               >
                 RESET
               </button>
