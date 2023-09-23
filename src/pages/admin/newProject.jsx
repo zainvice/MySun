@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useModal } from "../../hooks";
 import Layout from "../../layout";
 import Container from "../../common/container";
@@ -7,10 +7,24 @@ import DateInput from "../../common/dateInput";
 import Button from "../../common/button";
 import Modal from "../../common/modal";
 import WorkerOverlay from "../../components/workerOverlay";
+import { getWorkers } from "../../api";
 
 function NewProject() {
   const { isOpen, onOpen, onClose } = useModal();
   const [inputValues, setInputValues] = useState({});
+
+  const [workers, setWorkers] = useState([]);
+  const [selectedWorkers, setSelectedWorkers] = useState([]);
+  const [fileName, setFileName] = useState();
+
+  useEffect(() => {
+    getWorkers().then((data) => {
+      setWorkers(
+        data?.filter((worker) => worker.role.toLowerCase() !== "admin") ?? []
+      );
+    });
+  }, []);
+
   const onChange = (e) => {
     const target = e.target ?? {};
     setInputValues((prev) => ({
@@ -18,6 +32,21 @@ function NewProject() {
       [target.name]: target.value,
     }));
   };
+
+  const onFileSelect = (e) => {
+    const file = e?.target?.files[0];
+    setFileName(file?.name);
+    setInputValues((prev) => ({
+      ...prev,
+      projectFile: file,
+    }));
+  };
+
+  const onSubmit = (e) => {
+    e?.preventDefault();
+    console.log(inputValues);
+  };
+
 
   return (
     <>
@@ -29,7 +58,10 @@ function NewProject() {
                 title={"New Project"}
                 additionalClases={"mb-2 lg:mb-8"}
               />
-              <form className=" flex flex-col gap-2 lg:gap-6 lg:ml-14">
+              <form
+                className=" flex flex-col gap-2 lg:gap-6 lg:ml-14"
+                onSubmit={onSubmit}
+              >
                 <label className="flex flex-col lg:flex-row gap-1">
                   <span className="md:w-1/4 text-lg font-medium">
                     Project Name:
@@ -78,6 +110,13 @@ function NewProject() {
                     readOnly
                     type="text"
                     onClickCapture={() => onOpen()}
+                    value={
+                      selectedWorkers.length
+                        ? selectedWorkers
+                            .map((worker) => worker.fullName)
+                            .join(", ")
+                        : ""
+                    }
                     placeholder="Choose the worker for project"
                     className="h-10 w-full py-2 px-4 rounded-full border-[1px] border-[#8C8C8C] bg-white focus-within:outline-[#21D0B2] cursor-pointer"
                   />
@@ -91,6 +130,8 @@ function NewProject() {
                     type="text"
                     placeholder="Enter project's description"
                     rows={4}
+                    name="projectDescription"
+                    onChange={onChange}
                     className="w-full py-2 px-4 rounded-3xl border-[1px] border-[#8C8C8C] bg-white focus-within:outline-[#21D0B2]"
                   />
                 </label>
@@ -103,14 +144,17 @@ function NewProject() {
                     type="file"
                     placeholder="Choose the worker for project"
                     className="hidden"
-                    onChange={(e) => console.log(e.target.files[0])}
+                    onChange={onFileSelect}
+                    accept=".xlsx"
                   />
                   <div className="w-full rounded-3xl border-[1px] border-[#8C8C8C] bg-white h-40 flex flex-col items-center justify-center">
                     <img
-                      className="material-symbols-outlined w-10 h-12 animate-bounce"
+                      className={`material-symbols-outlined w-10 h-12 ${
+                        fileName ? "" : "animate-bounce"
+                      }`}
                       src="./images/uploadFile.png"
                     />
-                    <p>Choose file to upload </p>
+                    <p>{fileName ? fileName : "Choose .xlsx file to upload"}</p>
                   </div>
                 </label>
 
@@ -136,7 +180,11 @@ function NewProject() {
         </Container>
       </Layout>
       <Modal isOpen={isOpen} onClose={onClose}>
-        <WorkerOverlay />
+        <WorkerOverlay
+          workers={workers}
+          selectedWorkers={selectedWorkers}
+          setSelectedWorkers={setSelectedWorkers}
+        />
       </Modal>
     </>
   );

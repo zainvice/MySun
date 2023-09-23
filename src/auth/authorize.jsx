@@ -1,16 +1,25 @@
 import React from "react";
 import { Navigate } from "react-router-dom";
 
-function Auth({ Component, isAdminPath = false }) {
+function Auth({ Component, isAdminPath = false, isSupervisorPath = false }) {
   const isAuthenticated = sessionStorage.getItem("accessToken")?.length > 0;
-  const isAdmin = sessionStorage.getItem('Role') === 'admin' 
+  const isAdmin = sessionStorage.getItem("Role") === "admin";
+  const isSupervisor = sessionStorage.getItem("Role") === "supervisor";
   return (
     <>
       {isAuthenticated ? (
-        isAdminPath ? (
-          <AdminPath Component={Component} isAdmin={isAdmin && isAdminPath } />
+        isAdmin ? (
+          <AdminPath Component={Component} isAdmin={isAdmin && isAdminPath} />
+        ) : isSupervisor ? (
+          <SupervisorPath
+            Component={Component}
+            isSupervisor={isSupervisor && isSupervisorPath}
+          />
         ) : (
-          <WorkerPath Component={Component} isWorker={!isAdmin && !isAdminPath} />
+          <WorkerPath
+            Component={Component}
+            isWorker={!isAdmin && !isAdminPath}
+          />
         )
       ) : (
         <Navigate to={"/"} replace={true} />
@@ -27,6 +36,10 @@ const AdminPath = ({ Component, isAdmin }) => {
   ) : (
     <Navigate to={"/assigned-tasks"} replace={true} />
   );
+};
+
+const SupervisorPath = ({ Component, isSupervisor }) => {
+  return isSupervisor ? <Component /> : <Navigate to={"/dashboard"} />;
 };
 
 const WorkerPath = ({ Component, isWorker }) => {

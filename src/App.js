@@ -98,11 +98,11 @@ function App() {
           />
           <Route
             path="/dashboard"
-            element={<Auth Component={Dashboard} isAdminPath />}
+            element={<Auth Component={Dashboard} isAdminPath isSupervisorPath />}
           />
           <Route
             path="/manage-projects"
-            element={<Auth Component={ManageProjects} isAdminPath />}
+            element={<Auth Component={ManageProjects} isAdminPath isSupervisorPath />}
           />
           <Route
             path="/manage-projects/:id"

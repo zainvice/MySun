@@ -57,7 +57,7 @@ const Password = () => {
                       [e?.target?.name]: e?.target?.value,
                     }))
                   }
-                  className="w-full inline-block mx-auto  h-10 py-2 px-4 rounded-full bg-gray-500 text-gray-100 placeholder-white border border-green-500 focus:outline-none text-base"
+                  className="w-full inline-block mx-auto  h-10 py-2 px-4 rounded-full bg-gray-500 text-gray-100 placeholder-white border border-[#2ce6bd] focus:outline-none text-base"
                   placeholder="Use a new password for your account"
                 />
               </div>
@@ -65,7 +65,7 @@ const Password = () => {
               <div className="flex justify-center mt-4">
                 <button
                   type="submit"
-                  className="w-28 h-8 mt-2 bg-transparent border-green-500 text-green-500 hover:scale-120 hover:bg-white border rounded-full focus:outline-none"
+                  className="w-28 h-8 mt-2 bg-transparent border-[#2ce6bd] text-[#2ce6bd] hover:scale-120 hover:bg-white border rounded-full focus:outline-none"
                 >
                   RESET
                 </button>
