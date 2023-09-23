@@ -1,13 +1,20 @@
 {
-   
+        "greeting": "Welcome",
+        "projectsHeading": "Projects",
+        "addnewProj": "Add New Projects", 
         "error": "Error",
-        "emailLabel": "Enter an Email or Username",
+        "emailLabel": "Email or Username",
+        "femail": "Email",
+        "feplaceholder": "Enter your Email",
+        "freset":"RESET",
+        "fOr": "OR",
         "emailPlaceholder": "Enter your Email or Username",
         "passwordLabel": "Password",
         "passwordPlaceholder": "Enter your Password",
         "forgotPasswordLink": "Forgot your password?",
         "loginButton": "LOG IN",
         "dashboard": {
+                "title": "Dashboard",
                 "recentUpdates": {
                   "title": "Recent Updates",
                   "showingForLabel": "SHOWING FOR",
@@ -31,6 +38,25 @@
                   "surveysRemaining": "Surveys remaining for today on",
                   "averageTimeSpent": "Average 1 hour spent on surveys today on"
                 }
+              },
+              "workerCard": {
+                "name": "Muhammad Faizan",
+                "lastLoginLabel": "Last Login:",
+                "lastLoginValue": "3 days ago",
+                "projectsCompleted": "Projects Completed",
+                "startedOnLabel": "Started on:",
+                "startedOnValue": "Jan 21, 2023",
+                "latestProjectLabel": "Latest Project:",
+                "latestProjectValue": "My Sun Development"
+              },
+              "taskCard": {
+                "repairSafeTitle": "Repair Safe",
+                "daysAgoLabel": "3 days ago",
+                "description": "Some description of the project",
+                "completedLabel": "Completed",
+                "startedOnLabel": "Started On:",
+                "timeTakenLabel": "Time Taken:",
+                "assignedToLabel": "Assigned to:"
               }
  
 }

@@ -9,8 +9,8 @@ function LanguageSwitcher() {
   };
 
   return (
-    <div className="absolute top-2 right-2">
-  <div className="flex space-x-2">
+    <div className="absolute top-2 right-2 z-50">
+  <div className="flex space-x-0  text-xs">
     <button
       onClick={() => handleLanguageChange('en')}
       disabled={currentLanguage === 'en'}
@@ -25,7 +25,7 @@ function LanguageSwitcher() {
     <button
       onClick={() => handleLanguageChange('he')}
       disabled={currentLanguage === 'he'}
-      className={`flex-1 ${
+      className={`flex-0.5 ${
         currentLanguage === 'he'
           ? 'bg-gray-400 cursor-not-allowed'
           : 'bg-[#2ce6bd] hover:bg-green-600'

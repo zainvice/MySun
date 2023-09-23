@@ -1,13 +1,20 @@
 {
-    
+    "greeting": "ברוך הבא",
+    "projectsHeading": "פרוייקטים",
+    "addnewProj": "הוספת פרויקטים חדשים", 
         "error": "שגיאה",
         "emailLabel": "הזן אימייל או שם משתמש",
         "emailPlaceholder": "הזן את האימייל או שם המשתמש שלך",
+        "femail": "דואר אלקטרוני",
+        "feplaceholder": "הזן את כתובת הדואל שלך",
+        "freset": "איפוס",
+        "fOr": "או",
         "passwordLabel": "סיסמה",
         "passwordPlaceholder": "הזן את הסיסמה שלך",
         "forgotPasswordLink": "שכחת את הסיסמה שלך?",
         "loginButton": "כניסה",
       "dashboard": {
+        "title": "לוח המחוונים",
     "recentUpdates": {
       "title": "עדכונים אחרונים",
       "showingForLabel": "מציג עבור",
@@ -31,5 +38,24 @@
       "surveysRemaining": "סקרים שנשארו להשלמה היום בתאריך",
       "averageTimeSpent": "ממוצע שעה אחת הוצברה על סקרים היום בתאריך"
     }
-  }
+  },
+  "workerCard": {
+        "name": "מוחמד פייזאן",
+        "lastLoginLabel": "כניסה אחרונה:",
+        "lastLoginValue": "לפני 3 ימים",
+        "projectsCompleted": "השלים  פרויקטים",
+        "startedOnLabel": "התחיל בתאריך:",
+        "startedOnValue": "21 בינואר 2023",
+        "latestProjectLabel": "פרויקט אחרון:",
+        "latestProjectValue": "פיתוח השמש שלי"
+      },
+      "taskCard": {
+        "repairSafeTitle": "תיקון בטחון",
+        "daysAgoLabel": "לפני 3 ימים",
+        "description": "תיאור הפרויקט",
+        "completedLabel": "הושלם ב-",
+        "startedOnLabel": "התחיל בתאריך:",
+        "timeTakenLabel": "זמן הפרויקט:",
+        "assignedToLabel": "שוייך ל:"
+      }
 }
