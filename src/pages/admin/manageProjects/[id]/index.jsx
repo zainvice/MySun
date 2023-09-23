@@ -59,6 +59,9 @@ function Project() {
 
     window.URL.revokeObjectURL(url);
   };
+  const onTasksClick = () =>{
+    
+  }
 
   return (
     <Layout activePageName={"Project"}>
@@ -70,6 +73,7 @@ function Project() {
               <Button
                 title={`Show Tasks <span class='material-symbols-outlined'>chevron_right</span>`}
                 titleClasses={"flex items-center gap-2"}
+                onClick={onTasksClick}
               />
             )}
           </div>
@@ -86,7 +90,7 @@ function Project() {
             </div>
 
             {dimension >= 640 && (
-              <NavLink to="/assigned-tasks">
+              <NavLink to="/project-tasks">
                 <Button
                   title={`Show Tasks <span class='material-symbols-outlined'>chevron_right</span>`}
                   titleClasses={"flex items-center gap-2"}

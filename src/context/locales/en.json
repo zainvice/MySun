@@ -6,6 +6,31 @@
         "passwordLabel": "Password",
         "passwordPlaceholder": "Enter your Password",
         "forgotPasswordLink": "Forgot your password?",
-        "loginButton": "LOG IN"
+        "loginButton": "LOG IN",
+        "dashboard": {
+                "recentUpdates": {
+                  "title": "Recent Updates",
+                  "showingForLabel": "SHOWING FOR",
+                  "todayOption": "TODAY",
+                  "sevenDaysOption": "7 Days",
+                  "fifteenDaysOption": "15 Days",
+                  "lastMonthOption": "LAST MONTH"
+                },
+                "topWorkers": {
+                  "title": "Top Workers"
+                },
+                "taskCard": {
+                  "linkText": "Manage Projects"
+                },
+                "workerDetailLinkText": "Worker Detail",
+                "workerDetail": {
+                  "clarityMessage": "Provide some workers with more clarity for the upcoming projects"
+                },
+                "statistics": {
+                  "surveysCompleted": "Surveys completed today on",
+                  "surveysRemaining": "Surveys remaining for today on",
+                  "averageTimeSpent": "Average 1 hour spent on surveys today on"
+                }
+              }
  
 }
