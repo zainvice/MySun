@@ -32,6 +32,7 @@ function NewWorkerOverlay({ onClose }) {
     event.preventDefault();
     const data = await createWorker({ ...inputValues });
     setMessage(data.message);
+    setInputValues({})
   };
 
   return (
@@ -61,17 +62,19 @@ function NewWorkerOverlay({ onClose }) {
               name="fullName"
               onChange={onChange}
               placeholder="Enter the name of the Worker"
+              value={inputValues?.fullName ?? ''}
               className="h-10 flex-1 py-2 px-4 rounded-full border-[1px] border-[#8C8C8C] bg-white focus-within:outline-[#21D0B2]"
             />
           </label>
 
           <label className="flex flex-col lg:flex-row gap-1 mb-4">
-            <span className="md:w-1/4 text-lg font-medium">Full Name:</span>
+            <span className="md:w-1/4 text-lg font-medium">Username:</span>
             <input
               type="text"
               name="username"
               onChange={onChange}
               placeholder="Enter the username of the Worker"
+              value={inputValues?.username ?? ''}
               className="h-10 flex-1 py-2 px-4 rounded-full border-[1px] border-[#8C8C8C] bg-white focus-within:outline-[#21D0B2]"
             />
           </label>
@@ -83,6 +86,7 @@ function NewWorkerOverlay({ onClose }) {
               name="phone"
               onChange={onChange}
               placeholder="Enter the Phone of the Worker"
+              value={inputValues?.phone ?? ''}
               className="h-10 flex-1 py-2 px-4 rounded-full border-[1px] border-[#8C8C8C] bg-white focus-within:outline-[#21D0B2]"
             />
           </label>
@@ -94,6 +98,7 @@ function NewWorkerOverlay({ onClose }) {
               name="email"
               onChange={onChange}
               placeholder="Enter the email of the Worker"
+              value={inputValues?.email ?? '' }
               className="h-10 flex-1 py-2 px-4 rounded-full border-[1px] border-[#8C8C8C] bg-white focus-within:outline-[#21D0B2]"
             />
           </label>
@@ -104,7 +109,7 @@ function NewWorkerOverlay({ onClose }) {
               type="text"
               name="password"
               onChange={onChange}
-              value={inputValues?.password}
+              value={inputValues?.password ?? '' }
               placeholder="Enter the password of the Worker"
               className="h-10 flex-1 py-2 px-4 rounded-full border-[1px] border-[#8C8C8C] bg-white focus-within:outline-[#21D0B2]"
             />
@@ -120,31 +125,34 @@ function NewWorkerOverlay({ onClose }) {
             <span className="text-lg font-medium mr-4">Choose Role:</span>
             <div className="flex items-center flex-1 gap-4">
               <div className="flex items-center">
-                <label className="text-lg mr-2">Admin</label>
                 <input
                   type="radio"
                   name="role"
                   value={"admin"}
+                  checked={inputValues?.role === 'admin'}
                   onChange={onChange}
                 />
+                <label className="text-lg ml-2">Admin</label>
               </div>
               <div className="flex items-center">
-                <label className="text-lg mr-2">Supervisor</label>
                 <input
                   type="radio"
                   name="role"
                   value={"supervisor"}
+                  checked={inputValues?.role === 'supervisor'}
                   onChange={onChange}
                 />
+                <label className="text-lg ml-2">Supervisor</label>
               </div>
               <div className="flex items-center">
-                <label className="text-lg mr-2">Worker</label>
                 <input
                   type="radio"
                   name="role"
                   value={"worker"}
+                  checked={inputValues?.role === 'worker'}
                   onChange={onChange}
                 />
+                <label className="text-lg ml-2">Worker</label>
               </div>
             </div>
           </div>

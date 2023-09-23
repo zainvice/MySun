@@ -11,6 +11,7 @@ import WorkerOverlay from "../../components/workerOverlay";
 import * as xlsx from "xlsx";
 import Message from "../../common/message";
 import jwtDecode from "jwt-decode";
+import Spinner from "../../common/spinner";
 
 function NewProject() {
   const { isOpen, onOpen, onClose } = useModal();
@@ -125,7 +126,7 @@ function NewProject() {
                   <input
                     type="text"
                     name="projectName"
-                    value={inputValues?.projectName}
+                    value={inputValues?.projectName ?? ''}
                     onChange={onChange}
                     placeholder="Enter project name"
                     className="h-10 w-full py-2 px-4 rounded-full border-[1px] border-[#8C8C8C] bg-white focus-within:outline-[#21D0B2]"
@@ -138,7 +139,7 @@ function NewProject() {
                   </span>
                   <DateInput
                     onChange={onChange}
-                    value={inputValues?.startDate}
+                    value={inputValues?.startDate ?? ''}
                     placeholder={"Choose start date of project"}
                     additonalProps={{
                       name: "startDate",
@@ -152,7 +153,7 @@ function NewProject() {
                   </span>
                   <DateInput
                     onChange={onChange}
-                    value={inputValues?.endDate}
+                    value={inputValues?.endDate ?? ''}
                     placeholder={"Choose end date of project"}
                     additonalProps={{
                       name: "endDate",
@@ -188,7 +189,7 @@ function NewProject() {
                     rows={4}
                     name="projectDescription"
                     onChange={onChange}
-                    value={inputValues?.projectDescription}
+                    value={inputValues?.projectDescription ?? ''}
                     className="w-full py-2 px-4 rounded-3xl border-[1px] border-[#8C8C8C] bg-white focus-within:outline-[#21D0B2]"
                   />
                 </label>
@@ -254,14 +255,7 @@ function NewProject() {
       </Modal>
 
       <Modal isOpen={openLoading}>
-        <div
-          class="text-[#00FFD3] inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"
-          role="status"
-        >
-          <span class="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">
-            Loading...
-          </span>
-        </div>
+        <Spinner />
       </Modal>
     </>
   );
