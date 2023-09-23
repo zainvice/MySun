@@ -19,7 +19,7 @@ const OTP = () => {
   return (
     <div
       className="min-h-screen flex items-center justify-center bg-cover bg-center relative"
-      style={{ backgroundImage: `url("./images/ForgotPasswordImg.jpeg")` }}
+      style={{ backgroundImage: `url("./images/ForgotPasswordImg.jpg")` }}
     >
       <div className="absolute bg-gray-900 bg-opacity-80 p-4 rounded-lg shadow-lg h-[96%] w-[90%] sm:w-[70%]">
         <div className="w-full">
