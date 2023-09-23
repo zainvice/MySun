@@ -1,4 +1,5 @@
 import { publicUrl } from "../utils";
+import { useTranslation } from 'react-i18next';
 
 export const VARIANTS = {
   GREEN: "green",
@@ -6,6 +7,7 @@ export const VARIANTS = {
 };
 
 function TaskCard({ variant }) {
+  const { t } = useTranslation()
   return (
     <div
       className={`w-full p-4 sm:p-6 rounded-3xl text-white shadow-lg ${
@@ -30,24 +32,24 @@ function TaskCard({ variant }) {
         <p className="line-clamp-2 mb-2">Some description of project</p>
         <div className="relative h-7 rounded-full flex justify-center items-center text-sm text-[#00FFD3] bg-[#505050]">
           <div className="absolute top-0 -left-[2px] rounded-full border-white h-full w-[75%] bg-white" />
-          <span className="z-[1]">75% Completed</span>
+          <span className="z-[1]">75% {t('taskCard.completedLabel')}</span>
         </div>
       </div>
       <div className="mt-3 text-sm">
         <p className="flex items-center gap-2">
-          <span className="font-semibold">Started On: </span>
-          <span>23 May, 2023</span>
+          <span className="font-semibold">{t('taskCard.startedOnLabel')}: </span>
+          <span>DATE</span>
         </p>
 
         <p className="flex items-center gap-2">
-          <span className="font-semibold">Time Taken: </span>
-          <span>3 days, 12 hours</span>
+          <span className="font-semibold">{t('taskCard.timeTakenLabel')}: </span>
+          <span>TIME CALC.</span>
         </p>
       </div>
       <div className="mt-4 text-sm">
         <p className="flex items-center justify-end gap-2">
-          <span className="font-semibold">Assigned to: </span>
-          <span>Muhammad Faizan</span>
+          <span className="font-semibold">{t('taskCard.assignedToLabel')}: </span>
+          <span>SUPERVISOR NAME</span>
         </p>
       </div>
     </div>

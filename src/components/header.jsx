@@ -1,6 +1,8 @@
 import React from "react";
+import { useTranslation } from 'react-i18next';
 
 function Header({ onSidebarOpen, activePageName }) {
+  const { t } = useTranslation();
   const username = sessionStorage.getItem("Name");
   return (
     <div className="flex items-center w-full shadow-md p-2 sm:p-5">
@@ -17,7 +19,7 @@ function Header({ onSidebarOpen, activePageName }) {
         </div>
         <div>
           <h1 className="font-bold sm:text-lg">
-            Welcome,{" "}
+           {t('greeting')},{" "}
             <span className="text-[#00C191] font-medium">{username}</span>
           </h1>
         </div>

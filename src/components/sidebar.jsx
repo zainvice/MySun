@@ -2,6 +2,8 @@ import { Link, NavLink, useNavigate } from "react-router-dom";
 import { publicUrl } from "../utils";
 import { logoutUser } from "../api";
 
+import { useLanguageSwitcher } from '../context/useLanguageSwitcher';
+
 function Sidebar({ isSidebarOpen, onSidebarClose }) {
   const navigate = useNavigate();
   const isAdmin = sessionStorage.getItem("Role") === "admin";
@@ -13,6 +15,11 @@ function Sidebar({ isSidebarOpen, onSidebarClose }) {
       });
       navigate("/", { replace: true });
     });
+  };
+  const { currentLanguage, changeLanguage } = useLanguageSwitcher();
+
+  const handleLanguageChange = (language) => {
+    changeLanguage(language);
   };
 
   return (
@@ -39,6 +46,30 @@ function Sidebar({ isSidebarOpen, onSidebarClose }) {
           className="lg:w-20 lg:14 w-18 h-12"
         />
       </Link>
+      <div className=" mt-10 flex space-x-0  text-xs">
+          <button
+            onClick={() => handleLanguageChange('en')}
+            disabled={currentLanguage === 'en'}
+            className={`flex-1 ${
+              currentLanguage === 'en'
+                ? 'bg-gray-400 cursor-not-allowed'
+                : 'bg-[#2ce6bd] hover:bg-blue-600'
+            } text-white font-bold py-2 px-4 rounded-l focus:outline-none focus:ring focus:ring-blue-300`}
+          >
+            EN
+          </button>
+          <button
+            onClick={() => handleLanguageChange('he')}
+            disabled={currentLanguage === 'he'}
+            className={`flex-0.5 ${
+              currentLanguage === 'he'
+                ? 'bg-gray-400 cursor-not-allowed'
+                : 'bg-[#2ce6bd] hover:bg-green-600'
+            } text-white font-bold py-2 px-4 rounded-r focus:outline-none focus:ring focus:ring-green-300`}
+          >
+            HE
+          </button>
+        </div>
 
       <div className="mt-16 flex flex-col">
         {isAdmin && (
@@ -87,6 +118,7 @@ function Sidebar({ isSidebarOpen, onSidebarClose }) {
           </NavLink>
         )}
       </div>
+      
 
       <div className="flex flex-col absolute bottom-0">
         <NavLink
@@ -107,6 +139,8 @@ function Sidebar({ isSidebarOpen, onSidebarClose }) {
           </span>
           <span className="inline-block lg:hidden text-lg hover:text-[#2ce6bd] active:text-[#2ce6bd]">Logout</span>
         </button>
+        
+        
       </div>
     </div>
   );
