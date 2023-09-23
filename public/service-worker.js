@@ -5,6 +5,8 @@ const cacheableUrls = [
   '/index.html',
   '/manifest.json',
   '/pages/admin/dashboard.jsx',
+  '/pages/login.jsx',
+  '/pages/forgetPassword.jsx',
   '/pages/admin/newProject.jsx',
   '/pages/admin/workers.jsx',
   '/pages/admin/manageProjects/[id]/index.jsx',
