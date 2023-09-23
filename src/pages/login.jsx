@@ -91,7 +91,7 @@ const LoginPage = () => {
           <div className="flex justify-center mt-2">
   <button
     type="submit"
-    className="w-28 h-8 mt-2 bg-transparent border-green-500 text-green-500 border rounded-full focus:outline-none transform transition-transform hover:scale-105 hover:bg-white"
+    className="w-28 h-8 mt-2 bg-transparent border-green-500 text-green-500 border hover:text-white rounded-full focus:outline-none transform transition-300 hover:font-bold hover:bg-[#2ce6bd]"
   >
     {t('loginButton')}
   </button>

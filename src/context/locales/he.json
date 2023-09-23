@@ -6,6 +6,30 @@
         "passwordLabel": "סיסמה",
         "passwordPlaceholder": "הזן את הסיסמה שלך",
         "forgotPasswordLink": "שכחת את הסיסמה שלך?",
-        "loginButton": "כניסה"
-     
+        "loginButton": "כניסה",
+      "dashboard": {
+    "recentUpdates": {
+      "title": "עדכונים אחרונים",
+      "showingForLabel": "מציג עבור",
+      "todayOption": "היום",
+      "sevenDaysOption": "7 ימים",
+      "fifteenDaysOption": "15 ימים",
+      "lastMonthOption": "החודש האחרון"
+    },
+    "topWorkers": {
+      "title": "עובדים מובילים"
+    },
+    "taskCard": {
+      "linkText": "ניהול פרויקטים"
+    },
+    "workerDetailLinkText": "פרטי עובד",
+    "workerDetail": {
+      "clarityMessage": "ספק יותר בהבנה לעובדים לפרויקטים הקרובים"
+    },
+    "statistics": {
+      "surveysCompleted": "סקרים הושלמו היום בתאריך",
+      "surveysRemaining": "סקרים שנשארו להשלמה היום בתאריך",
+      "averageTimeSpent": "ממוצע שעה אחת הוצברה על סקרים היום בתאריך"
+    }
+  }
 }

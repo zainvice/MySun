@@ -6,9 +6,8 @@ import WorkerCard from "../../components/workerCard";
 import WorkerDetail from "../worker/workerDetail";
 import Layout from "../../layout";
 import { NavLink } from "react-router-dom";
-import { useLanguage } from "../../context/LanguageContext"; // Import the useLanguage hook
 function Dashboard() {
-  const { language, toggleLanguage } = useLanguage();
+  
   return (
     <Layout activePageName={"Dashboard"}>
       <Container>
@@ -16,8 +15,22 @@ function Dashboard() {
           <Heading title={"Recent Updates"} />
 
           <select className="border-2 border-[#00FFD3] text-[#00FFD3] p-2 rounded-full focus-within:outline-none transform transition-transform hover:scale-105 hover:bg-[#00FFD3] hover:text-white">
-            <option className="border-2 border-[#00FFD3] text-[#00FFD3] p-2 rounded-full focus-within:outline-none transform transition-transform hover:scale-105 hover:bg-[#00FFD3] hover:text-white">
-              showing for today
+           SHOWING FOR 
+            <option value={1} className="border-2 border-[#00FFD3] text-[#00FFD3] p-2 rounded-full focus-within:outline-none transform transition-transform hover:scale-105 hover:bg-[#00FFD3] hover:text-white">
+              {'TODAY'}
+            
+            </option>
+            <option value={7} className="border-2 border-[#00FFD3] text-[#00FFD3] p-2 rounded-full focus-within:outline-none transform transition-transform hover:scale-105 hover:bg-[#00FFD3] hover:text-white">
+               {'7 Days'}
+            
+            </option>
+            <option value={15} className="border-2 border-[#00FFD3] text-[#00FFD3] p-2 rounded-full focus-within:outline-none transform transition-transform hover:scale-105 hover:bg-[#00FFD3] hover:text-white">
+               {'15 Days'}
+            
+            </option>
+            <option value={30} className="border-2 border-[#00FFD3] text-[#00FFD3] p-2 rounded-full focus-within:outline-none transform transition-transform hover:scale-105 hover:bg-[#00FFD3] hover:text-white">
+              {'LAST MONTH'}
+            
             </option>
           </select>
         </div>
