@@ -6,16 +6,29 @@ import Heading from "../../common/heading";
 import DateInput from "../../common/dateInput";
 import Button from "../../common/button";
 import Modal from "../../common/modal";
+import { createProject, getWorkers } from "../../api";
 import WorkerOverlay from "../../components/workerOverlay";
-import { getWorkers } from "../../api";
+import * as xlsx from "xlsx";
+import Message from "../../common/message";
+import jwtDecode from "jwt-decode";
 
 function NewProject() {
   const { isOpen, onOpen, onClose } = useModal();
   const [inputValues, setInputValues] = useState({});
-
   const [workers, setWorkers] = useState([]);
   const [selectedWorkers, setSelectedWorkers] = useState([]);
-  const [fileName, setFileName] = useState();
+  const [fileName, setFileName] = useState("");
+  const [message, setMessage] = useState("");
+  const {
+    isOpen: openMessage,
+    onOpen: onOpenMessage,
+    onClose: onCloseMessage,
+  } = useModal();
+  const {
+    isOpen: openLoading,
+    onOpen: onOpenLoading,
+    onClose: onCloseLoading,
+  } = useModal();
 
   useEffect(() => {
     getWorkers().then((data) => {
@@ -36,17 +49,60 @@ function NewProject() {
   const onFileSelect = (e) => {
     const file = e?.target?.files[0];
     setFileName(file?.name);
-    setInputValues((prev) => ({
-      ...prev,
-      projectFile: file,
-    }));
+
+    if (file) {
+      const reader = new FileReader();
+      reader.readAsBinaryString(file);
+      reader.onload = function (e) {
+        const fileBinary = e.target.result;
+        const readedData = xlsx.read(fileBinary, { type: "binary" });
+        const workSheetNames = readedData.SheetNames[0];
+        const worksheets = readedData.Sheets[workSheetNames];
+        const data = xlsx.utils.sheet_to_json(worksheets, { header: 1 });
+        const header = data[0];
+        const rows = data.slice(1, data.length - 1);
+
+        const tasks = rows.map((row) => {
+          const task = Object.create(null);
+          row.map((data, index) => {
+            Object.assign(task, { [header[index]]: data });
+          });
+          return task;
+        });
+
+        setInputValues((prev) => ({
+          ...prev,
+          projectData: { tasks },
+        }));
+      };
+    }
   };
 
   const onSubmit = (e) => {
     e?.preventDefault();
-    console.log(inputValues);
+    onOpenLoading();
+    const userInfo = jwtDecode(sessionStorage.getItem("accessToken"));
+    createProject({
+      ...inputValues,
+      workers: selectedWorkers,
+      admin: userInfo.email,
+    })
+      .then(() => {
+        setFileName("");
+        setInputValues({});
+        setSelectedWorkers([]);
+        setMessage("Project created sccessfully!");
+        onOpenMessage();
+      })
+      .catch((error) => {
+        const data = error?.response?.data;
+        setMessage(data?.error ?? "Something went wrong!");
+        onOpenMessage();
+      })
+      .finally(() => {
+        onCloseLoading();
+      });
   };
-
 
   return (
     <>
@@ -111,7 +167,7 @@ function NewProject() {
                     type="text"
                     onClickCapture={() => onOpen()}
                     value={
-                      selectedWorkers.length
+                      selectedWorkers?.length
                         ? selectedWorkers
                             .map((worker) => worker.fullName)
                             .join(", ")
@@ -132,6 +188,7 @@ function NewProject() {
                     rows={4}
                     name="projectDescription"
                     onChange={onChange}
+                    value={inputValues?.projectDescription}
                     className="w-full py-2 px-4 rounded-3xl border-[1px] border-[#8C8C8C] bg-white focus-within:outline-[#21D0B2]"
                   />
                 </label>
@@ -145,7 +202,7 @@ function NewProject() {
                     placeholder="Choose the worker for project"
                     className="hidden"
                     onChange={onFileSelect}
-                    accept=".xlsx"
+                    accept=".xlsx,.xls"
                   />
                   <div className="w-full rounded-3xl border-[1px] border-[#8C8C8C] bg-white h-40 flex flex-col items-center justify-center">
                     <img
@@ -179,12 +236,32 @@ function NewProject() {
           </div>
         </Container>
       </Layout>
+
       <Modal isOpen={isOpen} onClose={onClose}>
         <WorkerOverlay
           workers={workers}
           selectedWorkers={selectedWorkers}
           setSelectedWorkers={setSelectedWorkers}
         />
+      </Modal>
+
+      <Modal isOpen={openMessage} onClose={onCloseMessage}>
+        <Message
+          heading={"Message"}
+          message={message}
+          onClose={onCloseMessage}
+        />
+      </Modal>
+
+      <Modal isOpen={openLoading}>
+        <div
+          class="text-[#00FFD3] inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"
+          role="status"
+        >
+          <span class="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">
+            Loading...
+          </span>
+        </div>
       </Modal>
     </>
   );

@@ -23,11 +23,13 @@ export const resquestReset = async (email) => {
   return await api.post("/resetPassword/auth/requestResetPassword", { email });
 };
 
-export const resetPassword = async ({userId, token, password}) => {
+export const resetPassword = async ({ userId, token, password }) => {
   return await api.post("/resetPassword/auth/resetPassword", {
-    userId, token, password
-  })
-}
+    userId,
+    token,
+    password,
+  });
+};
 
 export const createWorker = async ({
   email,
@@ -47,7 +49,8 @@ export const createWorker = async ({
 
     return response?.data;
   } catch (error) {
-    return error.response?.data;
+    if (error?.status === 500) return error.message;
+    return error?.response?.data;
   }
 };
 
@@ -56,6 +59,31 @@ export const getWorkers = async () => {
     const response = await api.get("/users");
     return response.data;
   } catch (error) {
-    return error.response?.data;
+    if (error?.status === 500) return error.message;
+    return error?.response?.data;
   }
+};
+
+export const createProject = async ({
+  projectName,
+  projectData,
+  projectDescription,
+  projectFile,
+  startDate,
+  endDate,
+  admin,
+  workers,
+  status,
+}) => {
+    return await api.post("/projects", {
+      projectName,
+      projectData,
+      projectDescription,
+      projectFile,
+      startDate,
+      endDate,
+      admin,
+      workers,
+      status,
+    });
 };
