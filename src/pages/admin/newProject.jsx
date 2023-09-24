@@ -73,7 +73,7 @@ function NewProject() {
 
         setInputValues((prev) => ({
           ...prev,
-          projectData: { tasks },
+          projectData: { tasks, completionPercentage: 0 },
         }));
       };
     }
@@ -126,7 +126,7 @@ function NewProject() {
                   <input
                     type="text"
                     name="projectName"
-                    value={inputValues?.projectName ?? ''}
+                    value={inputValues?.projectName ?? ""}
                     onChange={onChange}
                     placeholder="Enter project name"
                     className="h-10 w-full py-2 px-4 rounded-full border-[1px] border-[#8C8C8C] bg-white focus-within:outline-[#21D0B2]"
@@ -139,7 +139,7 @@ function NewProject() {
                   </span>
                   <DateInput
                     onChange={onChange}
-                    value={inputValues?.startDate ?? ''}
+                    value={inputValues?.startDate ?? ""}
                     placeholder={"Choose start date of project"}
                     additonalProps={{
                       name: "startDate",
@@ -153,7 +153,7 @@ function NewProject() {
                   </span>
                   <DateInput
                     onChange={onChange}
-                    value={inputValues?.endDate ?? ''}
+                    value={inputValues?.endDate ?? ""}
                     placeholder={"Choose end date of project"}
                     additonalProps={{
                       name: "endDate",
@@ -189,7 +189,7 @@ function NewProject() {
                     rows={4}
                     name="projectDescription"
                     onChange={onChange}
-                    value={inputValues?.projectDescription ?? ''}
+                    value={inputValues?.projectDescription ?? ""}
                     className="w-full py-2 px-4 rounded-3xl border-[1px] border-[#8C8C8C] bg-white focus-within:outline-[#21D0B2]"
                   />
                 </label>

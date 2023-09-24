@@ -75,15 +75,24 @@ export const createProject = async ({
   workers,
   status,
 }) => {
-    return await api.post("/projects", {
-      projectName,
-      projectData,
-      projectDescription,
-      projectFile,
-      startDate,
-      endDate,
-      admin,
-      workers,
-      status,
-    });
+  return await api.post("/projects", {
+    projectName,
+    projectData,
+    projectDescription,
+    projectFile,
+    startDate,
+    endDate,
+    admin,
+    workers,
+    status,
+  });
+};
+
+export const getProjects = async () => {
+  try {
+    const response = await api.get("/projects");
+    return response?.data;
+  } catch (error) {
+    throw error?.response?.data;
+  }
 };

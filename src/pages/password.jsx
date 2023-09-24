@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { useModal } from "../hooks";
 import Modal from "../common/modal";
 import Message from "../common/message";
+import Spinner from "../common/spinner";
 import { useTranslation } from "react-i18next";
 import LanguageSwitcher from "../context/LanguageSwitcher";
 
@@ -12,11 +13,13 @@ const Password = () => {
   const {t} = useTranslation()
   const { isOpen, onOpen, onClose } = useModal();
   const [success, setSuccess] = useState(false);
-  const [message, setMessage] = useState('')
+  const [message, setMessage] = useState("");
   const { resetToken, userId } = useParams();
   const [inputValues, setInputValues] = useState();
+  const [isloading, setloading] = useState(false);
   const onResetPassword = (event) => {
     event.preventDefault();
+    setloading(true);
     resetPassword({
       password: inputValues?.password,
       token: resetToken,
@@ -24,9 +27,10 @@ const Password = () => {
     })
       .then(() => setSuccess(true))
       .catch((error) => {
-        setMessage(error.response?.data?.message ?? error.message)
-        onOpen()
-      });
+        setMessage(error.response?.data?.message ?? error.message);
+        onOpen();
+      })
+      .finally(() => setloading(false));
   };
   
   return (
@@ -36,14 +40,15 @@ const Password = () => {
         className="min-h-screen flex items-center justify-center bg-cover bg-center relative"
         style={{ backgroundImage: `url("/images/ForgotPasswordImg.jpg")` }}
       >
+        <LanguageSwitcher />
         <div className="absolute bg-gray-900 bg-opacity-80 p-4 rounded-lg shadow-lg h-[90%] w-[90%] sm:w-[70%]">
           <div className="w-full">
             {/* Added the logo image and Login heading */}
             <div className="flex justify-center items-center mb-2 mt-9">
               <img
-                src={"/images/logo.png"} 
+                src={"/images/logo.png"}
                 alt="Logo"
-                className="w-[100px] h-[100px]" 
+                className="w-[100px] h-[100px]"
               />
             </div>
             <form className="w-full mt-20" onSubmit={onResetPassword}>
@@ -94,11 +99,11 @@ const Password = () => {
       </div>
 
       <Modal isOpen={isOpen} onClose={onClose}>
-        <Message
-          heading={"Alert!"}
-          message={message}
-          onClose={onClose}
-        />
+        <Message heading={"Alert!"} message={message} onClose={onClose} />
+      </Modal>
+
+      <Modal isOpen={isloading}>
+        <Spinner />
       </Modal>
     </>
   );

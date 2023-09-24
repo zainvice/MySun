@@ -1,7 +1,7 @@
 //@ts-ignore
 import Container from "../../common/container";
 import Heading from "../../common/heading";
-import TaskCard, { VARIANTS } from "../../components/taskCard";
+import ProjectCard, { VARIANTS } from "../../components/projectCard";
 import WorkerCard from "../../components/workerCard";
 import WorkerDetail from "../worker/workerDetail";
 import { useTranslation } from "react-i18next";
@@ -47,7 +47,7 @@ function Dashboard() {
         <div className="flex flex-col sm:flex-row gap-4 sm:gap-6">
           <div className="sm:w-1/2 md:min-w-[340px] md:w-1/3 ">
             <NavLink to="/manage-projects/:id" className={'block text-white transform transition-transform hover:scale-105'}>
-              <TaskCard variant={VARIANTS.GREEN} />
+              <ProjectCard variant={VARIANTS.GREEN} />
             </NavLink>
           </div>
           <div className="flex-1 bg-gradient-to-b from-[#00FFD3] from-60% to-[#37C19F] rounded-3xl p-[3px] shadow-lg">
