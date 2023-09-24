@@ -18,6 +18,8 @@ function NewProject() {
   const [inputValues, setInputValues] = useState({});
   const [workers, setWorkers] = useState([]);
   const [selectedWorkers, setSelectedWorkers] = useState([]);
+  const [isCorrectStartDate, setCorrectStartDate] = useState(true);
+  const [isCorrectEndDate, setCorrectEndDate] = useState(true);
   const [fileName, setFileName] = useState("");
   const [message, setMessage] = useState("");
   const {
@@ -43,7 +45,7 @@ function NewProject() {
     const target = e.target ?? {};
     setInputValues((prev) => ({
       ...prev,
-      [target.name]: target.value,
+      [target?.name]: target?.value,
     }));
   };
 
@@ -81,6 +83,21 @@ function NewProject() {
 
   const onSubmit = (e) => {
     e?.preventDefault();
+    const currentDate = new Date(Date.now());
+    const startDate = new Date(inputValues?.startDate);
+    const endDate = new Date(inputValues?.endDate);
+
+    if (startDate <= currentDate) {
+      setCorrectStartDate(false);
+      return;
+    } else if (endDate < startDate) {
+      setCorrectEndDate(false);
+      return;
+    } else {
+      setCorrectStartDate(true);
+      setCorrectEndDate(true);
+    }
+
     onOpenLoading();
     const userInfo = jwtDecode(sessionStorage.getItem("accessToken"));
     createProject({
@@ -137,28 +154,42 @@ function NewProject() {
                   <span className="md:w-1/4 text-lg font-medium">
                     Start Date:
                   </span>
-                  <DateInput
-                    onChange={onChange}
-                    value={inputValues?.startDate ?? ""}
-                    placeholder={"Choose start date of project"}
-                    additonalProps={{
-                      name: "startDate",
-                    }}
-                  />
+                  <div className="w-full">
+                    <DateInput
+                      onChange={onChange}
+                      value={inputValues?.startDate ?? ""}
+                      placeholder={"Choose start date of project"}
+                      additonalProps={{
+                        name: "startDate",
+                      }}
+                    />
+                    {!isCorrectStartDate && (
+                      <p className="pl-2 text-sm text-red-400">
+                        Start date should be greater than today's date
+                      </p>
+                    )}
+                  </div>
                 </label>
 
                 <label className="flex flex-col lg:flex-row gap-1">
                   <span className="md:w-1/4 text-lg font-medium">
                     End Date:
                   </span>
-                  <DateInput
-                    onChange={onChange}
-                    value={inputValues?.endDate ?? ""}
-                    placeholder={"Choose end date of project"}
-                    additonalProps={{
-                      name: "endDate",
-                    }}
-                  />
+                  <div className="w-full">
+                    <DateInput
+                      onChange={onChange}
+                      value={inputValues?.endDate ?? ""}
+                      placeholder={"Choose end date of project"}
+                      additonalProps={{
+                        name: "endDate",
+                      }}
+                    />
+                    {!isCorrectEndDate && (
+                      <p className="pl-2 text-sm text-red-400">
+                        End date should be greater than today's date
+                      </p>
+                    )}
+                  </div>
                 </label>
 
                 <label className="flex flex-col lg:flex-row gap-1">
