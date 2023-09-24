@@ -2,9 +2,10 @@ import React, { useState, useEffect } from "react";
 import Container from "../../common/container";
 import Layout from "../../layout";
 import Button from "../../common/button";
+import { useTranslation } from "react-i18next";
 
 function NewTaskAssigned() {
-
+  const {t}= useTranslation()
   const [timerRunning, setTimerRunning] = useState(false);
   const [seconds, setSeconds] = useState(0);
   const [offlineTasks, setOfflineTasks] = useState([]);
@@ -106,64 +107,65 @@ function NewTaskAssigned() {
           </div>
         </div>
         <div className="text-white grid grid-cols-1 sm:grid-cols-2  md:grid-cols-3 gap-4">
+          {/* These inputs will be dynamic if they are already existing then user input will be disabled  */}
           <input
             type="text"
-            placeholder="Building International Number"
+            placeholder={t("newTaskAssigned.buildingNumber")}
             className="rounded-full bg-gray-200 text-black px-4 h-12 w-full"
           />
           <input
             type="text"
-            placeholder="Worker Name"
+            placeholder={t("newTaskAssigned.workerName")}
             className="rounded-full bg-gray-200 text-black px-4 h-12 w-full"
           />
           <input
             type="text"
-            placeholder="Address"
+            placeholder={t("newTaskAssigned.address")}
             className="rounded-full bg-gray-200 text-black px-4 h-12 w-full"
           />
           <input
             type="text"
-            placeholder="Physical Number"
+            placeholder={t("newTaskAssigned.physicalNumber")}
             className="rounded-full bg-gray-200 text-black px-4 h-12 w-full"
           />
           <input
             type="text"
-            placeholder="Owner ID"
+            placeholder={t("newTaskAssigned.ownerID")}
             className="rounded-full bg-gray-200 text-black px-4 h-12 w-full"
           />
           <input
             type="text"
-            placeholder="Owner Name"
+            placeholder={t("newTaskAssigned.ownerName")}
             className="rounded-full bg-gray-200 text-black px-4 h-12 w-full"
           />
           <input
             type="text"
-            placeholder="Phone Number"
+            placeholder={t("newTaskAssigned.phoneNumber")}
             className="rounded-full bg-gray-200 text-black px-4 h-12 w-full"
           />
           <input
             type="text"
-            placeholder="Old Area"
+            placeholder={t("newTaskAssigned.oldArea")}
             className="rounded-full bg-gray-200 text-black px-4 h-12 w-full"
           />
           <input
             type="text"
-            placeholder="Property Type"
+            placeholder={t("newTaskAssigned.propertyType")}
             className="rounded-full bg-gray-200 text-black px-4 h-12 w-full"
           />
           <input
             type="text"
-            placeholder="GOSH"
+            placeholder={t("newTaskAssigned.GOSH")}
             className="rounded-full bg-gray-200 text-black px-4 h-12 w-full"
           />
           <input
             type="text"
-            placeholder="HELMA"
+            placeholder={t("newTaskAssigned.HELMA")}
             className="rounded-full bg-gray-200 text-black px-4 h-12 w-full"
           />
           <input
             type="text"
-            placeholder="FLOOR"
+            placeholder={t("newTaskAssigned.floor")}
             className="rounded-full bg-gray-200 text-black px-4 h-12 w-full"
           />
         </div>

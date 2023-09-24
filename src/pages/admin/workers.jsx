@@ -9,8 +9,10 @@ import WorkersTable from "../../components/workersTable";
 import { getWorkers } from "../../api";
 import { useModal } from "../../hooks";
 import Spinner from "../../common/spinner";
+import { useTranslation } from "react-i18next";
 
 function Workers() {
+  const {t} = useTranslation()
   const [workers, setWorkers] = useState([]);
   const { isOpen, onOpen, onClose } = useModal();
   const [isloading, setloading] = useState(true);
@@ -26,11 +28,12 @@ function Workers() {
 
   return (
     <>
-      <Layout activePageName={"Field Workers"}>
+      <Layout activePageName={t('workers.pageName')}>
         <Container>
           <div className="flex justify-between mb-2">
-            <Heading title={"Workers"} />
-            <Button title={"Add New Worker"} onClick={onOpen} />
+            <Heading title={t('workers.heading')} />
+            {/*  Add an onClick event to open the modal */}
+            <Button title={t('workers.addNewWorkerButton')} onClick={onOpen} />
           </div>
           {isloading ? <Spinner /> : <WorkersTable workers={workers} />}
         </Container>

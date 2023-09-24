@@ -9,6 +9,9 @@
         "feplaceholder": "הזן את כתובת הדואל שלך",
         "freset": "איפוס",
         "fOr": "או",
+        "frqdone": "שלחנו קישור לדואל שלך ",
+        "frqdone1": "לחץ על הקישור כדי לאפס את הסיסמה שלך",
+        "npassword": "השתמש בסיסמה חדשה עבור החשבון שלך",
         "passwordLabel": "סיסמה",
         "passwordPlaceholder": "הזן את הסיסמה שלך",
         "forgotPasswordLink": "שכחת את הסיסמה שלך?",
@@ -57,5 +60,60 @@
         "startedOnLabel": "התחיל בתאריך:",
         "timeTakenLabel": "זמן הפרויקט:",
         "assignedToLabel": "שוייך ל:"
-      }
+      },
+      "workers": {
+        "pageName": "עובדים בשדה",
+        "heading": "עובדים",
+        "addNewWorkerButton": "הוסף עובד חדש"
+      },
+      "workersTable": {
+        "name": "שם",
+        "email": "אימייל",
+        "role": "תפקיד",
+        "permissions": "הרשאות",
+        "edit": "ערוך",
+        "download": "הורד",
+        "share": "שתף"
+      },
+      
+        "newTaskAssigned": {
+          "newTask": "משימה חדשה",
+          "startTimer": "התחל טיימר",
+          "stopTimer": "עצור טיימר",
+          "timer": "טיימר",
+          "hours": "שעות",
+          "minutes": "דקות",
+          "seconds": "שניות",
+          "buildingNumber": "מספר בניין בינלאומי",
+          "workerName": "שם עובד",
+          "address": "כתובת",
+          "physicalNumber": "מספר פיזי",
+          "ownerID": "תעודת זהות בעלים",
+          "ownerName": "שם בעלים",
+          "phoneNumber": "מספר טלפון",
+          "oldArea": "אזור ישן",
+          "propertyType": "סוג הנכס",
+          "GOSH": "גוש",
+          "HELMA": "חלמ\"א",
+          "floor": "קומה",
+          "coordinationLetter": "מכתב התיאום",
+          "refusedSurvey": "סקר נדחה",
+          "aerialMapping": "מיפוי אווירי",
+          "missingInformation": "מידע חסר",
+          "uniteAddress": "כתובת אותחלק",
+          "underConstruction": "בנייה בתהליך",
+          "notes": "הערות",
+          "saveProgress": "שמור התקדמות"
+        },
+        "assignedTasks": {
+          "pageTitle": "משימות שהוקצו",
+          "sortByOptions": {
+            "mostRecent": "הכי חדשות",
+            "status": "סטטוס",
+            "progress": "התקדמות"
+          }
+        }
+      
+      
+
 }
