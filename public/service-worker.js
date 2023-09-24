@@ -4,10 +4,13 @@ const cacheableUrls = [
   '/',
   '/index.html',
   '/manifest.json',
-  '/pages/login.jsx', // Include only the relevant JavaScript files
+  '/pages/admin/dashboard.jsx',
+  '/pages/login.jsx',
   '/pages/forgetPassword.jsx',
   '/pages/admin/newProject.jsx',
   '/pages/admin/workers.jsx',
+  '/pages/admin/manageProjects/[id]/index.jsx',
+  '/pages/admin/manageProjects/index.jsx',
   '/pages/worker/assignedTasks.jsx',
   '/pages/worker/newTaskAssigned.jsx'
 ];
