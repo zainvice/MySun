@@ -3,7 +3,7 @@ import Container from "../../common/container";
 import Layout from "../../layout";
 import Heading from "../../common/heading";
 import { NavLink } from "react-router-dom";
-import TaskCard, { VARIANTS } from "../../components/taskCard";
+import ProjectCard, { VARIANTS } from "../../components/projectCard";
 import { isEven } from "../../utils";
 
 function AssignedTasks() {
@@ -24,7 +24,7 @@ function AssignedTasks() {
             .map((i, index) => (
               <NavLink to="/new-task-assigned" key={index}>
                 <div className="transform transition-transform hover:scale-105 hover:shadow-lg">
-                  <TaskCard
+                  <ProjectCard
                     variant={
                       isEven(index + 1) ? VARIANTS.PURPLE : VARIANTS.GREEN
                     }

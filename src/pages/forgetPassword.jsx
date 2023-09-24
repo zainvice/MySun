@@ -3,6 +3,9 @@ import { resquestReset } from "../api";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import LanguageSwitcher from "../context/LanguageSwitcher";
+import { useModal } from "../hooks";
+import Modal from "../common/modal";
+import Spinner from "../common/spinner";
 
 const ForgotPassword = () => {
   const { t } = useTranslation();
@@ -10,9 +13,11 @@ const ForgotPassword = () => {
   const [message, setMessage] = useState("");
   const [isSent, setSent] = useState(false);
   const [inputValues, setInputValues] = useState();
+  const { isOpen, onOpen, onClose } = useModal();
 
   const onRequestReset = (event) => {
     event.preventDefault();
+    onOpen();
     resquestReset(inputValues?.email)
       .then(() => {
         setSent(true);
@@ -22,7 +27,8 @@ const ForgotPassword = () => {
       .catch((error) => {
         setMessage(error?.response?.data?.message);
         console.error("An error occurred:", error);
-      });
+      })
+      .finally(() => onClose());
     debugger;
   };
   return (
@@ -103,6 +109,10 @@ const ForgotPassword = () => {
           </div>
         </div>
       </div>
+
+      <Modal isOpen={isOpen}>
+        <Spinner />
+      </Modal>
     </>
   );
 };

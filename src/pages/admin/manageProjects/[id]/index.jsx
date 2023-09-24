@@ -4,8 +4,9 @@ import Button from "../../../../common/button";
 import Container from "../../../../common/container";
 import DateInput from "../../../../common/dateInput";
 import { useDimensions } from "../../../../hooks";
-import { NavLink } from "react-router-dom";
-import { exportToExcel } from "../../../../global";
+import { NavLink, useParams } from "react-router-dom";
+import { useProjects } from "../../../../context/projectsContext";
+import { exportToExcel, formatDate } from "../../../../global";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -32,6 +33,16 @@ const dateInputClasses = `!font-semibold !text-white !bg-[#34F5C5] border-none f
 
 function Project() {
   const dimension = useDimensions();
+  const { id } = useParams();
+  const { projects } = useProjects();
+  const project = projects?.filter((project) => project.projectId === id)[0];
+  const supervisor = project?.workers?.filter(
+    (worker) => worker.role === "supervisor"
+  )[0]?.fullName;
+  const workers = project?.workers
+    ?.map((worker) => worker?.fullName)
+    ?.join(", ");
+
   const handleExport = async () => {
     const projectData = [
       {
@@ -59,22 +70,23 @@ function Project() {
 
     window.URL.revokeObjectURL(url);
   };
-  const onTasksClick = () =>{
-    
-  }
+
+  const onTasksClick = () => {};
 
   return (
-    <Layout activePageName={"Project"}>
+    <Layout activePageName={`Projects / ${id}`}>
       <Container>
         <div className="flex flex-col lg:flex-row lg:items-center gap-3">
           <div className="lg:w-1/3 flex justify-between">
             <Heading title={"Project Details"} />
             {dimension <= 640 && (
-              <Button
-                title={`Show Tasks <span class='material-symbols-outlined'>chevron_right</span>`}
-                titleClasses={"flex items-center gap-2"}
-                onClick={onTasksClick}
-              />
+              <NavLink to={`/manage-projects/${id}/tasks`}>
+                <Button
+                  title={`Show Tasks <span class='material-symbols-outlined'>chevron_right</span>`}
+                  titleClasses={"flex items-center gap-2"}
+                  onClick={onTasksClick}
+                />
+              </NavLink>
             )}
           </div>
           <div className="flex-1 w-full flex justify-between">
@@ -90,7 +102,7 @@ function Project() {
             </div>
 
             {dimension >= 640 && (
-              <NavLink to="/project-tasks">
+              <NavLink to={`/manage-projects/${id}/tasks`}>
                 <Button
                   title={`Show Tasks <span class='material-symbols-outlined'>chevron_right</span>`}
                   titleClasses={"flex items-center gap-2"}
@@ -104,34 +116,36 @@ function Project() {
           <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
             <p className="">
               <span className="font-bold mr-3">Project Name: </span>
-              <span className="text-[#34F5C5]">Develop Sun's prject</span>
+              <span className="text-[#34F5C5]">{project?.projectName}</span>
             </p>
 
             <p className="">
               <span className="font-bold mr-3">Start Date: </span>
-              <span className="text-[#34F5C5]">Mon, Jan 4, 2012</span>
+              <span className="text-[#34F5C5]">
+                {formatDate(project?.startDate)}
+              </span>
             </p>
 
             <p className="">
               <span className="font-bold mr-3">End Date: </span>
-              <span className="text-[#34F5C5]">Mon, Jan 4, 2012</span>
+              <span className="text-[#34F5C5]">
+                {formatDate(project?.endDate)}
+              </span>
             </p>
 
             <p className="">
               <span className="font-bold mr-3">Assigned Workers: </span>
-              <span className="text-[#34F5C5]">3</span>
+              <span className="text-[#34F5C5]">{workers?.length}</span>
             </p>
 
             <p className="">
               <span className="font-bold mr-3">Supervisor: </span>
-              <span className="text-[#34F5C5]">Muhammad Faizan</span>
+              <span className="text-[#34F5C5]">{supervisor}</span>
             </p>
 
             <p className="">
               <span className="font-bold mr-3">Workers: </span>
-              <span className="text-[#34F5C5]">
-                Muhammad Faizan, Sudais Malik, Ali Abdullah
-              </span>
+              <span className="text-[#34F5C5]">{workers}</span>
             </p>
           </div>
         </div>

@@ -39,3 +39,14 @@ export async function exportToExcel(projectData) {
     const blob = new Blob([data_1], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
     return blob;
 }
+
+
+export const formatDate = (date) => {
+  const formatedDate = new Date(date);
+  return formatedDate.toLocaleDateString('en', {
+    weekday: 'short', 
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+  })
+}

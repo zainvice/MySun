@@ -12,16 +12,17 @@ import OTP from "./pages/otp";
 import ProjectTasks from "./pages/admin/projectTasks";
 import WorkerDetail from "./pages/worker/workerDetail";
 import Password from "./pages/password";
-import { I18nextProvider } from 'react-i18next';
-import i18n from './context/i18n';
+import { I18nextProvider } from "react-i18next";
+import i18n from "./context/i18n";
 
-import { LanguageProvider } from './context/LanguageContext';
+import { LanguageProvider } from "./context/LanguageContext";
 
 // import NewWorker from "./pages/admin/newWorker";
 import NewTaskAssigned from "./pages/worker/newTaskAssigned";
 import Auth from "./auth/authorize";
 import Authenticate from "./auth/authenticate";
 import { useEffect } from "react";
+import { ProjectsProvider } from "./context/projectsContext";
 
 function App() {
   useEffect(() => {
@@ -89,50 +90,63 @@ function App() {
   return (
     <div className="App">
       <I18nextProvider i18n={i18n}>
-      <Router>
-        <Routes>
-          <Route path="/" element={<Authenticate Component={Login} />} />
-          <Route
-            path="/forgotpassword"
-            element={<Authenticate Component={ForgotPassword} />}
-          />
-          <Route
-            path="/dashboard"
-            element={<Auth Component={Dashboard} isAdminPath isSupervisorPath />}
-          />
-          <Route
-            path="/manage-projects"
-            element={<Auth Component={ManageProjects} isAdminPath isSupervisorPath />}
-          />
-          <Route
-            path="/manage-projects/:id"
-            element={<Auth Component={Project} isAdminPath />}
-          />
-          <Route
-            path="/new-project"
-            element={<Auth Component={NewProject} isAdminPath />}
-          />
-          <Route
-            path="/workers"
-            element={<Auth Component={Workers} isAdminPath />}
-          />
-          <Route path="/otp" element={<OTP />} />
-          <Route path="/project-tasks" element={<ProjectTasks/>} />
-          <Route path="/worker-detail" element={<WorkerDetail/>}/>
-          <Route
-            path="/resetPassword/:resetToken/:userId"
-            element={<Authenticate Component={Password} />}
-          />
-          <Route
-            path="/assigned-tasks"
-            element={<Auth Component={AssignedTasks} />}
-          />
-          <Route
-            path="/new-task-assigned"
-            element={<Auth Component={NewTaskAssigned} />}
-          />
-        </Routes>
-      </Router>
+        <ProjectsProvider>
+          <Router>
+            <Routes>
+              <Route path="/" element={<Authenticate Component={Login} />} />
+              <Route
+                path="/forgotpassword"
+                element={<Authenticate Component={ForgotPassword} />}
+              />
+              <Route
+                path="/dashboard"
+                element={
+                  <Auth Component={Dashboard} isAdminPath isSupervisorPath />
+                }
+              />
+              <Route
+                path="/manage-projects"
+                element={
+                  <Auth
+                    Component={ManageProjects}
+                    isAdminPath
+                    isSupervisorPath
+                  />
+                }
+              />
+              <Route
+                path="/manage-projects/:id"
+                element={<Auth Component={Project} isAdminPath />}
+              />
+              <Route
+                path="/manage-projects/:id/tasks"
+                element={<ProjectTasks />}
+              />
+              <Route
+                path="/new-project"
+                element={<Auth Component={NewProject} isAdminPath />}
+              />
+              <Route
+                path="/workers"
+                element={<Auth Component={Workers} isAdminPath />}
+              />
+              <Route path="/otp" element={<OTP />} />
+              <Route path="/worker-detail" element={<WorkerDetail />} />
+              <Route
+                path="/resetPassword/:resetToken/:userId"
+                element={<Authenticate Component={Password} />}
+              />
+              <Route
+                path="/assigned-tasks"
+                element={<Auth Component={AssignedTasks} />}
+              />
+              <Route
+                path="/new-task-assigned"
+                element={<Auth Component={NewTaskAssigned} />}
+              />
+            </Routes>
+          </Router>
+        </ProjectsProvider>
       </I18nextProvider>
     </div>
   );
