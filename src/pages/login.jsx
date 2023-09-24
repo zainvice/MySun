@@ -34,9 +34,9 @@ const LoginPage = () => {
       if (role === "admin" || role === "supervisor")
         return navigate("/dashboard", { replace: true });
       navigate("/assigned-tasks", { replace: true });
-    } catch ({ response }) {
-      if (response) setError(response.data.message);
-      else setError("Server is offline! Please check server status!");
+    } catch (error) {
+      if (error?.response) setError(error?.response.data.message);
+      else setError(error?.message);
     } finally {
       onClose()
     }
