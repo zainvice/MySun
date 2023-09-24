@@ -8,6 +8,9 @@
         "feplaceholder": "Enter your Email",
         "freset":"RESET",
         "fOr": "OR",
+        "frqdone": "We've sent a link to your email",
+        "frqdone1": "click on the link to reset your password!",
+        "npassword": "Use a new password for your account",
         "emailPlaceholder": "Enter your Email or Username",
         "passwordLabel": "Password",
         "passwordPlaceholder": "Enter your Password",
@@ -57,6 +60,60 @@
                 "startedOnLabel": "Started On:",
                 "timeTakenLabel": "Time Taken:",
                 "assignedToLabel": "Assigned to:"
-              }
+              },
+              "workers": {
+                "pageName": "Field Workers",
+                "heading": "Workers",
+                "addNewWorkerButton": "Add New Worker"
+              },
+              "workersTable": {
+                "name": "Name",
+                "email": "Email",
+                "role": "Role",
+                "permissions": "Permissions",
+                "edit": "Edit",
+                "download": "Download",
+                "share": "Share"
+              },
+              "newTaskAssigned": {
+                "newTask": "New Task",
+                "startTimer": "Start Timer",
+                "stopTimer": "Stop Timer",
+                "timer": "Timer",
+                "hours": "Hours",
+                "minutes": "Minutes",
+                "seconds": "Seconds",
+                "buildingNumber": "Building International Number",
+                "workerName": "Worker Name",
+                "address": "Address",
+                "physicalNumber": "Physical Number",
+                "ownerID": "Owner ID",
+                "ownerName": "Owner Name",
+                "phoneNumber": "Phone Number",
+                "oldArea": "Old Area",
+                "propertyType": "Property Type",
+                "GOSH": "GOSH",
+                "HELMA": "HELMA",
+                "floor": "Floor",
+                "coordinationLetter": "Coordination Letter",
+                "refusedSurvey": "Refused Survey",
+                "aerialMapping": "Aerial Mapping",
+                "missingInformation": "Missing Information",
+                "uniteAddress": "Unite Address",
+                "underConstruction": "Under Construction",
+                "notes": "Notes",
+                "saveProgress": "Save Progress"
+              },
+              
+                "assignedTasks": {
+                  "pageTitle": "Assigned Tasks",
+                  "sortByOptions": {
+                    "mostRecent": "Most Recent",
+                    "status": "Status",
+                    "progress": "Progress"
+                  }
+                }
+              
+              
  
 }
