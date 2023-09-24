@@ -5,17 +5,20 @@ import Heading from "../../common/heading";
 import { NavLink } from "react-router-dom";
 import TaskCard, { VARIANTS } from "../../components/taskCard";
 import { isEven } from "../../utils";
+import { useTranslation } from "react-i18next";
 
 function AssignedTasks() {
+  const { t } = useTranslation();
+
   return (
-    <Layout activePageName={"Dashboard"}>
+    <Layout activePageName={t("assignedTasks.pageTitle")}>
       <Container>
         <div className="flex justify-between mb-2">
-          <Heading title={"Assigned Tasks"} />
+          <Heading title={t("assignedTasks.pageTitle")} />
           <select className="border-2 border-[#00FFD3] text-[#00FFD3] p-2 rounded-full focus-within:outline-none transform transition-transform hover:scale-105 hover:bg-[#00FFD3] hover:text-white">
-            <option>Most Recent</option>
-            <option>Status</option>
-            <option>Progress</option>
+            <option>{t("assignedTasks.sortByOptions.mostRecent")}</option>
+            <option>{t("assignedTasks.sortByOptions.status")}</option>
+            <option>{t("assignedTasks.sortByOptions.progress")}</option>
           </select>
         </div>
         <div className="mt-4 grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">

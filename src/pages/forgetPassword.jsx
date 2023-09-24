@@ -46,8 +46,7 @@ const ForgotPassword = () => {
 
             {isSent ? (
               <p className="mt-20 sm:max-w-[50%] mx-auto text-lg text-center text-white">
-                We've sent a link to your email {emailAddress}, click the link
-                to reset your password
+                {t('frqdone')} {emailAddress}, {t('frqdone1')} 
               </p>
             ) : (
               <form

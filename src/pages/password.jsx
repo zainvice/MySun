@@ -5,8 +5,11 @@ import { Link } from "react-router-dom";
 import { useModal } from "../hooks";
 import Modal from "../common/modal";
 import Message from "../common/message";
+import { useTranslation } from "react-i18next";
+import LanguageSwitcher from "../context/LanguageSwitcher";
 
 const Password = () => {
+  const {t} = useTranslation()
   const { isOpen, onOpen, onClose } = useModal();
   const [success, setSuccess] = useState(false);
   const [message, setMessage] = useState('')
@@ -25,8 +28,10 @@ const Password = () => {
         onOpen()
       });
   };
+  
   return (
     <>
+     <LanguageSwitcher />
       <div
         className="min-h-screen flex items-center justify-center bg-cover bg-center relative"
         style={{ backgroundImage: `url("/images/ForgotPasswordImg.jpg")` }}
@@ -44,7 +49,7 @@ const Password = () => {
             <form className="w-full mt-20" onSubmit={onResetPassword}>
               <div className="md:max-w-sm mx-auto">
                 <label htmlFor="password" className="block text-gray-300 ">
-                  Enter your Password
+                  {t('passwordPlaceholder')}
                 </label>
                 <input
                   type="text"
@@ -58,7 +63,7 @@ const Password = () => {
                     }))
                   }
                   className="w-full inline-block mx-auto  h-10 py-2 px-4 rounded-full bg-gray-500 text-gray-100 placeholder-white border border-[#2ce6bd] focus:outline-none text-base"
-                  placeholder="Use a new password for your account"
+                  placeholder= {t('npassword')}
                 />
               </div>
 
@@ -67,7 +72,7 @@ const Password = () => {
                   type="submit"
                   className="w-28 h-8 mt-2 bg-transparent border-[#2ce6bd] text-[#2ce6bd] hover:scale-120 hover:bg-white border rounded-full focus:outline-none"
                 >
-                  RESET
+                  {t("freset")}
                 </button>
               </div>
 
