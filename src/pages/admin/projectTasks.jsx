@@ -8,8 +8,8 @@ import { useProjects } from "../../context/projectsContext";
 function Tasks() {
   const { id } = useParams();
   const { projects } = useProjects();
-  const project = projects.length
-    ? projects?.filter((project) => project.projectId === id)[0]
+  const project = projects?.length
+    ? projects?.filter((project) => project?.projectId === id)[0]
     : {};
 
   const tasks = project?.projectData?.tasks;
@@ -26,13 +26,13 @@ function Tasks() {
                 <thead>
                   <tr className="bg-white text-gray-800 text-sm font-thin">
                     {headings?.length > 0 &&
-                      headings.map((heading) => (
+                      headings?.map((heading) => (
                         <th key={heading} className="px-3 text-lg">{heading}</th>
                       ))}
                   </tr>
                 </thead>
                 <tbody className="rounded-full text-center text-sm font-thin">
-                  {tasks.length > 0 ? (
+                  {tasks?.length > 0 ? (
                     tasks.map((task, index) => (
                       <tr className="bg-gray-200" key={index}>
                         {headings?.map((heading, index) => (

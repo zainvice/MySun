@@ -16,13 +16,13 @@ function ManageProjects() {
   const [isloading, setloading] = useState(true);
   const { projects, setProjects } = useProjects();
 
-  useEffect(() => {
+  useEffect(() => {     
     getProjects()
       .then((data) => {
         setProjects(data);
         localStorage.setItem("projects", JSON.stringify(data));
       })
-      .catch((error) => error.message)
+      .catch(() => localStorage.removeItem("projects"))
       .finally(() => setloading(false));
   }, []);
 
