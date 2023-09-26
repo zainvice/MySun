@@ -9,9 +9,11 @@ import { useEffect, useState } from "react";
 import { getProjects } from "../../api";
 import Spinner from "../../common/spinner";
 import { useProjects } from "../../context/projectsContext";
+import jwtDecode from "jwt-decode";
 import Layout from "../../layout";
 import { getWorkers } from "../../api";
 import { NavLink } from "react-router-dom";
+import { editNotes } from "../../api";
 function findProjectByWorker(worker, projects) {
   
   const project = projects.find(project => project._id === worker.projects[0]);
@@ -21,13 +23,18 @@ function findProjectByWorker(worker, projects) {
 
 function Dashboard() {
   const { t } = useTranslation();
+  const[notes, setNotes]= useState("No notes!")
   const { projects, setProjects } = useProjects();
   const [workers, setWorkers] = useState([]);
   const [isloading, setloading] = useState(true);
   const [project, toDisplay]= useState();
   const [workerNo1, setWorkerNo1] = useState(null);
   const [workerNo2, setWorkerNo2] = useState(null);
-  
+  const [tasksremaining, setRemaining]= useState()
+  const userInfo = jwtDecode(sessionStorage.getItem("accessToken"));
+  const [avarageTime, setAverge]= useState("")
+  const [completed, setCompleted]= useState("")
+
   useEffect(() => {
     if (projects) {
       getWorkers()
@@ -79,6 +86,39 @@ function Dashboard() {
           console.error("Error fetching workers:", error);
         });
     }
+    if(projects){
+      let totalIncompleteTasks = 0;
+      
+      if(userInfo){
+        setNotes(userInfo.UserInfo.notes)
+      }
+      let totalCompletedTasks = 0;
+      let totalCompletedTime = 0;
+      projects.forEach(project => {
+        const incompleteTasks = project.projectData.tasks.filter(task => !task.completed);
+        const completedTasks = project.projectData.tasks.filter(task => task.completed);
+        totalIncompleteTasks += incompleteTasks.length;
+        completedTasks.forEach(task => {
+          // Assuming each task has a timeTaken property in milliseconds
+          totalCompletedTime += task.timeTaken;
+          totalCompletedTasks += completedTasks.length;
+        });
+    
+      });
+      
+      
+      setCompleted(totalCompletedTasks)
+      setRemaining(totalIncompleteTasks)
+      // Calculate the average time
+      const averageTime = totalCompletedTasks > 0 ? totalCompletedTime / totalCompletedTasks : 0;
+    
+      setAverge(avarageTime)
+    }
+    
+    
+  
+  
+    
   }, [projects]);
 
 
@@ -105,6 +145,20 @@ function Dashboard() {
       .finally(() => setloading(false));
   }, []);
 
+  
+  const [saved, isSaved]= useState(false)
+  const SaveNotes = (e) =>{
+   
+    try{
+      const email= userInfo.UserInfo.email
+      editNotes( {email, notes})
+      isSaved(true)
+    }catch(error){
+      console.log(error)
+    }
+  }
+  
+  
   return (
     <Layout activePageName={t("dashboard.title")}>
       <Container>
@@ -155,36 +209,43 @@ function Dashboard() {
               <ul className="font-semibold list-disc list-outside ml-1 sm:ml-4">
                 <li className="line-clamp-1">
                   <p>
-                    34{" "}
+                    0{" "}
                     <span className="text-[#00FFD3]">
                       {t("dashboard.statistics.surveysCompleted")}
                     </span>{" "}
-                    on DATE
+                    on {new Date(Date.now()).toLocaleString()}
                   </p>
                 </li>
                 <li className="mt-1 sm:mt-2 line-clamp-1">
                   <p>
-                    12{" "}
+                    {tasksremaining}{" "}
                     <span className="text-[#00FFD3]">
                       {t("dashboard.statistics.surveysRemaining")}
                     </span>{" "}
-                    on DATE
+                    on {new Date(Date.now()).toLocaleString()}
                   </p>
                 </li>
                 <li className="mt-1 sm:mt-2 line-clamp-1">
                   <p>
                     <span className="text-[#00FFD3]">
-                      {t("dashboard.statistics.averageTimeSpent")}
+                      {t("dashboard.statistics.averageTimeSpent")}{avarageTime}
                     </span>{" "}
-                    on DATE
+                    on {new Date(Date.now()).toLocaleString()}
                   </p>
                 </li>
               </ul>
               <div className="mt-4 flex items-center">
                 <img src="./images/stickyNotes.png" />
-                <p className="font-semibold">
-                  {t("dashboard.workerDetail.clarityMessage")}
+                <p className="font-semibold" contentEditable suppressContentEditableWarning={false} onBlur={(e)=>setNotes(e.target.textContent)}>
+                  {notes}
                 </p>
+                
+                  <><span class="material-symbols-outlined hover:cursor-pointer hover:color-green-600 transition-300" onClick={SaveNotes}>
+                  done
+              </span></>
+                
+                
+                
               </div>
             </div>
           </div>

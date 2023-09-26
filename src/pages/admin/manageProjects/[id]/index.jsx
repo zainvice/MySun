@@ -36,6 +36,39 @@ function Project() {
   const { id } = useParams();
   const { projects } = useProjects();
   const project = projects?.filter((project) => project.projectId === id)[0];
+  let completedTasks= 0
+  let remainingTasks= 0
+  if (project) {
+    const completedTask = project.projectData.tasks.filter(task => task.completed);
+    
+    const workersInProject = project.workers;
+      
+    const workerTasksCount = {};
+      
+    completedTask.forEach(task => {
+      const assignedWorkerId = task.worker; 
+      const assignedWorker = workersInProject.find(worker => worker._id === assignedWorkerId);
+    
+      if (assignedWorker) {
+        const workerName = assignedWorker.name;
+        if (!workerTasksCount[workerName]) {
+          workerTasksCount[workerName] = 1;
+        } else {
+          workerTasksCount[workerName]++;
+        }
+      }
+    });
+
+
+
+    project.projectData.tasks.forEach(task => {
+      if (task.completed) {
+        completedTasks++;
+      } else {
+        remainingTasks++;
+      }
+    });
+  }
   const supervisor = project?.workers?.filter(
     (worker) => worker.role === "supervisor"
   )[0]?.fullName;
@@ -157,15 +190,15 @@ function Project() {
                 Total Surveys Completed
               </span>
               <span className="text-[#00ABE0] before:content-[':'] before:mr-4">
-                35
+                {completedTasks}
               </span>
             </p>
             <p className="mb-2">
               <span className="inline-block w-10/12 md:w-60">
-                Surveys Remaining
+                Total surveys remaining
               </span>
               <span className="text[#FF7258] before:content-[':'] before:mr-4">
-                12
+                {remainingTasks}
               </span>
             </p>
 
@@ -174,7 +207,7 @@ function Project() {
                 Surverys in Progress
               </span>
               <span className="text-[#FFC94A] before:content-[':'] before:mr-4">
-                35
+              {remainingTasks}
               </span>
             </p>
           </div>
@@ -185,7 +218,7 @@ function Project() {
                 datasets: [
                   {
                     label: "# of tasks",
-                    data: [36, 12, 5],
+                    data: [{completedTasks}, {remainingTasks}, {remainingTasks}],
                     weight: 2,
                     clip: 4,
                     backgroundColor: ["#00ABE0", "#FF7258", "#FFC94A"],
