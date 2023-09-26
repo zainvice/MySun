@@ -1,7 +1,7 @@
 import axios from "axios";
 import { async } from "q";
 
-const BASE_URL = "https://mysun-api.onrender.com/api/v1/";
+const BASE_URL = "http://localhost:3500/api/v1/";
 
 const api = axios.create({
   baseURL: BASE_URL,
@@ -96,3 +96,4 @@ export const getProjects = async () => {
     throw error?.response?.data;
   }
 };
+

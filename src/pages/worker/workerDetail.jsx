@@ -37,7 +37,7 @@ function WorkerDetail() {
           <div className="lg:w-1/3 flex justify-between">
             <Heading title={"Worker Details"} />
             {dimension <= 1000 && (
-              <div className="flex flex-col items-center gap-2">
+              <div className="absolute flex flex-col items-center gap-2">
                 <img src="./images/avatarFemale.png" className="w-40 h-40" />
                 <span className="text-sm text-black">XXX</span>
               </div>
