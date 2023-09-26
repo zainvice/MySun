@@ -33,18 +33,12 @@ function WorkerDetail() {
   return (
     <Layout>
       <Container>
-        <div className="flex flex-col lg:flex-row lg:items-center gap-4">
+        <div className="flex flex-col lg:flex-row lg:items-center gap-4 justify-center">
           <div className="lg:w-1/3 flex justify-between">
             <Heading title={"Worker Details"} />
-            {dimension <= 1000 && (
-              <div className="absolute flex flex-col items-center gap-2">
-                <img src="./images/avatarFemale.png" className="w-40 h-40" />
-                <span className="text-sm text-black">XXX</span>
-              </div>
-            )}
           </div>
           <div className="flex-1 w-full flex justify-between">
-            <div className="flex-1 flex gap-4 justify-between sm:justify-start">
+            <div className="flex-1 flex gap-4 justify-between sm:justify-start items-center">
               <DateInput
                 placeholder={"Select from"}
                 additionalClasses={`${dateInputClasses} transition-transform transform hover:scale-105`}
@@ -53,12 +47,18 @@ function WorkerDetail() {
                 placeholder={"Select to"}
                 additionalClasses={`${dateInputClasses} transition-transform transform hover:scale-105`}
               />
+              {dimension > 500 && (
+                <div className="flex flex-col items-center mx-auto gap-2">
+                  <img src="./images/avatarMale.png" className="w-28 h-28" />
+                  <span className="text-sm text-black">XXX</span>
+                </div>
+              )}
             </div>
           </div>
         </div>
 
         <div className="py-4">
-          <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+          <div className="w-full grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-5 gap-3">
             <p className="">
               <span className="font-bold mr-3">Worker Name: </span>
               <span className="text-[#34F5C5]">XXXt</span>
@@ -73,13 +73,6 @@ function WorkerDetail() {
               <span className="font-bold mr-3">Total Projects: </span>
               <span className="text-[#34F5C5]">XXXX</span>
             </p>
-
-            {dimension > 1000 && (
-              <div className="flex flex-col items-center mx-auto gap-2">
-                <img src="./images/avatarFemale.png" className="w-60 h-60" />
-                <span className="text-sm text-black">XXX</span>
-              </div>
-            )}
 
             <p className="">
               <span className="font-bold mr-3">Role: </span>
