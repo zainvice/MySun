@@ -1,5 +1,7 @@
+import jwtDecode from 'jwt-decode';
 import axios from "axios";
 import { async } from "q";
+
 
 const BASE_URL = "https://mysun-api.onrender.com/api/v1/";
 
@@ -97,3 +99,25 @@ export const getProjects = async () => {
   }
 };
 
+export const getTasks = async () => {
+  try {
+    const accessToken = sessionStorage.getItem('accessToken'); // Adjust as per your session storage method
+    console.log('Access token: ' + accessToken);
+
+    if (!accessToken) {
+      throw new Error('Access token not found in session');
+    }
+
+    const decodedToken = jwtDecode(accessToken);
+    console.log('Decoded token: ' + JSON.stringify(decodedToken));
+
+    // Access tasks array from UserInfo object
+    const userTasks = decodedToken.UserInfo.tasks || [];
+
+    console.log('User tasks:', userTasks); // Log the tasks array
+
+    return userTasks;
+  } catch (error) {
+    throw error;
+  }
+};
