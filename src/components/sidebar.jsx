@@ -145,7 +145,7 @@ function Sidebar({ isSidebarOpen, onSidebarClose }) {
             </span>
             <span className="inline-block lg:hidden text-lg">Account</span>
             <span className="z-[100000] hidden absolute -top-[70%]  left-[50%] -translate-x-[50%]  px-2 rounded bg-[#34F5C5]  h-6 text-ellipsis line-clamp-1 text-black peer-hover:block">
-              {sessionStorage.getItem("Name").split(" ")[0]}
+              {sessionStorage.getItem("Name")?.split(" ")[0]}
             </span>
           </p>
           <button
