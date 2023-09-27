@@ -218,7 +218,7 @@ function Project() {
                 datasets: [
                   {
                     label: "# of tasks",
-                    data: [{completedTasks}, {remainingTasks}, {remainingTasks}],
+                    data: [completedTasks, remainingTasks, remainingTasks],
                     weight: 2,
                     clip: 4,
                     backgroundColor: ["#00ABE0", "#FF7258", "#FFC94A"],

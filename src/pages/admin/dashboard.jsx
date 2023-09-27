@@ -14,12 +14,16 @@ import Layout from "../../layout";
 import { getWorkers } from "../../api";
 import { NavLink } from "react-router-dom";
 import { editNotes } from "../../api";
+
 function findProjectByWorker(worker, projects) {
-  
-  const project = projects.find(project => project._id === worker.projects[0]);
-  
-  return project;
+  if(worker){
+    const project = projects.find(project => project._id === worker.projects[0]);
+    return project;
 }
+  
+  return {Project: "Not Found!"};
+}
+
 
 function Dashboard() {
   const { t } = useTranslation();
@@ -34,7 +38,8 @@ function Dashboard() {
   const userInfo = jwtDecode(sessionStorage.getItem("accessToken"));
   const [avarageTime, setAverge]= useState("")
   const [completed, setCompleted]= useState("")
-
+  const [isPLoading, setPLoading]= useState(true)
+  const [iswLoading, setwLoading]= useState(true)
   useEffect(() => {
     if (projects) {
       getWorkers()
@@ -44,11 +49,16 @@ function Dashboard() {
         
          
           workerList.forEach((worker) => {
+            console.log('I\'m at worker')
+            if(!worker.tasks){
+
+            }else{
             const completedTasks = worker.tasks.filter((task) => {
               // I'll define completed crieteria here
               //tasksCompleted++
             });
             worker.completedTasksCount = completedTasks.length;
+            }
           });
         
           
@@ -77,10 +87,16 @@ function Dashboard() {
             
             setWorkerNo2(prevWorkerNo2 => ({ ...prevWorkerNo2, assignedProject: assignedProject2 }));
           }
-          
+          if(workerNo1){
           workerNo1.assignedProject = findProjectByWorker(workerNo1, projects)
+          }
+          if(workerNo2){
+
+          }
           setWorkers(data);
           setloading(false);
+          setwLoading(false)
+          setPLoading(false)
         })
         .catch((error) => {
           console.error("Error fetching workers:", error);
@@ -95,6 +111,9 @@ function Dashboard() {
       let totalCompletedTasks = 0;
       let totalCompletedTime = 0;
       projects.forEach(project => {
+        //console.log('Project Data', project.projectData.tasks)
+        if(!project.projectData.tasks
+          ){
         const incompleteTasks = project.projectData.tasks.filter(task => !task.completed);
         const completedTasks = project.projectData.tasks.filter(task => task.completed);
         totalIncompleteTasks += incompleteTasks.length;
@@ -102,7 +121,7 @@ function Dashboard() {
           // Assuming each task has a timeTaken property in milliseconds
           totalCompletedTime += task.timeTaken;
           totalCompletedTasks += completedTasks.length;
-        });
+        });}
     
       });
       
@@ -194,8 +213,12 @@ function Dashboard() {
           </select>
         </div>
         <div className="flex flex-col sm:flex-row gap-4 sm:gap-6">
-          <div className="sm:w-1/2 md:min-w-[340px] md:w-1/3 ">
-            <NavLink to="/manage-projects/:id" className={'block text-white transform transition-transform hover:scale-105'}>
+          {iswLoading? (
+            <Spinner/>
+          ): (
+            <>
+             <div className="sm:w-1/2 md:min-w-[340px] md:w-1/3 ">
+            <NavLink to={"/manage-projects/"+project?.projectId} className={'block text-white transform transition-transform hover:scale-105'}>
               <ProjectCard
                     project={project}
                     variant={
@@ -249,6 +272,8 @@ function Dashboard() {
               </div>
             </div>
           </div>
+            </>
+          )}
         </div>
         <Heading
           title={t("dashboard.topWorkers.title")}
@@ -256,22 +281,27 @@ function Dashboard() {
         />
         <div className="flex flex-col lg:flex-row gap-4 sm:gap-6">
           <div className="lg:w-3/5 grid sm:grid-cols-2 gap-4">
-            
-                <NavLink
-                  to="/worker-detail"
-                  
+            {iswLoading?(
+              <Spinner/>
+            ): (
+              <>
+              
+              <NavLink
+                  to={"/worker-detail/"+workerNo1?._id}                 
                   className="block transform hover:scale-105 transition-transform duration-300"
                 >
                   <WorkerCard worker= {workerNo1} />
                 </NavLink>
                 <NavLink
-                  to="/worker-detail"
+                 to={"/worker-detail/"+workerNo2?._id}                 
                   
                   className="block transform hover:scale-105 transition-transform duration-300"
                 >
                   <WorkerCard worker= {workerNo2} />
                 </NavLink>
             
+              </>
+            )}
           </div>
           <div className="flex-1"></div>
         </div>

@@ -3,6 +3,8 @@ import Heading from "../../common/heading";
 import Container from "../../common/container";
 import DateInput from "../../common/dateInput";
 import { useDimensions } from "../../hooks";
+import { useParams } from "react-router";
+import Spinner from "../../common/spinner";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -14,6 +16,8 @@ import {
   Title,
 } from "chart.js";
 import { Doughnut, Bar } from "react-chartjs-2";
+import { useState, useEffect } from "react";
+import { getWorkers } from "../../api";
 
 ChartJS.register(
   BarElement,
@@ -27,13 +31,48 @@ ChartJS.register(
 
 const dateInputClasses = `!font-semibold !text-white !bg-[#34F5C5] border-none focus-within:!outline-none white-placeholder h-10 !w-40`;
 
-function WorkerDetail() {
+function WorkerDetail(worker) {
   const dimension = useDimensions();
+  const {id}= useParams()
+  const [workerData, setData]= useState()
+  const [surveyData, setSurveys]= useState()
+  const [isloading, setloading] = useState(true);
+  useEffect(() => {
+    if (id) {
+      getWorkers()
+        .then((data) => {
+          const worker = data.filter((worker) => worker._id === id);
+          setData(worker[0])
+          setloading(false)
+        })
+    }
+    
+  }, [id]);
+  useEffect(() => {
+    if (workerData) {
+      const taskCompleted = workerData.tasks.filter((task) => task.completed);
+      const taskIncomplete = workerData.tasks.filter((task) => !task.completed);
+      const taskCompletedCount = taskCompleted.length;
+      const taskIncompleteCount = taskIncomplete.length;
+      setSurveys({
+        taskCompleted: taskCompleted, // Corrected this line
+        taskCompletedCount: taskCompletedCount,
+        taskIncomplete: taskIncompleteCount,
+      });
+    }
+    console.log('Worker Data', workerData)
+    console.log("surverys", surveyData)
+  }, [workerData])
+
 
   return (
     <Layout>
       <Container>
-        <div className="flex flex-col lg:flex-row lg:items-center gap-4 justify-center">
+        {isloading? (
+          <Spinner/>
+        ): (
+          <>
+          <div className="flex flex-col lg:flex-row lg:items-center gap-4 justify-center">
           <div className="lg:w-1/3 flex justify-between">
             <Heading title={"Worker Details"} />
           </div>
@@ -50,7 +89,7 @@ function WorkerDetail() {
               {dimension > 500 && (
                 <div className="flex flex-col items-center mx-auto gap-2">
                   <img src="./images/avatarMale.png" className="w-28 h-28" />
-                  <span className="text-sm text-black">XXX</span>
+                  <span className="text-sm text-black">{workerData?.fullName}</span>
                 </div>
               )}
             </div>
@@ -61,22 +100,22 @@ function WorkerDetail() {
           <div className="w-full grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-5 gap-3">
             <p className="">
               <span className="font-bold mr-3">Worker Name: </span>
-              <span className="text-[#34F5C5]">XXXt</span>
+              <span className="text-[#34F5C5]">{workerData?.fullName}</span>
             </p>
 
             <p className="">
               <span className="font-bold mr-3">Start Date: </span>
-              <span className="text-[#34F5C5]">XXXX</span>
+              <span className="text-[#34F5C5]">{new Date(workerData?.createdAt).toLocaleString()}</span>
             </p>
 
             <p className="">
               <span className="font-bold mr-3">Total Projects: </span>
-              <span className="text-[#34F5C5]">XXXX</span>
+              <span className="text-[#34F5C5]">{workerData?.projects.length}</span>
             </p>
 
             <p className="">
               <span className="font-bold mr-3">Role: </span>
-              <span className="text-[#34F5C5]">Supervisor</span>
+              <span className="text-[#34F5C5]">{workerData?.role}</span>
             </p>
           </div>
         </div>
@@ -88,7 +127,7 @@ function WorkerDetail() {
                 Total Surveys Completed
               </span>
               <span className="text-[#00ABE0] before:content-[':'] before:mr-4">
-                35
+                {surveyData?.taskCompletedCount}
               </span>
             </p>
             <p className="mb-2">
@@ -96,7 +135,7 @@ function WorkerDetail() {
                 Surveys Remaining
               </span>
               <span className="text[#FF7258] before:content-[':'] before:mr-4">
-                12
+                {surveyData?.taskIncomplete}
               </span>
             </p>
 
@@ -105,7 +144,7 @@ function WorkerDetail() {
                 Surverys in Progress
               </span>
               <span className="text-[#FFC94A] before:content-[':'] before:mr-4">
-                35
+              {surveyData?.taskIncomplete}
               </span>
             </p>
           </div>
@@ -116,7 +155,7 @@ function WorkerDetail() {
                 datasets: [
                   {
                     label: "# of tasks",
-                    data: [36, 12, 5],
+                    data: [surveyData?.taskCompletedCount, surveyData?.taskIncomplete, surveyData?.taskIncomplete],
                     weight: 2,
                     clip: 4,
                     backgroundColor: ["#00ABE0", "#FF7258", "#FFC94A"],
@@ -173,6 +212,8 @@ function WorkerDetail() {
             </p>
           </div>
         </div>
+          </>
+        )}
       </Container>
     </Layout>
   );

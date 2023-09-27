@@ -131,7 +131,7 @@ function App() {
                 element={<Auth Component={Workers} isAdminPath />}
               />
               <Route path="/otp" element={<OTP />} />
-              <Route path="/worker-detail" element={<WorkerDetail />} />
+              <Route path="/worker-detail/:id" element={<WorkerDetail />} />
               <Route
                 path="/resetPassword/:resetToken/:userId"
                 element={<Authenticate Component={Password} />}

@@ -7,8 +7,9 @@ function WorkersTable({ workers }) {
   const navigate = useNavigate(); // Initialize the navigate function
 
   // Function to navigate to worker detail page when a row is clicked
-  const handleRowClick = () => {
-    navigate(`/worker-detail`);
+  const handleRowClick = (_id) => {
+    console.log(_id)
+    navigate(`/worker-detail/`+_id);
   };
 
   return (
@@ -35,7 +36,7 @@ function WorkersTable({ workers }) {
               <tr
                 key={index}
                 className="bg-[#E7E7E7] overflow-hidden text-center cursor-pointer"
-                onClick={() => handleRowClick()} // Handle row click
+                onClick={() => handleRowClick(worker._id)} // Handle row click
               >
                 <td className="py-2 px-3 rounded-l-full">{worker.fullName}</td>
                 <td>{worker.email}</td>

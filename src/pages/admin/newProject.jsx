@@ -234,7 +234,8 @@ function NewProject() {
                     placeholder="Choose the worker for project"
                     className="hidden"
                     onChange={onFileSelect}
-                    accept=".xlsx,.xls"
+                    accept=".xlsx,.xls,.csv"
+                    required
                   />
                   <div className="w-full rounded-3xl border-[1px] border-[#8C8C8C] bg-white h-40 flex flex-col items-center justify-center">
                     <img

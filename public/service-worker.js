@@ -5,14 +5,32 @@ const cacheableUrls = [
   '/index.html',
   '/manifest.json',
   '/pages/admin/dashboard.jsx',
-  '/pages/login.jsx',
-  '/pages/forgetPassword.jsx',
-  '/pages/admin/newProject.jsx',
-  '/pages/admin/workers.jsx',
-  '/pages/admin/manageProjects/[id]/index.jsx',
-  '/pages/admin/manageProjects/index.jsx',
-  '/pages/worker/assignedTasks.jsx',
-  '/pages/worker/newTaskAssigned.jsx'
+  '/dashboard',
+  '/login',
+  '/manage-projects',
+  '/favicon.png',
+  '/static/js/bundle.js',
+  '/workers',
+  '/images/stickyNotes.png',
+  '/images/avatarFemale.png',
+  '/images/avatarMale.png',
+  '/images/check.png',
+  '/images/ForgetPasswordImg.png',
+  '/images/LoginImg.png',
+  '/images/logo.png',
+  '/images/logo1.png',
+  '/images/taskIcon-Ig.png',
+  '/images/taskIcon.png',
+  '/images/taskico1.png',
+  '/images/uploadFile.png',
+  '/ForgotPassword',
+  '/resetPassword/:resetToken/:userId',
+  '/assigned-tasks',
+  '/new-task-assigned',
+  
+
+  
+  
 ];
 
 self.addEventListener('install', (event) => {
