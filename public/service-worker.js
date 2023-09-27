@@ -1,4 +1,4 @@
-const CACHE_NAME = 'my-react-app-v4';
+const CACHE_NAME = 'my-sun-app-v0';
 
 const cacheableUrls = [
   '/',
@@ -6,7 +6,6 @@ const cacheableUrls = [
   '/manifest.json',
   '/pages/admin/dashboard.jsx',
   '/dashboard',
-  '/login',
   '/manage-projects',
   '/favicon.png',
   '/static/js/bundle.js',
