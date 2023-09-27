@@ -20,7 +20,8 @@ function Workers() {
   useEffect(() => {
     if (!isOpen) {
       getWorkers().then((data) => {
-        setWorkers(data);
+        const filteredWorkers = data.filter((worker) => worker.role !== "admin");
+        setWorkers(filteredWorkers);
         setloading(false);
       });
     }

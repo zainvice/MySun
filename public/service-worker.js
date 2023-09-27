@@ -1,4 +1,4 @@
-const CACHE_NAME = 'my-react-app-v3';
+const CACHE_NAME = 'my-react-app-v4';
 
 const cacheableUrls = [
   '/',

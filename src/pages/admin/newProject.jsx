@@ -142,6 +142,7 @@ function NewProject() {
                   </span>
                   <input
                     type="text"
+                    required
                     name="projectName"
                     value={inputValues?.projectName ?? ""}
                     onChange={onChange}
@@ -157,6 +158,7 @@ function NewProject() {
                   <div className="w-full">
                     <DateInput
                       onChange={onChange}
+                      required
                       value={inputValues?.startDate ?? ""}
                       placeholder={"Choose start date of project"}
                       additonalProps={{
@@ -178,6 +180,7 @@ function NewProject() {
                   <div className="w-full">
                     <DateInput
                       onChange={onChange}
+                      required
                       value={inputValues?.endDate ?? ""}
                       placeholder={"Choose end date of project"}
                       additonalProps={{
@@ -216,6 +219,7 @@ function NewProject() {
                   </span>
                   <textarea
                     type="text"
+                    required
                     placeholder="Enter project's description"
                     rows={4}
                     name="projectDescription"

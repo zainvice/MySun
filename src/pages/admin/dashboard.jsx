@@ -50,15 +50,13 @@ function Dashboard() {
          
           workerList.forEach((worker) => {
             console.log('I\'m at worker')
-            if(!worker.tasks){
-
-            }else{
+           
             const completedTasks = worker.tasks.filter((task) => {
               // I'll define completed crieteria here
               //tasksCompleted++
             });
             worker.completedTasksCount = completedTasks.length;
-            }
+            
           });
         
           
@@ -112,8 +110,7 @@ function Dashboard() {
       let totalCompletedTime = 0;
       projects.forEach(project => {
         //console.log('Project Data', project.projectData.tasks)
-        if(!project.projectData.tasks
-          ){
+        
         const incompleteTasks = project.projectData.tasks.filter(task => !task.completed);
         const completedTasks = project.projectData.tasks.filter(task => task.completed);
         totalIncompleteTasks += incompleteTasks.length;
@@ -121,7 +118,7 @@ function Dashboard() {
           // Assuming each task has a timeTaken property in milliseconds
           totalCompletedTime += task.timeTaken;
           totalCompletedTasks += completedTasks.length;
-        });}
+        });
     
       });
       
