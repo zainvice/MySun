@@ -18,6 +18,7 @@ import {
   Title,
 } from "chart.js";
 import { Doughnut, Bar } from "react-chartjs-2";
+import { useEffect, useState } from "react";
 
 ChartJS.register(
   BarElement,
@@ -36,19 +37,24 @@ function Project() {
   const { id } = useParams();
   const { projects } = useProjects();
   const project = projects?.filter((project) => project.projectId === id)[0];
+  let workersInProject
   let completedTasks= 0
   let remainingTasks= 0
+  useEffect(()=>{
+
+  }, [project])
   if (project) {
     const completedTask = project.projectData.tasks.filter(task => task.completed);
     
-    const workersInProject = project.workers;
-      
+    const workerInProject = project.workers.filter(worker => worker.role !== 'supervisor');
+    console.log("Workers in Project", project);
+    workersInProject= workerInProject
     const workerTasksCount = {};
       
     completedTask.forEach(task => {
       const assignedWorkerId = task.worker; 
-      const assignedWorker = workersInProject.find(worker => worker._id === assignedWorkerId);
-    
+      const assignedWorker = workerInProject.find(worker => worker._id === assignedWorkerId);
+      
       if (assignedWorker) {
         const workerName = assignedWorker.name;
         if (!workerTasksCount[workerName]) {
@@ -58,6 +64,7 @@ function Project() {
         }
       }
     });
+
 
 
 
@@ -76,33 +83,42 @@ function Project() {
     ?.map((worker) => worker?.fullName)
     ?.join(", ");
 
-  const handleExport = async () => {
-    const projectData = [
-      {
-        Classification: "Commercial",
-        "Property number": "saddar",
-        "Payment number": "123",
-        "Classification explained": "nothing",
-        "Property old area": "msjkj",
-        "Owner Type": "Company",
-        "Owner Id": "000",
-        "Property Address": "Business Rd",
-        "Owner name": "muskan",
-        Notes:
-          "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-      },
-    ];
-
-    const blob = await exportToExcel(projectData);
-
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "projects.xlsx";
-    a.click();
-
-    window.URL.revokeObjectURL(url);
-  };
+   const handleExport = async () => {
+      if (!project) {
+        // If there's no project, return early
+        return;
+      }
+    
+      // Create an array to hold the project data
+      const projectData = [];
+    
+      // Loop through the project object and add each key-value pair to the projectData array
+      for (const key in project) {
+        if (project.hasOwnProperty(key) && project[key]) {
+          projectData.push({ [key]: project[key] });
+        }
+      }
+    
+      // Check if any data to export
+      if (projectData.length === 0) {
+        // No data to export, return early
+        return;
+      }
+    
+      // Create a blob with the project data
+      const blob = await exportToExcel(projectData);
+    
+      // Create a download link and trigger the download
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "project_data.xlsx";
+      a.click();
+    
+      // Revoke the object URL to free up resources
+      window.URL.revokeObjectURL(url);
+    };
+    
 
   const onTasksClick = () => {};
 
@@ -234,29 +250,20 @@ function Project() {
           </div>
 
           <div>
-            <p className="flex items-center mb-2">
-              <span className="w-10/12 md:w-60 line-clamp-1">
-                Surveys Completed by{" "}
-                <span className="text-[#34F5C5]">Muhammad Faizan</span>
-              </span>
-              <span className="before:content-[':'] before:mr-4">35</span>
-            </p>
-
-            <p className="flex items-center mb-2">
-              <span className="w-10/12 md:w-60 line-clamp-1">
-                Surveys Completed by{" "}
-                <span className="text-[#34F5C5]">Ali Abdullah</span>
-              </span>
-              <span className="before:content-[':'] before:mr-4">90</span>
-            </p>
-
-            <p className="flex items-center mb-2">
-              <span className="w-10/12 md:w-60 line-clamp-1">
-                Surveys Completed by{" "}
-                <span className="text-[#34F5C5]">Ahmer Shahid</span>
-              </span>
-              <span className="before:content-[':'] before:mr-4">120</span>
-            </p>
+            
+          {Array.isArray(workersInProject) ? (
+            workersInProject.map((worker) => (
+              <p className="flex items-center mb-2" key={worker._id}>
+                <span className="w-9/12 md:w-90 line-clamp-1">
+                  Surveys Completed by{" "}
+                  <span className="text-[#34F5C5]">{worker.fullName}</span>
+                </span>
+                <span className="before:content-[':'] before:mr-4">XXX</span>
+              </p>
+            ))
+          ) : (
+            <p>No workers available</p>
+          )}
           </div>
         </div>
 
@@ -273,17 +280,17 @@ function Project() {
               labels: ["Mon", "Tue", "Wed", "Thu", "Fri"],
               datasets: [
                 {
-                  label: "Muhammad Faizan",
+                  label: "XXXXXXX",
                   data: [3, 4, 6, 8, 2],
                   backgroundColor: "#23F08A",
                 },
                 {
-                  label: "Ahmer Shahid",
+                  label: "XXXXXX",
                   data: [6, 2, 9, 1, 0],
                   backgroundColor: "#5D3E8E",
                 },
                 {
-                  label: "Ali Abdullah",
+                  label: "XXXXXXX",
                   data: [2, 8, 1, 9, 2],
                   backgroundColor: "#686D74",
                 },
@@ -292,29 +299,19 @@ function Project() {
           />
 
           <div className="mx-auto sm:w-fit">
-            <p className="flex items-center mb-2">
-              <span className="w-9/12 md:w-96 line-clamp-1">
-                Surveys Completed by{" "}
-                <span className="text-[#34F5C5]">Muhammad Faizan</span>
-              </span>
-              <span className="before:content-[':'] before:mr-4">35 hrs</span>
-            </p>
-
-            <p className="flex items-center mb-2">
-              <span className="w-9/12 md:w-96 line-clamp-1">
-                Surveys Completed by{" "}
-                <span className="text-[#34F5C5]">Ali Abdullah</span>
-              </span>
-              <span className="before:content-[':'] before:mr-4">90 hrs</span>
-            </p>
-
-            <p className="flex items-center mb-2">
-              <span className="w-9/12 md:w-96 line-clamp-1">
-                Surveys Completed by{" "}
-                <span className="text-[#34F5C5]">Ahmer Shahid</span>
-              </span>
-              <span className="before:content-[':'] before:mr-4">120 hrs</span>
-            </p>
+          {Array.isArray(workersInProject) ? (
+            workersInProject.map((worker) => (
+              <p className="flex items-center mb-2" key={worker._id}>
+                <span className="w-9/12 md:w-96 line-clamp-1">
+                  Hours Completed by{" "}
+                  <span className="text-[#34F5C5]">{worker.fullName}</span>
+                </span>
+                <span className="before:content-[':'] before:mr-0">XXX</span>
+              </p>
+            ))
+          ) : (
+            <p>No workers available</p>
+          )}
           </div>
         </div>
         <div className="flex justify-end">

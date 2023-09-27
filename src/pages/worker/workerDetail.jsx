@@ -78,14 +78,14 @@ function WorkerDetail(worker) {
           </div>
           <div className="flex-1 w-full flex justify-between">
             <div className="flex-1 flex gap-4 justify-between sm:justify-start items-center">
-              <DateInput
+              {/* <DateInput
                 placeholder={"Select from"}
                 additionalClasses={`${dateInputClasses} transition-transform transform hover:scale-105`}
               />
               <DateInput
                 placeholder={"Select to"}
                 additionalClasses={`${dateInputClasses} transition-transform transform hover:scale-105`}
-              />
+              /> */}
               {dimension > 500 && (
                 <div className="flex flex-col items-center mx-auto gap-2">
                   <img src="./images/avatarMale.png" className="w-28 h-28" />
@@ -184,20 +184,10 @@ function WorkerDetail(worker) {
               labels: ["Mon", "Tue", "Wed", "Thu", "Fri"],
               datasets: [
                 {
-                  label: "Muskan Nagdev",
+                  label: workerData?.fullName,
                   data: [3, 4, 6, 8, 2],
                   backgroundColor: "#23F08A",
-                },
-                {
-                  label: "Zain",
-                  data: [6, 2, 9, 1, 0],
-                  backgroundColor: "#5D3E8E",
-                },
-                {
-                  label: "Abdul Rehman",
-                  data: [2, 8, 1, 9, 2],
-                  backgroundColor: "#686D74",
-                },
+                }
               ],
             }}
           />
@@ -205,10 +195,10 @@ function WorkerDetail(worker) {
           <div className="mx-auto sm:w-fit">
             <p className="flex items-center mb-2">
               <span className="w-9/12 md:w-96 line-clamp-1">
-                Surveys Completed by{" "}
-                <span className="text-[#34F5C5]">Muskan Nagdev</span>
+                Hours Completed by{" "}
+                <span className="text-[#34F5C5]">{workerData?.fullName}</span>
               </span>
-              <span className="before:content-[':'] before:mr-4">7.5 hrs</span>
+              <span className="before:content-[':'] before:mr-4">Hours HHHH</span>
             </p>
           </div>
         </div>
