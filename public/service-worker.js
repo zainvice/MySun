@@ -1,4 +1,5 @@
-const CACHE_NAME = 'my-sun-app-v0';
+const CACHE_NAME = 'my-sun-app-v10'; // Updated cache name
+
 
 const cacheableUrls = [
   '/',
@@ -25,17 +26,15 @@ const cacheableUrls = [
   '/ForgotPassword',
   '/resetPassword/:resetToken/:userId',
   '/assigned-tasks',
-  '/new-task-assigned',
-  
-
-  
-  
+  '/new-task-assigned'
 ];
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
       return cache.addAll(cacheableUrls);
+    }).catch((error) => {
+      console.error('Cache.addAll failed:', error);
     })
   );
 });
