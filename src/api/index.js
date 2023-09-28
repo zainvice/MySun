@@ -32,6 +32,12 @@ export const resetPassword = async ({ userId, token, password }) => {
     password,
   });
 };
+export const firstResetPassword = async ({ email, password }) => {
+  return await api.patch("/users", {
+    email,
+    password,
+  });
+};
 
 export const createWorker = async ({
   email,

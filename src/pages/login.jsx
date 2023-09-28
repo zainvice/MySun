@@ -27,27 +27,37 @@ const LoginPage = () => {
   };
   const handleSubmit = async (e)=>{
     e.preventDefault()
+    onOpen()
     try{
        const {email, password} = inputValues
        const response = await login({ email, password}).unwrap()
        console.log(response)
-       const {accessToken, Role} = response
-       console.log(accessToken)
+       const {accessToken, Role, lastLogin} = response
+      
        dispatch(setCredentials({ accessToken }))
        const data = response;
        console.log('DATA', data)
        for (const key in data) {
           sessionStorage.setItem(key, data[key]);
        }
+       onClose()
        if(Role==='admin')
          navigate('/dashboard')
        if(Role==='supervisor')
          navigate('/dashboard')
-       if(Role==='worker')
-         navigate('/assigned-tasks')
+       if(Role==='worker'){
+          if(!lastLogin){
+            navigate('/resetPassword/'+email)
+          }else{
+            navigate('/assigned-tasks')
+          }
+        }
+
     }catch(error) {
-      if (error?.response) setError(error?.response.data.message);
-      else setError(error?.message);
+      console.log("error", error)
+      if (error?.response) setError(error?.data.message);
+      else setError(error?.data.message);
+      onClose()
     }
   }
   const onSubmit = async (event) => {

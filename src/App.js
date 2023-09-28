@@ -141,6 +141,10 @@ function App() {
                 path="/resetPassword/:resetToken/:userId"
                 element={<Password/>}
               />
+              <Route
+                path="/resetPassword/:email"
+                element={<Password/>}
+              />
               <Route element={<PersistLogin/>}>
                 <Route element= {<RequireAuth allowedRoles={[ROLES.Worker]}/>}>
                 

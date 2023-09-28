@@ -8,29 +8,43 @@ import Message from "../common/message";
 import Spinner from "../common/spinner";
 import { useTranslation } from "react-i18next";
 import LanguageSwitcher from "../context/LanguageSwitcher";
+import { firstResetPassword } from "../api";
 
 const Password = () => {
   const {t} = useTranslation()
   const { isOpen, onOpen, onClose } = useModal();
   const [success, setSuccess] = useState(false);
   const [message, setMessage] = useState("");
-  const { resetToken, userId } = useParams();
+  const { resetToken, userId, email } = useParams();
   const [inputValues, setInputValues] = useState();
   const [isloading, setloading] = useState(false);
   const onResetPassword = (event) => {
     event.preventDefault();
     setloading(true);
-    resetPassword({
-      password: inputValues?.password,
-      token: resetToken,
-      userId,
-    })
-      .then(() => setSuccess(true))
-      .catch((error) => {
-        setMessage(error.response?.data?.message ?? error.message);
-        onOpen();
+    if(email){
+      firstResetPassword({
+        password: inputValues?.password,
+        email: email,
       })
-      .finally(() => setloading(false));
+        .then(() => setSuccess(true))
+        .catch((error) => {
+          setMessage(error.response?.data?.message ?? error.message);
+          onOpen();
+        })
+        .finally(() => setloading(false));
+    }else{
+      resetPassword({
+        password: inputValues?.password,
+        token: resetToken,
+        userId,
+      })
+        .then(() => setSuccess(true))
+        .catch((error) => {
+          setMessage(error.response?.data?.message ?? error.message);
+          onOpen();
+        })
+        .finally(() => setloading(false));
+    }
   };
   
   return (
@@ -52,7 +66,21 @@ const Password = () => {
               />
             </div>
             <form className="w-full mt-20" onSubmit={onResetPassword}>
-              <div className="md:max-w-sm mx-auto">
+              
+              {!success? (
+                <p className="text-center text-gray-300">
+                  Password Reset Successfully!{" "}
+                  <Link
+                    to={"/"}
+                    className="text-green-500 underline italic font-semibold hover:text-white"
+                    replace={true}
+                  >
+                    Go to Login
+                  </Link>
+                </p>
+              ):(
+                <>
+                <div className="md:max-w-sm mx-auto">
                 <label htmlFor="password" className="block text-gray-300 ">
                   {t('passwordPlaceholder')}
                 </label>
@@ -81,18 +109,9 @@ const Password = () => {
                 </button>
               </div>
 
-              {success && (
-                <p className="text-center text-gray-300">
-                  Password Reset Successfully!{" "}
-                  <Link
-                    to={"/"}
-                    className="text-green-500 underline italic font-semibold hover:text-white"
-                    replace={true}
-                  >
-                    Go to Login
-                  </Link>
-                </p>
-              )}
+                </>
+              )
+              }
             </form>
           </div>
         </div>
