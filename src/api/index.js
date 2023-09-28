@@ -2,7 +2,6 @@ import jwtDecode from 'jwt-decode';
 import axios from "axios";
 import { async } from "q";
 
-
 const BASE_URL = "https://mysunapi.onrender.com/api/v1/";
 
 const api = axios.create({
