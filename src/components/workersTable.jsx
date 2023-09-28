@@ -14,7 +14,7 @@ function WorkersTable({ workers }) {
   };
 
   const remove = (_id, active) =>{
-    console.log("clicked")
+    
     removeWorkers({
       _id,
       active
