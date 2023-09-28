@@ -146,7 +146,7 @@ function App() {
                 element={<Password/>}
               />
               <Route element={<PersistLogin/>}>
-                <Route element= {<RequireAuth allowedRoles={[ROLES.Worker]}/>}>
+                <Route element= {<RequireAuth allowedRoles={[ROLES.Worker, ROLES.Supervisor]}/>}>
                 
               <Route
                 path="/assigned-tasks"

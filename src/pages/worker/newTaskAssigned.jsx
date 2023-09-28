@@ -38,7 +38,7 @@ function NewTaskAssigned() {
           console.log("TASKS from above", tasks);
           filteredTasks = tasks?.filter((task) => task?._id === id);
           console.log("Filtered Tasks", filteredTasks[0]);
-  
+          setStatus(filteredTasks[0].status)
           localStorage.setItem("taskNo", JSON.stringify(filteredTasks));
   
           return filteredTasks; // Return filteredTasks here
@@ -128,7 +128,7 @@ function NewTaskAssigned() {
   const remainingSeconds = seconds % 60;
 
   const [status, setStatus] = useState(tasktoDisplay?.status); // Initialize the status state variable
-
+  console.log("TASK STATUS", status)
   const handleStatusChange = (event) => {
     setStatus(event.target.value); // Update the status state with the selected value
   };
@@ -480,8 +480,8 @@ function NewTaskAssigned() {
           />
            <select
           className="ml-0 mt-3 rounded-full bg-gray-200 text-black px-4 h-12 w-full lg:w-1/2"
-          value={tasktoDisplay?.status} // You should set the selected option value here
-          //onChange={(e) => setSelectedOption(e.target.value)} // Handle selection change
+          value={status} // You should set the selected option value here
+          onChange={(e) => setStatus(e.target.value)} // Handle selection change
         >
           <option value="Pending">Pending</option>
           <option value="Coordination Letter 1">Coordination Letter 1</option>
@@ -503,7 +503,7 @@ function NewTaskAssigned() {
           <></>
         )}
        
-        <div className="mt-3 flex flex-row">
+        <div className="mt-3 flex flex-row w-full">
         <Button  title={"Save Progress"} onClick={addToOfflineTasks} />
         <Button className="ml-4" title={"Sync Manually"} onClick={sendOfflineTasksToDatabase} />
         </div>
