@@ -10,11 +10,14 @@ import { getTasks } from "../../api";
 import jwtDecode from "jwt-decode";
 import TaskCard from "../../components/taskCard";
 import Spinner from "../../common/spinner";
+import { useSelector } from 'react-redux';
+import { selectCurrentToken } from "../../features/auth/authSlice";
 import _ from "lodash";
 
 function AssignedTasks() {
   const { t } = useTranslation();
   const [tasks, setTasks] = useState([]);
+  console.log("TASKS", tasks)
   const [isloading, setloading] = useState(true);
 
   useEffect(() => {
@@ -23,13 +26,17 @@ function AssignedTasks() {
     (async () => {
       try {
         const response = await getTasks();
-        const tasks = response?.data ?? [];
+        const tasks = response
+        console.log('Response', response)
+        console.log(userTasks)
         if (userTasks?.length > 0) {
+          console.log("TASKS from above", tasks)
           const filteredTasks = tasks?.filter((task) =>
             userTasks.includes(task?._id)
           );
           localStorage.setItem("tasks", JSON.stringify(filteredTasks));
           setTasks(filteredTasks);
+          
         }
       } catch (error) {
         localStorage.removeItem("tasks");
@@ -50,7 +57,13 @@ function AssignedTasks() {
       sortedTasks = _.sortBy(
         localTasks,
         (data) => data?.projectId?.projectData?.completionPercentage
-      );
+      )
+      ;
+    }else if (sortBy?.toLowerCase() === "status") {
+      sortedTasks = localTasks
+    }
+    else if (sortBy?.toLowerCase() === "sort by") {
+      sortedTasks = localTasks
     }
     setTasks(sortedTasks);
   };
@@ -85,7 +98,7 @@ function AssignedTasks() {
               {tasks?.length > 0 ? (
                 tasks?.map((task, index) => (
                   <NavLink
-                    to="/new-task-assigned"
+                    to={"/task/"+task?._id}
                     key={task?._id}
                     className={
                       "transform transition-transform hover:scale-105 inlne-block"

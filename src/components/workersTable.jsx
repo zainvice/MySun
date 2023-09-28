@@ -1,6 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom"; // Import useNavigate hook
 import { useTranslation } from "react-i18next";
+import { removeWorkers } from "../api";
 
 function WorkersTable({ workers }) {
   const {t}= useTranslation()
@@ -12,21 +13,35 @@ function WorkersTable({ workers }) {
     navigate(`/worker-detail/`+_id);
   };
 
+  const remove = (_id, active) =>{
+    console.log("clicked")
+    removeWorkers({
+      _id,
+      active
+    })
+     
+      .catch((error) => {
+        const data = error?.response?.data;
+       
+      })
+    window.location.reload()
+  }
+
   return (
     <div className="w-full overflow-auto">
       <table className="w-full border-separate border-spacing-y-3">
         <thead className="align-top">
           <tr>
-            <th className="min-w-[160px]">{t('workersTable.name')}</th>
+            <th className="min-w-[200px]">{t('workersTable.name')}</th>
             <th className="min-w-[160px]">{t('workersTable.email')}</th>
             <th className="min-w-[160px]">{t('workersTable.role')}</th>
-            <th className="min-w-[200px]">
+            <th className="min-w-[160px]">
             {t('workersTable.permissions')}
-              <div className="grid grid-cols-3 mt-2">
-                <span>{t('workersTable.edit')}</span>
-                <span>{t('workersTable.download')}</span>
-                <span>{t('workersTable.share')}</span>
-              </div>
+              
+            </th>
+            <th className="min-w-[200px]">
+            {t('workersTable.remove')}
+              
             </th>
             </tr>
         </thead>
@@ -36,17 +51,43 @@ function WorkersTable({ workers }) {
               <tr
                 key={index}
                 className="bg-[#E7E7E7] overflow-hidden text-center cursor-pointer"
-                onClick={() => handleRowClick(worker._id)} // Handle row click
+                
               >
-                <td className="py-2 px-3 rounded-l-full">{worker.fullName}</td>
+                <td className="py-2 px-3 rounded-l-full" 
+                  onClick={() => handleRowClick(worker._id)} // Handle row click
+                >{worker.fullName}</td>
                 <td>{worker.email}</td>
                 <td>{worker.role}</td>
+                <td>{worker.active ? 'Active' : 'Inactive'}</td>
                 <td className="rounded-r-full">
-                  <div className="grid grid-cols-3">
-                    <input type="checkbox" />
-                    <input type="checkbox" />
-                    <input type="checkbox" />
-                  </div>
+                
+                {worker.active? (
+                  <>
+                  <span class="material-symbols-outlined  hover:text-yellow-500 transition duration-300 ease-in-out"
+                
+                onClick={() => remove(worker._id, worker.active)}
+                >
+                  toggle_on
+                 
+                  </span>
+                  
+                  </>
+                ):(
+                  <>
+                  <span class="material-symbols-outlined  hover:text-green-500 transition duration-300 ease-in-out"
+                
+                onClick={() => remove(worker._id, worker.active)}
+                >
+                  toggle_off
+                 
+                  </span>
+                  </>
+                )}
+                  <span class="ml-4 material-symbols-outlined hover:text-red-500 transition duration-300 ease-in-out" 
+                  onClick={() => remove(worker._id)}
+                >
+                    delete_sweep
+                </span>
                 </td>
               </tr>
             ))}

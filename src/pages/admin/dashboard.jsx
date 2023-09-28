@@ -14,6 +14,8 @@ import Layout from "../../layout";
 import { getWorkers } from "../../api";
 import { NavLink } from "react-router-dom";
 import { editNotes } from "../../api";
+import { useSelector } from 'react-redux';
+import { selectCurrentToken } from "../../features/auth/authSlice";
 
 function findProjectByWorker(worker, projects) {
   if(worker){
@@ -35,11 +37,64 @@ function Dashboard() {
   const [workerNo1, setWorkerNo1] = useState(null);
   const [workerNo2, setWorkerNo2] = useState(null);
   const [tasksremaining, setRemaining]= useState()
-  const userInfo = jwtDecode(sessionStorage.getItem("accessToken"));
+  const token = useSelector(selectCurrentToken);
+  const userInfo = jwtDecode(token);
   const [avarageTime, setAverge]= useState("")
   const [completed, setCompleted]= useState("")
   const [isPLoading, setPLoading]= useState(true)
   const [iswLoading, setwLoading]= useState(true)
+  const [selectedFilter, setSelectedFilter] = useState("today");
+  const [filteredProjects, setFilteredProjects] = useState([]);
+
+  useEffect(() => {
+    setPLoading(true);
+    console.log('IM here')
+    getProjects()
+    .then((data) => {
+      setProjects(data);
+      
+      const filteredData = projects.filter((project) => {
+        const projectDate = new Date(project.startDate); 
+        const currentDate = new Date();
+        console.log(projectDate.toLocaleDateString())
+        if (selectedFilter === "0") {
+          
+          return projectDate.toDateString() === currentDate.toDateString();
+          
+        } else if (selectedFilter === "7") {
+          console.log('7')
+          const sevenDaysAgo = new Date();
+          sevenDaysAgo.setDate(currentDate.getDate() - 7);
+          return projectDate >= sevenDaysAgo;
+        } else if (selectedFilter === "15") {
+          console.log('15')
+          const fifteenDaysAgo = new Date();
+          fifteenDaysAgo.setDate(currentDate.getDate() - 15);
+          return projectDate >= fifteenDaysAgo;
+        } else if (selectedFilter === "30") {
+          console.log('30')
+
+          const thirtyDaysAgo = new Date();
+          thirtyDaysAgo.setDate(currentDate.getDate() - 30);
+          return projectDate >= thirtyDaysAgo;
+        }
+    
+        return true; // If no filter is applied, return true for all projects
+      });
+      
+       setFilteredProjects(filteredData); // Set the filtered data in state
+        console.log('filered', filteredProjects)
+        toDisplay(filteredData[0])
+        setPLoading(false)
+    })
+    .catch(() => localStorage.removeItem("projects"))
+    .finally(() => setloading(false));
+    
+  
+    //setPLoading(false);
+  }, [selectedFilter]);
+  
+  
   useEffect(() => {
     if (projects) {
       getWorkers()
@@ -49,12 +104,7 @@ function Dashboard() {
         
          
           workerList.forEach((worker) => {
-            console.log('I\'m at worker')
-           
-            const completedTasks = worker.tasks.filter((task) => {
-              // I'll define completed crieteria here
-              //tasksCompleted++
-            });
+            const completedTasks = worker.tasks.filter((task) => task.status==="Delivered");
             worker.completedTasksCount = completedTasks.length;
             
           });
@@ -181,40 +231,25 @@ function Dashboard() {
         <div className="flex justify-between mb-2">
           <Heading title={t("dashboard.recentUpdates.title")} />
 
-          <select className="border-2 border-[#00FFD3] text-[#00FFD3] p-2 rounded-full focus-within:outline-none transform transition-transform hover:scale-105 hover:bg-[#00FFD3] hover:text-white">
-            Showing for
-            <option
-              value={1}
-              className="border-2 border-[#00FFD3] text-[#00FFD3] p-2 rounded-full focus-within:outline-none transform transition-transform hover:scale-105 hover:bg-[#00FFD3] hover:text-white"
-            >
-              {"Today"}
-            </option>
-            <option
-              value={7}
-              className="border-2 border-[#00FFD3] text-[#00FFD3] p-2 rounded-full focus-within:outline-none transform transition-transform hover:scale-105 hover:bg-[#00FFD3] hover:text-white"
-            >
-              {"7 Days"}
-            </option>
-            <option
-              value={15}
-              className="border-2 border-[#00FFD3] text-[#00FFD3] p-2 rounded-full focus-within:outline-none transform transition-transform hover:scale-105 hover:bg-[#00FFD3] hover:text-white"
-            >
-              {"15 Days"}
-            </option>
-            <option
-              value={30}
-              className="border-2 border-[#00FFD3] text-[#00FFD3] p-2 rounded-full focus-within:outline-none transform transition-transform hover:scale-105 hover:bg-[#00FFD3] hover:text-white"
-            >
-              {"Last Month"}
-            </option>
+          <select
+            value={selectedFilter}
+            onChange={(e) => setSelectedFilter(e.target.value)}
+            className="border-2 border-[#00FFD3] text-[#00FFD3] p-2 rounded-full focus-within:outline-none transform transition-transform hover:scale-105 hover:bg-[#00FFD3] hover:text-white"
+          >
+            <option value="0">Today</option>
+            <option value="7">7 Days</option>
+            <option value="15">15 Days</option>
+            <option value="30">Last Month</option>
           </select>
         </div>
         <div className="flex flex-col sm:flex-row gap-4 sm:gap-6">
-          {iswLoading? (
+          {isPLoading? (
             <Spinner/>
           ): (
             <>
-             <div className="sm:w-1/2 md:min-w-[340px] md:w-1/3 ">
+             {filteredProjects.length > 0? (
+              <>
+              <div className="sm:w-1/2 md:min-w-[340px] md:w-1/3 ">
             <NavLink to={"/manage-projects/"+project?.projectId} className={'block text-white transform transition-transform hover:scale-105'}>
               <ProjectCard
                     project={project}
@@ -233,7 +268,7 @@ function Dashboard() {
                     <span className="text-[#00FFD3]">
                       {t("dashboard.statistics.surveysCompleted")}
                     </span>{" "}
-                    on {new Date(Date.now()).toLocaleString()}
+                     {new Date(new Date().setDate(new Date().getDate() - parseInt(selectedFilter))).toLocaleDateString()}
                   </p>
                 </li>
                 <li className="mt-1 sm:mt-2 line-clamp-1">
@@ -242,7 +277,7 @@ function Dashboard() {
                     <span className="text-[#00FFD3]">
                       {t("dashboard.statistics.surveysRemaining")}
                     </span>{" "}
-                    on {new Date(Date.now()).toLocaleString()}
+                    {new Date(new Date().setDate(new Date().getDate() - parseInt(selectedFilter))).toLocaleDateString()}
                   </p>
                 </li>
                 <li className="mt-1 sm:mt-2 line-clamp-1">
@@ -250,7 +285,7 @@ function Dashboard() {
                     <span className="text-[#00FFD3]">
                       {t("dashboard.statistics.averageTimeSpent")}{avarageTime}
                     </span>{" "}
-                    on {new Date(Date.now()).toLocaleString()}
+                    {new Date(new Date().setDate(new Date().getDate() - parseInt(selectedFilter))).toLocaleDateString()}
                   </p>
                 </li>
               </ul>
@@ -269,6 +304,67 @@ function Dashboard() {
               </div>
             </div>
           </div>
+              </>
+             ) : (
+              <>
+              <div className="sm:w-1/2 md:min-w-[340px] md:w-1/3 ">
+            <NavLink to={"/manage-projects/"+project?.projectId} className={'block text-white transform transition-transform hover:scale-105'}>
+              <ProjectCard
+                    project={project}
+                    variant={
+                       VARIANTS.GREEN
+                    }
+                  />
+            </NavLink>
+          </div>
+          <div className="flex-1 bg-gradient-to-b from-[#00FFD3] from-60% to-[#37C19F] rounded-3xl p-[3px] shadow-lg">
+            <div className="p-4 sm:p- bg-white rounded-[20px] h-full">
+              <ul className="font-semibold list-disc list-outside ml-1 sm:ml-4">
+                <li className="line-clamp-1">
+                  <p>
+                    0{" "}
+                    <span className="text-[#00FFD3]">
+                      {t("dashboard.statistics.surveysCompleted")}
+                    </span>{" "}
+                     {new Date(new Date().setDate(new Date().getDate() - parseInt(selectedFilter))).toLocaleDateString()}
+                  </p>
+                </li>
+                <li className="mt-1 sm:mt-2 line-clamp-1">
+                  <p>
+                    {tasksremaining}{" "}
+                    <span className="text-[#00FFD3]">
+                      {t("dashboard.statistics.surveysRemaining")}
+                    </span>{" "}
+                    {new Date(new Date().setDate(new Date().getDate() - parseInt(selectedFilter))).toLocaleDateString()}
+                  </p>
+                </li>
+                <li className="mt-1 sm:mt-2 line-clamp-1">
+                  <p>
+                    <span className="text-[#00FFD3]">
+                      {t("dashboard.statistics.averageTimeSpent")}{avarageTime}
+                    </span>{" "}
+                    {new Date(new Date().setDate(new Date().getDate() - parseInt(selectedFilter))).toLocaleDateString()}
+                  </p>
+                </li>
+              </ul>
+              <div className="mt-4 flex items-center">
+                <img src="./images/stickyNotes.png" />
+                <p className="font-semibold" contentEditable suppressContentEditableWarning={false} onBlur={(e)=>setNotes(e.target.textContent)}>
+                  {notes}
+                </p>
+                
+                  <><span class="material-symbols-outlined hover:cursor-pointer hover:color-green-600 transition-300" onClick={SaveNotes}>
+                  done
+              </span></>
+                
+                
+                
+              </div>
+            </div>
+          </div>
+              </>
+
+             )}
             </>
           )}
         </div>

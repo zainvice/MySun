@@ -6,19 +6,50 @@ import { useModal } from "../hooks";
 import LanguageSwitcher from "../context/LanguageSwitcher";
 import Modal from "../common/modal";
 import Spinner from "../common/spinner";
+import { useRef, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { useLoginMutation } from '../features/auth/authApiSlice';
+import { setCredentials } from '../features/auth/authSlice';
 
 const LoginPage = () => {
   const navigate = useNavigate();
   const [inputValues, setInputValues] = useState({});
+  const [login]= useLoginMutation()
   const {isOpen, onOpen, onClose, } = useModal()
   const [error, setError] = useState("");
   const { t } = useTranslation();
-
+  const [errMsg, setErrMsg] = useState('')
+  const dispatch = useDispatch()
+  const errRef = useRef()
   const onChange = (event) => {
     const target = event.target ?? {};
     setInputValues((prev) => ({ ...prev, [target.name]: target.value }));
   };
-
+  const handleSubmit = async (e)=>{
+    e.preventDefault()
+    try{
+       const {email, password} = inputValues
+       const response = await login({ email, password}).unwrap()
+       console.log(response)
+       const {accessToken, Role} = response
+       console.log(accessToken)
+       dispatch(setCredentials({ accessToken }))
+       const data = response;
+       console.log('DATA', data)
+       for (const key in data) {
+          sessionStorage.setItem(key, data[key]);
+       }
+       if(Role==='admin')
+         navigate('/dashboard')
+       if(Role==='supervisor')
+         navigate('/dashboard')
+       if(Role==='worker')
+         navigate('/assigned-tasks')
+    }catch(error) {
+      if (error?.response) setError(error?.response.data.message);
+      else setError(error?.message);
+    }
+  }
   const onSubmit = async (event) => {
     event.preventDefault();
     onOpen()
@@ -57,7 +88,7 @@ const LoginPage = () => {
               className="w-[100px] h-[100px]"
             />
           </div>
-          <form className="w-full mt-20" onSubmit={onSubmit}>
+          <form className="w-full mt-20" onSubmit={handleSubmit}>
             <div className="md:max-w-sm mx-auto">
               {error && (
                 <div>

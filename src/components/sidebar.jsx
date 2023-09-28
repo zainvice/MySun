@@ -113,7 +113,7 @@ function Sidebar({ isSidebarOpen, onSidebarClose }) {
             to={
               isAdmin || isSupervisor
                 ? "/manage-projects"
-                : "/new-task-assigned"
+                : "/task/:id"
             }
             className={isActive}
           >

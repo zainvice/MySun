@@ -37,9 +37,9 @@
       "clarityMessage": "ספק יותר בהבנה לעובדים לפרויקטים הקרובים"
     },
     "statistics": {
-      "surveysCompleted": "סקרים הושלמו היום בתאריך",
-      "surveysRemaining": "סקרים שנשארו להשלמה היום בתאריך",
-      "averageTimeSpent": "ממוצע שעה אחת הוצברה על סקרים היום בתאריך"
+      "surveysCompleted": "סקרים שהושלמו ב",
+      "surveysRemaining":"סקרים שנותרו ב",
+      "averageTimeSpent": "הזמן הממוצע המושקע בסקרים ב-"
     }
   },
   "workerCard": {
@@ -70,7 +70,8 @@
         "name": "שם",
         "email": "אימייל",
         "role": "תפקיד",
-        "permissions": "הרשאות",
+        "permissions": "מצב",
+        "remove": "שינוי סטטוס / הסרה",
         "edit": "ערוך",
         "download": "הורד",
         "share": "שתף"

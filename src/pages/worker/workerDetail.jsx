@@ -86,12 +86,12 @@ function WorkerDetail(worker) {
                 placeholder={"Select to"}
                 additionalClasses={`${dateInputClasses} transition-transform transform hover:scale-105`}
               /> */}
-              {dimension > 500 && (
+             {/*  {dimension > 500 && (
                 <div className="flex flex-col items-center mx-auto gap-2">
                   <img src="./images/avatarMale.png" className="w-28 h-28" />
                   <span className="text-sm text-black">{workerData?.fullName}</span>
                 </div>
-              )}
+              )} */}
             </div>
           </div>
         </div>

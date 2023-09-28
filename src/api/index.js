@@ -3,7 +3,7 @@ import axios from "axios";
 import { async } from "q";
 
 
-const BASE_URL = "https://mysunapi.onrender.com/api/v1/";
+const BASE_URL = "http://localhost:3500/api/v1/";
 
 const api = axios.create({
   baseURL: BASE_URL,
@@ -65,6 +65,31 @@ export const getWorkers = async () => {
     return error?.response?.data;
   }
 };
+export const removeWorkers = async ( values ) => {
+  try {
+    const {_id, active}= values
+    console.log(values)
+    console.log(_id, "ID")
+    const response = await api.delete("/users",  { data: { _id ,active } });
+    return response.data;
+  } catch (error) {
+    if (error?.status === 500) return error.message;
+    return error?.response?.data;
+  }
+};
+export const editTasks = async ({task}) => {
+  try {
+  console.log("I GOT THIS DATA", task)
+  const{_id, taskData, status, timeTaken}= task
+  console.log("Sending", _id, taskData, status, timeTaken)
+  return await api.patch("/tasks", {
+   _id, taskData, status, timeTaken}
+  );}catch(error){
+    if (error?.status === 500) return error.message;
+    return error?.response?.data;
+  }
+};
+
 
 export const createProject = async ({
   projectName,
@@ -111,23 +136,10 @@ export const getProjects = async () => {
 
 export const getTasks = async () => {
   try {
-    const accessToken = sessionStorage.getItem('accessToken'); // Adjust as per your session storage method
-    console.log('Access token: ' + accessToken);
-
-    if (!accessToken) {
-      throw new Error('Access token not found in session');
-    }
-
-    const decodedToken = jwtDecode(accessToken);
-    console.log('Decoded token: ' + JSON.stringify(decodedToken));
-
-    // Access tasks array from UserInfo object
-    const userTasks = decodedToken.UserInfo.tasks || [];
-
-    console.log('User tasks:', userTasks); // Log the tasks array
-
-    return userTasks;
+    const response = await api.get("/tasks");
+    return response?.data;
   } catch (error) {
     throw error;
   }
 };
+

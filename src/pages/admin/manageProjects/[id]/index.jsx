@@ -140,14 +140,14 @@ function Project() {
           </div>
           <div className="flex-1 w-full flex justify-between">
             <div className="flex-1 flex gap-4 justify-between sm:justify-start">
-              <DateInput
+             {/*  <DateInput
                 placeholder={"Select from"}
                 additionalClasses={`${dateInputClasses} transition-transform transform hover:scale-105`}
               />
               <DateInput
                 placeholder={"Select to"}
                 additionalClasses={`${dateInputClasses} transition-transform transform hover:scale-105`}
-              />
+              /> */}
             </div>
 
             {dimension >= 640 && (

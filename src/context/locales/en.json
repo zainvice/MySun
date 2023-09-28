@@ -37,9 +37,9 @@
                   "clarityMessage": "Provide some workers with more clarity for the upcoming projects"
                 },
                 "statistics": {
-                  "surveysCompleted": "Surveys completed today on",
-                  "surveysRemaining": "Surveys remaining for today on",
-                  "averageTimeSpent": "Average 1 hour spent on surveys today on"
+                  "surveysCompleted": "surveys completed on",
+                  "surveysRemaining": "surveys remaining on",
+                  "averageTimeSpent": "average time spent on surveys on"
                 }
               },
               "workerCard": {
@@ -70,7 +70,8 @@
                 "name": "Name",
                 "email": "Email",
                 "role": "Role",
-                "permissions": "Permissions",
+                "permissions": "Status",
+                "remove": "Change Status / Remove",
                 "edit": "Edit",
                 "download": "Download",
                 "share": "Share"

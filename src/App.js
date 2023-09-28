@@ -14,7 +14,9 @@ import WorkerDetail from "./pages/worker/workerDetail";
 import Password from "./pages/password";
 import { I18nextProvider } from "react-i18next";
 import i18n from "./context/i18n";
-
+import PersistLogin from './features/auth/PresistLogin'
+import RequireAuth from './features/auth/RequireAuth'
+import { ROLES } from './config/roles'
 import { LanguageProvider } from "./context/LanguageContext";
 
 // import NewWorker from "./pages/admin/newWorker";
@@ -93,57 +95,67 @@ function App() {
         <ProjectsProvider>
           <Router>
             <Routes>
-              <Route path="/" element={<Authenticate Component={Login} />} />
+              <Route path="/" element={<Login />} />
+              <Route path="/login" element={<Login />} />
               <Route
                 path="/forgotpassword"
-                element={<Authenticate Component={ForgotPassword} />}
+                element={<ForgotPassword/>}
               />
-              <Route
-                path="/dashboard"
-                element={
-                  <Auth Component={Dashboard} isAdminPath isSupervisorPath />
-                }
-              />
-              <Route
-                path="/manage-projects"
-                element={
-                  <Auth
-                    Component={ManageProjects}
-                    isAdminPath
-                    isSupervisorPath
-                  />
-                }
-              />
-              <Route
-                path="/manage-projects/:id"
-                element={<Auth Component={Project} isAdminPath />}
-              />
-              <Route
-                path="/manage-projects/:id/tasks"
-                element={<ProjectTasks />}
-              />
-              <Route
-                path="/new-project"
-                element={<Auth Component={NewProject} isAdminPath />}
-              />
-              <Route
-                path="/workers"
-                element={<Auth Component={Workers} isAdminPath />}
-              />
-              <Route path="/otp" element={<OTP />} />
-              <Route path="/worker-detail/:id" element={<WorkerDetail />} />
+              <Route element={<PersistLogin/>}>
+                <Route element= {<RequireAuth allowedRoles={[ROLES.Admin, ROLES.Supervisor]}/>}>
+                         <Route
+                         path="/dashboard"
+                         element={
+                           <Dashboard/>
+                         }
+                       />
+                       <Route
+                         path="/manage-projects"
+                         element={
+                           <ManageProjects
+                           />
+                         }
+                       />
+                       <Route
+                         path="/manage-projects/:id"
+                         element={<Project/>}
+                       />
+                       <Route
+                         path="/manage-projects/:id/tasks"
+                         element={<ProjectTasks />}
+                       />
+                       <Route
+                         path="/new-project"
+                         element={<NewProject/>}
+                       />
+                       <Route
+                         path="/workers"
+                         element={<Auth Component={Workers} isAdminPath />}
+                       />
+                       <Route path="/otp" element={<OTP />} />
+                       <Route path="/worker-detail/:id" element={<WorkerDetail />} />
+                </Route>
+
+              </Route>
               <Route
                 path="/resetPassword/:resetToken/:userId"
-                element={<Authenticate Component={Password} />}
+                element={<Password/>}
               />
+              <Route element={<PersistLogin/>}>
+                <Route element= {<RequireAuth allowedRoles={[ROLES.Worker]}/>}>
+                
               <Route
                 path="/assigned-tasks"
-                element={<Auth Component={AssignedTasks} />}
+                element={<AssignedTasks/>}
               />
               <Route
-                path="/new-task-assigned"
-                element={<Auth Component={NewTaskAssigned} />}
+                path="/task/:id"
+                element={<NewTaskAssigned/>}
               />
+                  </Route>
+                  
+              </Route>
+              
             </Routes>
           </Router>
         </ProjectsProvider>

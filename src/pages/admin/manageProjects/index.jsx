@@ -10,11 +10,16 @@ import { useEffect, useState } from "react";
 import { getProjects } from "../../../api";
 import Spinner from "../../../common/spinner";
 import { useProjects } from "../../../context/projectsContext";
-
+import { useSelector } from 'react-redux';
+import { selectCurrentToken } from "../../../features/auth/authSlice";
+import jwtDecode from "jwt-decode";
 function ManageProjects() {
   const { t } = useTranslation();
   const [isloading, setloading] = useState(true);
   const { projects, setProjects } = useProjects();
+  const token = useSelector(selectCurrentToken);
+  const userInfo = jwtDecode(token);
+  const {role}= userInfo.UserInfo
 
   useEffect(() => {     
     getProjects()
@@ -31,9 +36,17 @@ function ManageProjects() {
       <Container showMoreButton={projects?.length > 0}>
         <div className="flex justify-between mb-2">
           <Heading title={t("projectsHeading")} />
-          <NavLink to="/new-project">
+          {role!=='admin'?(
+            <>
+            </>
+          ): (
+            <>
+            <NavLink to="/new-project">
             <Button title={t("addnewProj")} />
           </NavLink>
+            </>
+          )}
+          
         </div>
 
         {isloading ? (

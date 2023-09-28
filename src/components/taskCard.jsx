@@ -30,7 +30,8 @@ function TaskCard({ variant, task }) {
           }`}
         />
         <div>
-          <h2 className="font-semibold text-3xl line-clamp-1">
+          <h2 className="font-semibold text-3xl line-clamp-0">
+            <p className="text-sm"> TASK FROM </p>
             {project?.projectName ?? ""}
           </h2>
         </div>
