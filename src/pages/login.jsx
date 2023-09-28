@@ -36,7 +36,7 @@ const LoginPage = () => {
       
        dispatch(setCredentials({ accessToken }))
        const data = response;
-       console.log('DATA', data)
+
        for (const key in data) {
           sessionStorage.setItem(key, data[key]);
        }

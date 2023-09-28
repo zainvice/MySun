@@ -56,23 +56,23 @@ function Dashboard() {
       const filteredData = projects.filter((project) => {
         const projectDate = new Date(project.startDate); 
         const currentDate = new Date();
-        console.log(projectDate.toLocaleDateString())
+        
         if (selectedFilter === "0") {
           
           return projectDate.toDateString() === currentDate.toDateString();
           
         } else if (selectedFilter === "7") {
-          console.log('7')
+          
           const sevenDaysAgo = new Date();
           sevenDaysAgo.setDate(currentDate.getDate() - 7);
           return projectDate >= sevenDaysAgo;
         } else if (selectedFilter === "15") {
-          console.log('15')
+          
           const fifteenDaysAgo = new Date();
           fifteenDaysAgo.setDate(currentDate.getDate() - 15);
           return projectDate >= fifteenDaysAgo;
         } else if (selectedFilter === "30") {
-          console.log('30')
+          
 
           const thirtyDaysAgo = new Date();
           thirtyDaysAgo.setDate(currentDate.getDate() - 30);
@@ -204,8 +204,7 @@ function Dashboard() {
         // Get the latest updated project (first item in the sorted array)
         const latestUpdatedProject = sortedProjects[0];
         toDisplay(latestUpdatedProject)
-        // Display the latest updated project
-        console.log("Latest Updated Project:", latestUpdatedProject);
+        
       })
       .catch(() => localStorage.removeItem("projects"))
       .finally(() => setloading(false));

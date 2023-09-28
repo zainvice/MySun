@@ -47,7 +47,7 @@ function Project() {
     const completedTask = project.projectData.tasks.filter(task => task.completed);
     
     const workerInProject = project.workers.filter(worker => worker.role !== 'supervisor');
-    console.log("Workers in Project", project);
+    
     workersInProject= workerInProject
     const workerTasksCount = {};
       
