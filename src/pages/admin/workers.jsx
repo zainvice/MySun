@@ -36,7 +36,21 @@ function Workers() {
             {/*  Add an onClick event to open the modal */}
             <Button title={t('workers.addNewWorkerButton')} onClick={onOpen} />
           </div>
-          {isloading ? <Spinner /> : <WorkersTable workers={workers} />}
+          {isloading ? <Spinner /> : (
+            <>
+            {workers.length>0?(
+              <>
+              <WorkersTable workers={workers} />
+                </>
+            ): (
+              <>
+              <p className="text-center">No workers found!</p>
+              </>
+            )
+            }
+            </>
+          )
+          }
         </Container>
       </Layout>
 

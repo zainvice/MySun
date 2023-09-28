@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import Heading from "../common/heading";
 import { createWorker } from "../api";
+import Spinner from "../common/spinner";
 
 function NewWorkerOverlay({ onClose }) {
   const [message, setMessage] = useState(null);
   const [inputValues, setInputValues] = useState({});
+  const [creating, isCreating]= useState(false)
   const onChange = (e) => {
     const target = e.target ?? {};
     setInputValues((prev) => ({
@@ -29,10 +31,12 @@ function NewWorkerOverlay({ onClose }) {
   };
 
   const onSubmit = async (event) => {
+    isCreating(true)
     event.preventDefault();
     const data = await createWorker({ ...inputValues });
     setMessage(data.message);
     setInputValues({})
+    isCreating(false)
   };
 
   return (
@@ -46,7 +50,9 @@ function NewWorkerOverlay({ onClose }) {
           <span className="material-symbols-outlined">close</span>
         </button>
       </div>
-
+      {!creating?(
+       <>
+       
       <div className="mt-6">
         <form className="flex flex-col" onSubmit={onSubmit}>
           {message && (
@@ -167,6 +173,10 @@ function NewWorkerOverlay({ onClose }) {
           </div>
         </form>
       </div>
+       </> 
+      ) : (
+        <Spinner/>
+      )}
     </div>
   );
 }

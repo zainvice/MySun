@@ -43,7 +43,7 @@ function Dashboard() {
   const [completed, setCompleted]= useState("")
   const [isPLoading, setPLoading]= useState(true)
   const [iswLoading, setwLoading]= useState(true)
-  const [selectedFilter, setSelectedFilter] = useState("today");
+  const [selectedFilter, setSelectedFilter] = useState("0");
   const [filteredProjects, setFilteredProjects] = useState([]);
 
   useEffect(() => {
@@ -312,7 +312,7 @@ function Dashboard() {
               <ProjectCard
                     project={project}
                     variant={
-                       VARIANTS.GREEN
+                       VARIANTS.PURPLE
                     }
                   />
             </NavLink>
@@ -378,13 +378,24 @@ function Dashboard() {
               <Spinner/>
             ): (
               <>
-              
-              <NavLink
+              {workerNo1?(
+                <>
+                
+                <NavLink
                   to={"/worker-detail/"+workerNo1?._id}                 
                   className="block transform hover:scale-105 transition-transform duration-300"
                 >
                   <WorkerCard worker= {workerNo1} />
                 </NavLink>
+                </>
+              ):(
+                <p className="text-center font-bold">No top workers found</p>
+              )
+
+              }
+              {workerNo2?(
+                <>
+                
                 <NavLink
                  to={"/worker-detail/"+workerNo2?._id}                 
                   
@@ -392,6 +403,13 @@ function Dashboard() {
                 >
                   <WorkerCard worker= {workerNo2} />
                 </NavLink>
+                </>
+              ):(
+                <></>
+              )
+
+              }
+               
             
               </>
             )}
