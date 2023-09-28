@@ -2,6 +2,7 @@ import jwtDecode from 'jwt-decode';
 import axios from "axios";
 import { async } from "q";
 
+
 const BASE_URL = "https://mysunapi.onrender.com/api/v1/";
 
 const api = axios.create({
@@ -41,6 +42,7 @@ export const firstResetPassword = async ({ email, password }) => {
 export const createWorker = async ({
   email,
   fullName,
+  username,
   phone,
   password,
   role,
@@ -49,6 +51,7 @@ export const createWorker = async ({
     const response = await api.post("/users", {
       email,
       fullName,
+      username,
       phone,
       password,
       role,
