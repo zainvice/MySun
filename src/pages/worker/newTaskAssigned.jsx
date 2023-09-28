@@ -229,8 +229,8 @@ function NewTaskAssigned() {
           placeholder={
             tasktoDisplay?.taskData?.address || t("newTaskAssigned.address")
           }
-          value={tasktoDisplay?.taskData?.address || ""}
-          disabled={!!tasktoDisplay?.taskData?.address}
+          /* value={tasktoDisplay?.taskData?.address || ""}
+          disabled={!!tasktoDisplay?.taskData?.address} */
           className="rounded-full bg-gray-200 text-black px-4 h-12 w-full"
           onChange={onChange}
         />
