@@ -67,7 +67,7 @@ const Password = () => {
             </div>
             <form className="w-full mt-20" onSubmit={onResetPassword}>
               
-              {!success? (
+              {success? (
                 <p className="text-center text-gray-300">
                   Password Reset Successfully!{" "}
                   <Link

@@ -70,40 +70,54 @@ function NewTaskAssigned() {
   }, [navigator.onLine]);
 
   const addToOfflineTasks = () => {
-    const taskData = {_id: tasktoDisplay._id, taskData: inputValues, timeTaken: timeTaken, status: status}
-    const updatedTasks = [...offlineTasks, taskData ];
-    setOfflineTasks(updatedTasks);
-    localStorage.setItem("offlineTasks", JSON.stringify(updatedTasks));
-    console.log("OFFLINE TASK SAVED!", offlineTasks)
+    if(timerRunning){
+      setMessage("Please stop the timer first!")
+    }else{
+      setMessage("Saving...")
+      const taskData = {_id: tasktoDisplay._id, taskData: inputValues, timeTaken: timeTaken, status: status}
+      const updatedTasks = [...offlineTasks, taskData ];
+      setOfflineTasks(updatedTasks);
+      localStorage.setItem("offlineTasks", JSON.stringify(updatedTasks));
+      console.log("OFFLINE TASK SAVED!", offlineTasks)
+      setMessage("Saved!")
+    }
+    
   };
-
+  const[message, setMessage]= useState("")
   const sendOfflineTasksToDatabase = async() => {
     const tasks = JSON.parse(localStorage.getItem("offlineTasks"));
-
+    setloading(true)
     if (tasks && tasks.length > 0) {
       for(let task of tasks){
         console.log(task)
-        await editTasks({
-          task
-        })
-         localStorage.removeItem("offlineTasks")
-          .catch((error) => {
-            const data = error?.response?.data;
-           
-          })
+        try {
+          await editTasks({ task });
+          localStorage.removeItem("offlineTasks");
+          setloading(false);
+          setMessage("Successfully saved to database!")
+        } catch (error) {
+          const data = error?.response?.data;
+          setloading(false);
+          setMessage("Something went wrong, try again in a moment!")
+        }
       }
+    }else{
+      setMessage("No Tasks found to be synced!")
     }
+    setloading(false)
   };
 
   useEffect(() => {
     let interval;
-
+    
     if (timerRunning) {
+      setMessage("Timer Started!")
       interval = setInterval(() => {
         setSeconds((prevSeconds) => prevSeconds + 1);
       }, 1000);
       setTimeTaken((prevTimeTaken) => prevTimeTaken + seconds);
     } else {
+      setMessage("Timer Stopped!")
       clearInterval(interval);
       setTimeTaken((prevTimeTaken) => prevTimeTaken + seconds);
     }
@@ -141,6 +155,7 @@ function NewTaskAssigned() {
       <Container>
         {isloading?(
           <Spinner/>
+          
         ):(
           <>
           <div className="grid grid-cols-3 items-center m-4">
@@ -176,6 +191,7 @@ function NewTaskAssigned() {
           </div>
 
           <div className=" flex justify-end items-center">
+            
             <span className="material-symbols-outlined text-[#34F5C5] text-4xl hidden sm:inline">
               schedule
             </span>
@@ -192,18 +208,32 @@ function NewTaskAssigned() {
             </div>
           </div>
         </div>
-        <div className="text-white grid grid-cols-1 sm:grid-cols-2  md:grid-cols-3 gap-4">
+       <div className="w-full text-center">
+       <p className="text-lg font-bold text-[#34F5C5]">{message}</p>
+       </div>
+        <div className="mt-6 text-white grid grid-cols-1 sm:grid-cols-2  md:grid-cols-3 gap-4">
           {/* These inputs will be dynamic if they are already existing then user input will be disabled  */}
-          <input
-            type="text"
-            value={
-              tasktoDisplay?.worker?.fullName || t("newTaskAssigned.workerName")
-            }
-            disabled
-            className="rounded-full bg-gray-200 text-black px-4 h-12 w-full"
-            onChange={onChange}
-            name="worker.fullName"
-          />           
+          
+          <div className="relative">
+              <label className="text-gray-400 absolute top-0 left-3 -mt-6">
+                Worker Name
+              </label>
+              <input
+                type="text"
+                id="workerName"
+                value={
+                  tasktoDisplay?.worker?.fullName || t("newTaskAssigned.workerName")
+                }
+                disabled
+                className="rounded-full bg-gray-200 text-black px-4 h-12 w-full"
+                onChange={onChange}
+                name="worker.fullName"
+              />
+            </div>   
+            <div className="relative">
+              <label className="text-gray-400 absolute top-0 left-3 -mt-6">
+                Building Number
+              </label>    
           <input
             type="text"
             name="buildingNumber"
@@ -221,8 +251,11 @@ function NewTaskAssigned() {
             className="rounded-full bg-gray-200 text-black px-4 h-12 w-full"
             onChange={onChange}
           />
-          
-
+          </div>
+          <div className="relative">
+              <label className="text-gray-400 absolute top-0 left-3 -mt-6">
+               Address
+              </label>
           <input
           type="text"
           name="address"
@@ -234,7 +267,11 @@ function NewTaskAssigned() {
           className="rounded-full bg-gray-200 text-black px-4 h-12 w-full"
           onChange={onChange}
         />
-        
+        </div>
+        <div className="relative mt-3">
+              <label className="text-gray-400 absolute top-0 left-3 -mt-6">
+                Physical Number
+              </label>
         <input
           type="text"
           name="physicalNumber"
@@ -246,7 +283,11 @@ function NewTaskAssigned() {
           className="rounded-full bg-gray-200 text-black px-4 h-12 w-full"
           onChange={onChange}
         />
-        
+        </div>
+         <div className="relative mt-3">
+              <label className="text-gray-400 absolute top-0 left-3 -mt-6">
+                Owner ID
+              </label>
         <input
           type="text"
           name="ownerID"
@@ -258,7 +299,11 @@ function NewTaskAssigned() {
           className="rounded-full bg-gray-200 text-black px-4 h-12 w-full"
           onChange={onChange}
         />
-        
+        </div>
+         <div className="relative mt-3">
+              <label className="text-gray-400 absolute top-0 left-3 -mt-6">
+                Owner Name
+              </label>
         <input
           type="text"
           name="ownerName"
@@ -270,7 +315,11 @@ function NewTaskAssigned() {
           className="rounded-full bg-gray-200 text-black px-4 h-12 w-full"
           onChange={onChange}
         />
-        
+        </div>
+         <div className="relative mt-3">
+              <label className="text-gray-400 absolute top-0 left-3 -mt-6">
+                Phone Number
+              </label>
         <input
           type="text"
           name="phoneNumber"
@@ -282,7 +331,11 @@ function NewTaskAssigned() {
           className="rounded-full bg-gray-200 text-black px-4 h-12 w-full"
           onChange={onChange}
         />
-        
+        </div>
+         <div className="relative mt-3">
+              <label className="text-gray-400 absolute top-0 left-3 -mt-6">
+                Old Area
+              </label>
         <input
           type="text"
           name="oldArea"
@@ -294,7 +347,11 @@ function NewTaskAssigned() {
           className="rounded-full bg-gray-200 text-black px-4 h-12 w-full"
           onChange={onChange}
         />
-        
+        </div>
+        <div className="relative mt-3">
+              <label className="text-gray-400 absolute top-0 left-3 -mt-6">
+                Property Type
+              </label>
         <input
           type="text"
           name="propertyType"
@@ -306,7 +363,11 @@ function NewTaskAssigned() {
           className="rounded-full bg-gray-200 text-black px-4 h-12 w-full"
           onChange={onChange}
         />
-        
+        </div>
+        <div className="relative mt-3">
+              <label className="text-gray-400 absolute top-0 left-3 -mt-6">
+                GOSH
+              </label>
         <input
           type="text"
           name="GOSH"
@@ -318,7 +379,11 @@ function NewTaskAssigned() {
           className="rounded-full bg-gray-200 text-black px-4 h-12 w-full"
           onChange={onChange}
         />
-        
+        </div>
+        <div className="relative mt-3">
+              <label className="text-gray-400 absolute top-0 left-3 -mt-6">
+                HELMA
+              </label>
         <input
           type="text"
           name="HELMA"
@@ -330,7 +395,11 @@ function NewTaskAssigned() {
           className="rounded-full bg-gray-200 text-black px-4 h-12 w-full"
           onChange={onChange}
         />
-        
+        </div>
+        <div className="relative mt-3">
+              <label className="text-gray-400 absolute top-0 left-3 -mt-6">
+                Floor
+              </label>
         <input
           type="text"
           name="floor"
@@ -342,10 +411,13 @@ function NewTaskAssigned() {
           className="rounded-full bg-gray-200 text-black px-4 h-12 w-full"
           onChange={onChange}
         />
-
+        </div>
 
         </div>
-        <p className="m-3 font-bold">Status</p>
+        <>
+        {role!=="supervisor"?(
+          <>
+          <p className="m-3 font-bold">Status</p>
         <div className="mt-0 sm:mt-8 mx-2 grid grid-cols-2  md:grid-cols-3 lg:grid-cols-4 justify-center items-center">
         
          {/* Radio button for "Coordination Letter" */}
@@ -468,11 +540,17 @@ function NewTaskAssigned() {
     Under Construction
   </span>
 </label>
-
-        </div>
+</div>
+          </>
+        ): (
+          <></>
+        )
+        }
+        </>
+       
         {role==="supervisor"?(
           <>
-          <div className="flex flex-col">
+          <div className="mt-8 flex flex-col">
           <textarea
             type="text"
             placeholder="Notes"
@@ -484,6 +562,7 @@ function NewTaskAssigned() {
           onChange={(e) => setStatus(e.target.value)} // Handle selection change
         >
           <option value="Pending">Pending</option>
+          <option value="Coordination Letter">Coordination Letter</option>
           <option value="Coordination Letter 1">Coordination Letter 1</option>
           <option value="Coordination Letter 2">Coordination Letter 2</option>
           <option value="Office Work">Office Work</option>
@@ -503,11 +582,17 @@ function NewTaskAssigned() {
           <></>
         )}
        
-        <div className="mt-3 flex flex-row w-full">
+        {role==="supervisor"?(
+          <div className="mt-3 flex flex-row w-full">
+           <Button className="m-4" title={"Update Progress"} onClick={() => { addToOfflineTasks(); sendOfflineTasksToDatabase(); }} />
+           </div>
+        ):(
+          <div className="mt-3 flex flex-row w-full">
         <Button  title={"Save Progress"} onClick={addToOfflineTasks} />
-        <Button className="ml-4" title={"Sync Manually"} onClick={sendOfflineTasksToDatabase} />
+        <Button className="ml-4" title={"Sync Manually"} onClick={()=>{addToOfflineTasks(); sendOfflineTasksToDatabase();}} />
         </div>
-        
+        )}
+          
           </>
         )}
       </Container>

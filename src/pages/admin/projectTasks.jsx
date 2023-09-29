@@ -41,17 +41,21 @@ function Tasks() {
               {role!=='admin' ? (
                <>
                 {viewAs? (
-                  <span className="ml-3 justify-end material-symbols-outlined text-4xl bg-[#00FFD3] rounded text-white hover:cursor-pointer hover:bg-green-400 hover:text-white-200" 
+                  <button className="bg-[#00FFD3] hover:bg-green-400 rounded-lg content-center w-5/2 hover:ease-in-out duration-300 shadow-md">
+                  <span className="justify-center material-symbols-outlined text-4xl rounded text-white hover:cursor-pointer hover:text-white-200" 
                   onClick={changeView}
                   >
                   toc
                  </span>
+                 </button>
                 ): (
-                  <span className="ml-3 justify-end material-symbols-outlined text-4xl bg-[#00FFD3] rounded text-white hover:cursor-pointer hover:bg-green-400 hover:text-white-200" 
+                  <button className="bg-[#00FFD3] hover:bg-green-400 rounded-lg content-center nw-5/2 hover:ease-in-out duration-300 shadow-md">
+                  <span className="justify-center material-symbols-outlined text-4xl text-white hover:cursor-pointer hover:text-white-200" 
                   onClick={changeView}
                   >
-                 tablet
+                 aod_tablet
                   </span>
+                  </button>
                 )}
                </>
               ): (
