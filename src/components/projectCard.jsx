@@ -35,7 +35,7 @@ function ProjectCard({ variant, project }) {
       <div className="flex items-center gap-4">
         <img
           className="w-18"
-          src={`${publicUrl}/images/${
+          src={`/images/${
             VARIANTS.GREEN === variant ? "taskIcon.png" : "taskIcon1.png"
           }`}
         />

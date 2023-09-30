@@ -103,7 +103,7 @@ function App() {
               />
               <Route element={<PersistLogin/>}>
                 <Route element= {<RequireAuth allowedRoles={[ROLES.Admin, ROLES.Supervisor]}/>}>
-                         <Route
+                      <Route
                          path="/dashboard"
                          element={
                            <Dashboard/>
@@ -120,10 +120,7 @@ function App() {
                          path="/manage-projects/:id"
                          element={<Project/>}
                        />
-                       <Route
-                         path="/manage-projects/:id/tasks"
-                         element={<ProjectTasks />}
-                       />
+                       
                        <Route
                          path="/new-project"
                          element={<NewProject/>}
@@ -145,17 +142,34 @@ function App() {
                 path="/resetPassword/:email"
                 element={<Password/>}
               />
+
+
+
+              <Route element={<PersistLogin/>}>
+                <Route element= {<RequireAuth allowedRoles={[ROLES.Admin, ROLES.Supervisor, ROLES.Worker]}/>}>
+                  <Route
+                         path="/manage-projects/:id/tasks"
+                         element={<ProjectTasks />}
+                       />
+                  </Route>
+                  <Route
+                            path="/task/:id"
+                            element={<NewTaskAssigned/>}
+                          />
+              </Route>
+
+
+
+
+              
               <Route element={<PersistLogin/>}>
                 <Route element= {<RequireAuth allowedRoles={[ROLES.Worker, ROLES.Supervisor]}/>}>
                 
-              <Route
-                path="/assigned-tasks"
-                element={<AssignedTasks/>}
-              />
-              <Route
-                path="/task/:id"
-                element={<NewTaskAssigned/>}
-              />
+                          <Route
+                            path="/assigned-tasks"
+                            element={<AssignedTasks/>}
+                          />
+                         
                   </Route>
                   
               </Route>

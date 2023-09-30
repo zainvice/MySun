@@ -1,6 +1,6 @@
 import React from "react";
 
-function Spinner() {
+function Spinner({message}) {
   return (
     <div className="h-96 w-full flex items-center justify-center">
       <div
@@ -12,7 +12,7 @@ function Spinner() {
         </span>
         
       </div>
-      <p className="absolute mt-20 mr-0 text-gray-600 font-bold">Please hold!</p>
+      <p className="absolute mt-20 mr-0 text-gray-600 font-bold">{message ||"Please hold!"}</p>
     </div>
   );
 }

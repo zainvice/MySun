@@ -246,7 +246,7 @@ function Dashboard() {
             <Spinner/>
           ): (
             <>
-             {filteredProjects.length > 0? (
+             {filteredProjects ? (
               <>
               <div className="sm:w-1/2 md:min-w-[340px] md:w-1/3 ">
             <NavLink to={"/manage-projects/"+project?.projectId} className={'block text-white transform transition-transform hover:scale-105'}>
@@ -305,64 +305,7 @@ function Dashboard() {
           </div>
               </>
              ) : (
-              <>
-              <div className="sm:w-1/2 md:min-w-[340px] md:w-1/3 ">
-            <NavLink to={"/manage-projects/"+project?.projectId} className={'block text-white transform transition-transform hover:scale-105'}>
-              <ProjectCard
-                    project={project}
-                    variant={
-                       VARIANTS.PURPLE
-                    }
-                  />
-            </NavLink>
-          </div>
-          <div className="flex-1 bg-gradient-to-b from-[#00FFD3] from-60% to-[#37C19F] rounded-3xl p-[3px] shadow-lg">
-            <div className="p-4 sm:p- bg-white rounded-[20px] h-full">
-              <ul className="font-semibold list-disc list-outside ml-1 sm:ml-4">
-                <li className="line-clamp-1">
-                  <p>
-                    0{" "}
-                    <span className="text-[#00FFD3]">
-                      {t("dashboard.statistics.surveysCompleted")}
-                    </span>{" "}
-                     {new Date(new Date().setDate(new Date().getDate() - parseInt(selectedFilter))).toLocaleDateString()}
-                  </p>
-                </li>
-                <li className="mt-1 sm:mt-2 line-clamp-1">
-                  <p>
-                    {tasksremaining}{" "}
-                    <span className="text-[#00FFD3]">
-                      {t("dashboard.statistics.surveysRemaining")}
-                    </span>{" "}
-                    {new Date(new Date().setDate(new Date().getDate() - parseInt(selectedFilter))).toLocaleDateString()}
-                  </p>
-                </li>
-                <li className="mt-1 sm:mt-2 line-clamp-1">
-                  <p>
-                    <span className="text-[#00FFD3]">
-                      {t("dashboard.statistics.averageTimeSpent")}{avarageTime}
-                    </span>{" "}
-                    {new Date(new Date().setDate(new Date().getDate() - parseInt(selectedFilter))).toLocaleDateString()}
-                  </p>
-                </li>
-              </ul>
-              <div className="mt-4 flex items-center">
-                <img src="./images/stickyNotes.png" />
-                <p className="font-semibold" contentEditable suppressContentEditableWarning={false} onBlur={(e)=>setNotes(e.target.textContent)}>
-                  {notes}
-                </p>
-                
-                  <><span class="material-symbols-outlined hover:cursor-pointer hover:color-green-600 transition-300" onClick={SaveNotes}>
-                  done
-              </span></>
-                
-                
-                
-              </div>
-            </div>
-          </div>
-              </>
-
+              <></>
              )}
             </>
           )}

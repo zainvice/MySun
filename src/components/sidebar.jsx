@@ -109,22 +109,24 @@ function Sidebar({ isSidebarOpen, onSidebarClose }) {
               Dashboard
             </span>
           </NavLink>
-          <NavLink
-            to={
-              isAdmin || isSupervisor
-                ? "/manage-projects"
-                : "/task/:id"
-            }
-            className={isActive}
-          >
-            <span className="material-symbols-outlined text-2xl sm:text-3xl hover:text-[#2ce6bd] active:text-[#2ce6bd]">
-              work
-            </span>
-            <span className="inline-block lg:hidden text-lg hover:text-[#2ce6bd] active:text-[#2ce6bd]">
-              Projects
-            </span>
-          </NavLink>
+         
           {isAdmin && (
+            <>
+             <NavLink
+             to={
+               isAdmin || isSupervisor
+                 ? "/manage-projects"
+                 : "/assigned-tasks"
+             }
+             className={isActive}
+           >
+             <span className="material-symbols-outlined text-2xl sm:text-3xl hover:text-[#2ce6bd] active:text-[#2ce6bd]">
+               work
+             </span>
+             <span className="inline-block lg:hidden text-lg hover:text-[#2ce6bd] active:text-[#2ce6bd]">
+               Projects
+             </span>
+           </NavLink>
             <NavLink to={"/workers"} className={isActive}>
               <span className="material-symbols-outlined text-2xl sm:text-3xl hover:text-[#2ce6bd] active:text-[#2ce6bd]">
                 person_pin
@@ -133,6 +135,7 @@ function Sidebar({ isSidebarOpen, onSidebarClose }) {
                 Workers
               </span>
             </NavLink>
+            </>
           )}
         </div>
 

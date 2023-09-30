@@ -1,0 +1,200 @@
+ {/* These inputs will be dynamic if they are already existing then user input will be disabled  */}
+          
+ <div className="relative">
+ <label className="text-gray-400 absolute top-0 left-3 -mt-6">
+   Worker Name
+ </label>
+ <input
+   type="text"
+   id="workerName"
+   value={
+     tasktoDisplay?.worker?.fullName || t("newTaskAssigned.workerName")
+   }
+   disabled
+   className="rounded-full bg-gray-200 text-black px-4 h-12 w-full"
+   onChange={onChange}
+   name="worker.fullName"
+ />
+</div>   
+<div className="relative">
+ <label className="text-gray-400 absolute top-0 left-3 -mt-6">
+   Building Number
+ </label>    
+<input
+type="text"
+name="buildingNumber"
+value={
+ tasktoDisplay?.taskData?.buildingNumber
+   ? tasktoDisplay?.taskData?.buildingNumber
+   : ""
+}
+placeholder={
+ !tasktoDisplay?.taskData?.buildingNumber
+   ? t("newTaskAssigned.buildingNumber")
+   : ""
+}
+disabled={!!tasktoDisplay?.taskData?.buildingNumber} // Set disabled if buildingNumber exists
+className="rounded-full bg-gray-200 text-black px-4 h-12 w-full"
+onChange={onChange}
+/>
+</div>
+<div className="relative">
+ <label className="text-gray-400 absolute top-0 left-3 -mt-6">
+  Address
+ </label>
+<input
+type="text"
+name="address"
+placeholder={
+tasktoDisplay?.taskData?.address || t("newTaskAssigned.address")
+}
+/* value={tasktoDisplay?.taskData?.address || ""}
+disabled={!!tasktoDisplay?.taskData?.address} */
+className="rounded-full bg-gray-200 text-black px-4 h-12 w-full"
+onChange={onChange}
+/>
+</div>
+<div className="relative mt-3">
+ <label className="text-gray-400 absolute top-0 left-3 -mt-6">
+   Physical Number
+ </label>
+<input
+type="text"
+name="physicalNumber"
+placeholder={
+tasktoDisplay?.taskData?.physicalNumber || t("newTaskAssigned.physicalNumber")
+}
+//value={tasktoDisplay?.taskData?.physicalNumber || ""}
+//disabled={!!tasktoDisplay?.taskData?.physicalNumber}
+className="rounded-full bg-gray-200 text-black px-4 h-12 w-full"
+onChange={onChange}
+/>
+</div>
+<div className="relative mt-3">
+ <label className="text-gray-400 absolute top-0 left-3 -mt-6">
+   Owner ID
+ </label>
+<input
+type="text"
+name="ownerID"
+placeholder={
+tasktoDisplay?.taskData?.ownerID || t("newTaskAssigned.ownerID")
+}
+//value={tasktoDisplay?.taskData?.ownerID || ""}
+//disabled={!!tasktoDisplay?.taskData?.ownerID}
+className="rounded-full bg-gray-200 text-black px-4 h-12 w-full"
+onChange={onChange}
+/>
+</div>
+<div className="relative mt-3">
+ <label className="text-gray-400 absolute top-0 left-3 -mt-6">
+   Owner Name
+ </label>
+<input
+type="text"
+name="ownerName"
+placeholder={
+tasktoDisplay?.taskData?.ownerName || t("newTaskAssigned.ownerName")
+}
+//value={tasktoDisplay?.taskData?.ownerName || ""}
+//disabled={!!tasktoDisplay?.taskData?.ownerName}
+className="rounded-full bg-gray-200 text-black px-4 h-12 w-full"
+onChange={onChange}
+/>
+</div>
+<div className="relative mt-3">
+ <label className="text-gray-400 absolute top-0 left-3 -mt-6">
+   Phone Number
+ </label>
+<input
+type="text"
+name="phoneNumber"
+placeholder={
+tasktoDisplay?.taskData?.phoneNumber || t("newTaskAssigned.phoneNumber")
+}
+//value={tasktoDisplay?.taskData?.phoneNumber || ""}
+//disabled={!!tasktoDisplay?.taskData?.phoneNumber}
+className="rounded-full bg-gray-200 text-black px-4 h-12 w-full"
+onChange={onChange}
+/>
+</div>
+<div className="relative mt-3">
+ <label className="text-gray-400 absolute top-0 left-3 -mt-6">
+   Old Area
+ </label>
+<input
+type="text"
+name="oldArea"
+placeholder={
+tasktoDisplay?.taskData?.oldArea || t("newTaskAssigned.oldArea")
+}
+//value={tasktoDisplay?.taskData?.oldArea || ""}
+//disabled={!!tasktoDisplay?.taskData?.oldArea}
+className="rounded-full bg-gray-200 text-black px-4 h-12 w-full"
+onChange={onChange}
+/>
+</div>
+<div className="relative mt-3">
+ <label className="text-gray-400 absolute top-0 left-3 -mt-6">
+   Property Type
+ </label>
+<input
+type="text"
+name="propertyType"
+placeholder={
+tasktoDisplay?.taskData?.propertyType || t("newTaskAssigned.propertyType")
+}
+//value={tasktoDisplay?.taskData?.propertyType || ""}
+//disabled={!!tasktoDisplay?.taskData?.propertyType}
+className="rounded-full bg-gray-200 text-black px-4 h-12 w-full"
+onChange={onChange}
+/>
+</div>
+<div className="relative mt-3">
+ <label className="text-gray-400 absolute top-0 left-3 -mt-6">
+   GOSH
+ </label>
+<input
+type="text"
+name="GOSH"
+placeholder={
+tasktoDisplay?.taskData?.GOSH || t("newTaskAssigned.GOSH")
+}
+//value={tasktoDisplay?.taskData?.GOSH || ""}
+//disabled={!!tasktoDisplay?.taskData?.GOSH}
+className="rounded-full bg-gray-200 text-black px-4 h-12 w-full"
+onChange={onChange}
+/>
+</div>
+<div className="relative mt-3">
+ <label className="text-gray-400 absolute top-0 left-3 -mt-6">
+   HELMA
+ </label>
+<input
+type="text"
+name="HELMA"
+placeholder={
+tasktoDisplay?.taskData?.HELMA || t("newTaskAssigned.HELMA")
+}
+//value={tasktoDisplay?.taskData?.HELMA || ""}
+//disabled={!!tasktoDisplay?.taskData?.HELMA}
+className="rounded-full bg-gray-200 text-black px-4 h-12 w-full"
+onChange={onChange}
+/>
+</div>
+<div className="relative mt-3">
+ <label className="text-gray-400 absolute top-0 left-3 -mt-6">
+   Floor
+ </label>
+<input
+type="text"
+name="floor"
+placeholder={
+tasktoDisplay?.taskData?.floor || t("newTaskAssigned.floor")
+}
+//value={tasktoDisplay?.taskData?.floor || ""}
+//disabled={!!tasktoDisplay?.taskData?.floor}
+className="rounded-full bg-gray-200 text-black px-4 h-12 w-full"
+onChange={onChange}
+/>
+</div>

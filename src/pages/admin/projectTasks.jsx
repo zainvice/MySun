@@ -36,9 +36,11 @@ function Tasks() {
       <Layout activePageName={`Projects / ${id} / Tasks`}>
         <Container>
           <div >
+            
             <div className="flex justify-between mb-2">
             <Heading title={"Project Tasks"}></Heading>
-              {role!=='admin' ? (
+            <p className="text-gray-600 font-bold">Choose Tablet Mode to edit Tasks</p>
+              
                <>
                 {viewAs? (
                   <button className="bg-[#00FFD3] hover:bg-green-400 rounded-lg content-center w-5/2 hover:ease-in-out duration-300 shadow-md">
@@ -58,9 +60,7 @@ function Tasks() {
                   </button>
                 )}
                </>
-              ): (
-                <></>
-              )}
+             
               </div>
             <div className="my-4 ">
               {viewAs? (
