@@ -50,9 +50,9 @@ function Worker({ worker, selectedWorkers, onSelect }) {
         className="col-span-2 h-10 w-10"
         src={`${publicUrl}/images/avatarMale.png`}
       />
-      <p className="col-span-3 text-ellipsis line-clamp-1">{worker?.fullName}</p>
-      <p className="col-span-3 text-ellipsis line-clamp-1">{worker?.email}</p>
-      <p className="col-span-2 text-ellipsis line-clamp-1">{worker?.role}</p>
+      <p className="col-span-5 text-ellipsis line-clamp-1 mb-3">{worker?.fullName}</p>
+      <p className="col-span-5 text-ellipsis line-clamp-1 mb-0">{worker?.role.toUpperCase()}</p>
+      <p className="col-span-9 text-ellipsis line-clamp-1 text-sm mb-5">{worker?.email}</p>
     </button>
   );
 }
