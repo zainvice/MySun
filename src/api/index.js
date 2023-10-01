@@ -3,7 +3,7 @@ import axios from "axios";
 import { async } from "q";
 
 
-const BASE_URL = "https://mysunapi.onrender.com/api/v1/";
+const BASE_URL = "http://localhost:3500/api/v1/";
 
 const api = axios.create({
   baseURL: BASE_URL,
@@ -130,6 +130,16 @@ export const editNotes = async ({
   return await api.patch("/users", {
     email, 
     notes
+  });
+};
+export const editProject = async ({
+  projectId, 
+  workers
+}) => {
+  
+  return await api.patch("/projects", {
+    projectId, 
+    workers
   });
 };
 

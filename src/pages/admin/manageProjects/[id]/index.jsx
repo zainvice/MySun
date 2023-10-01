@@ -7,6 +7,10 @@ import { useDimensions } from "../../../../hooks";
 import { NavLink, useParams } from "react-router-dom";
 import { useProjects } from "../../../../context/projectsContext";
 import { exportToExcel, formatDate } from "../../../../global";
+import Modal from "../../../../common/modal";
+import WorkerOverlay from "../../../../components/workerOverlay2";
+import { useModal } from "../../../../hooks";
+import { getWorkers } from "../../../../api";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -33,6 +37,7 @@ ChartJS.register(
 const dateInputClasses = `!font-semibold !text-white !bg-[#34F5C5] border-none focus-within:!outline-none white-placeholder h-10 !w-40`;
 
 function Project() {
+  const { isOpen, onOpen, onClose } = useModal();
   const dimension = useDimensions();
   const { id } = useParams();
   const { projects } = useProjects();
@@ -40,6 +45,14 @@ function Project() {
   let workersInProject
   let completedTasks= 0
   let remainingTasks= 0
+  const [allWorkers, setWorkers]= useState()
+  useEffect(() => {
+    getWorkers().then((data) => {
+      setWorkers(
+        data?.filter((worker) => worker.role.toLowerCase() === "worker") ?? []
+      );
+    });
+  }, []);
   useEffect(()=>{
 
   }, [project])
@@ -123,12 +136,21 @@ function Project() {
   const onTasksClick = () => {};
 
   return (
+    <>
     <Layout activePageName={`Projects / ${id}`}>
       <Container>
         <div className="flex flex-col lg:flex-row lg:items-center gap-3">
           <div className="lg:w-1/3 flex justify-between">
             <Heading title={"Project Details"} />
+           
+                <Button
+                  title={`ADD A WORKER <span class='material-symbols-outlined'>add</span>`}
+                  titleClasses={"flex items-center gap-2"}
+                  onClick={onOpen}
+                />
+              
             {dimension <= 640 && (
+              <>
               <NavLink to={`/manage-projects/${id}/tasks`}>
                 <Button
                   title={`Show Tasks <span class='material-symbols-outlined'>chevron_right</span>`}
@@ -136,6 +158,8 @@ function Project() {
                   onClick={onTasksClick}
                 />
               </NavLink>
+              
+              </>
             )}
           </div>
           <div className="flex-1 w-full flex justify-between">
@@ -323,8 +347,18 @@ function Project() {
             onClick={handleExport}
           />
         </div>
+        
       </Container>
+      
     </Layout>
+    <Modal isOpen={isOpen} onClose={onClose}>
+        <WorkerOverlay
+          workers={allWorkers}
+          addedWorkers={project?.workers}
+          projectId={id}
+        />
+      </Modal>
+      </>
   );
 }
 
