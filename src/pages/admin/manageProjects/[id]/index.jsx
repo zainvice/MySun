@@ -101,26 +101,27 @@ function Project() {
         // If there's no project, return early
         return;
       }
-    
+      console.log("project", project)
       // Create an array to hold the project data
-      const projectData = [];
-    
+      const taskDataArray = project.tasks.map((task) => task.taskData);
+      const projectData = project.tasks.map((task) => task.taskData);
+      const tasks = project.tasks
       // Loop through the project object and add each key-value pair to the projectData array
-      for (const key in project) {
+      /* for (const key in project) {
         if (project.hasOwnProperty(key) && project[key]) {
           projectData.push({ [key]: project[key] });
         }
-      }
-    
+      } */
+     console.log(projectData)
       // Check if any data to export
       if (projectData.length === 0) {
         // No data to export, return early
         return;
       }
-    
+      const data = projectData[9]
       // Create a blob with the project data
       const blob = await exportToExcel(projectData);
-    
+      console.log(blob)
       // Create a download link and trigger the download
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement("a");
