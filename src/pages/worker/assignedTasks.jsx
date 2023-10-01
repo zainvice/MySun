@@ -20,11 +20,20 @@ function AssignedTasks() {
   const token = useSelector(selectCurrentToken);
   const userInfo = jwtDecode(token);
   const {role}= userInfo.UserInfo
-
+  
   useEffect(() => {     
     getProjects()
       .then((data) => {
-        setProjects(data);
+        let filteredProjects
+        const {projects}= userInfo.UserInfo
+        const assignedProjects = projects
+        //console.log("assignedProje", assignedProjects)
+        for(let i=0; i<assignedProjects.length; i++){
+          //console.log("Project",assignedProjects[i])
+          filteredProjects= data.filter(project=>project._id===assignedProjects[i])
+        }
+        //console.log("filtered Projects",filteredProjects)
+        setProjects(filteredProjects);
         localStorage.setItem("projects", JSON.stringify(data));
       })
       .catch(() => localStorage.removeItem("projects"))

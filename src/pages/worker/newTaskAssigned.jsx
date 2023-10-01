@@ -419,7 +419,7 @@ function NewTaskAssigned() {
         ): (
           <></>
         )}
-        {role==="supervisor"?(
+        {role!=="worker"?(
           <div className="mt-3 flex flex-row w-full">
            <Button className="m-4" title={"Update Progress"} onClick={() => { addToOfflineTasks(); sendOfflineTasksToDatabase(); }} />
            </div>
