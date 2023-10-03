@@ -21,6 +21,7 @@ function NewProject() {
   const [isCorrectStartDate, setCorrectStartDate] = useState(true);
   const [isCorrectEndDate, setCorrectEndDate] = useState(true);
   const [fileName, setFileName] = useState("");
+  const [file2Name, setFile2Name] = useState("");
   const [message, setMessage] = useState("");
   const {
     isOpen: openMessage,
@@ -81,6 +82,38 @@ function NewProject() {
     }
   };
 
+  const onFile2Select = (e) => {
+    const file = e?.target?.files[0];
+    setFile2Name(file?.name);
+
+    if (file) {
+      const reader = new FileReader();
+      reader.readAsBinaryString(file);
+      reader.onload = function (e) {
+        const fileBinary = e.target.result;
+        const readedData = xlsx.read(fileBinary, { type: "binary" });
+        const workSheetNames = readedData.SheetNames[0];
+        const worksheets = readedData.Sheets[workSheetNames];
+        const data = xlsx.utils.sheet_to_json(worksheets, { header: 1 });
+        const header = data[0];
+        const rows = data.slice(1, data.length - 1);
+
+        const tasks = rows.map((row) => {
+          const task = Object.create(null);
+          row.map((data, index) => {
+            Object.assign(task, { [header[index]]: data });
+          });
+          return task;
+        });
+
+        setInputValues((prev) => ({
+          ...prev,
+          buildingData: { tasks, completionPercentage: 0 },
+        }));
+      };
+    }
+  };
+
   const onSubmit = (e) => {
     e?.preventDefault();
     const currentDate = new Date(Date.now());
@@ -107,6 +140,7 @@ function NewProject() {
     })
       .then(() => {
         setFileName("");
+        setFile2Name("");
         setInputValues({});
         setSelectedWorkers([]);
         setMessage("Project created sccessfully!");
@@ -229,10 +263,12 @@ function NewProject() {
                   />
                 </label>
 
-                <label className="flex flex-col lg:flex-row gap-1">
-                  <span className="md:w-1/4 text-lg font-medium">
-                    Upload file
+                <div className="flex flex-col lg:flex-row">
+                <span className="w-1/2 text-lg font-medium">
+                    Upload files:
                   </span>
+                <label className="flex flex-col lg:flex-row gap-1 w-full lg-w-1/3 mr-5">
+                  
                   <input
                     type="file"
                     placeholder="Choose the worker for project"
@@ -248,9 +284,30 @@ function NewProject() {
                       }`}
                       src="./images/uploadFile.png"
                     />
-                    <p>{fileName ? fileName : "Choose .xlsx file to upload"}</p>
+                    <p>{fileName ? fileName : "Choose property data (.xlsx)"}</p>
                   </div>
                 </label>
+                <label className="flex flex-col lg:flex-row w-full lg-w-1/3 lg:ml-3">
+                 
+                  <input
+                    type="file"
+                    placeholder="Choose the worker for project"
+                    className="hidden"
+                    onChange={onFile2Select}
+                    accept=".xlsx,.xls,.csv"
+                    required
+                  />
+                  <div className="w-full rounded-3xl border-[1px] border-[#8C8C8C] bg-white h-40 flex flex-col items-center justify-center">
+                    <img
+                      className={`material-symbols-outlined w-10 h-12 ${
+                        file2Name ? "" : "animate-bounce"
+                      }`}
+                      src="./images/uploadFile.png"
+                    />
+                    <p>{file2Name ? file2Name : "Choose building data (.xlsx)"}</p>
+                  </div>
+                </label>
+                </div>
 
                 <div className="mb-4 mt-2 lg:mt-0 text-right">
                   <Button

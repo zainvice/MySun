@@ -8,7 +8,7 @@ import { getTasks } from "../../api";
 import Spinner from "../../common/spinner";
 import useAuth from "../../hooks/useAuth";
 import { editTasks } from "../../api";
-
+import { editProject } from "../../api";
 
 function NewTaskAssigned() {
   const {t}= useTranslation()
@@ -22,10 +22,20 @@ function NewTaskAssigned() {
   const [seconds, setSeconds] = useState(0);
   const [offlineTasks, setOfflineTasks] = useState([]);
   const {id} = useParams()
-  
+  const [projects, setProjects]= useState()
+  const [projectToCompare, setProject]= useState()
   const [isloading, setloading] = useState(true);
   const [timeTaken, setTimeTaken] = useState(0);
   const {role}= useAuth()
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const handleSearch = (event) => {
+    setSearchTerm(event.target.value);
+  };
+
+  const filteredBuildings = projectToCompare?.buildingData?.tasks.filter((building) =>
+    building["building number"||"כתובת"].toLowerCase().includes(searchTerm.toLowerCase())
+  );
   useEffect(() => {
     async function fetchData() {
       let filteredTasks;
@@ -33,6 +43,7 @@ function NewTaskAssigned() {
         console.log(id, "I'm here");
         console.log("getting response");
         const response = await getTasks();
+        
         const tasks = response;
         console.log(response);
         if (tasks?.length > 0) {
@@ -56,6 +67,8 @@ function NewTaskAssigned() {
       const filteredTasks = await fetchData();
       console.log("TASK now", filteredTasks[0]);
       setTasktoDisplay(filteredTasks[0]);
+      const projectId = filteredTasks[0].projectId
+      setProject(projectId)
       setInputValues(filteredTasks[0]?.taskData)
       console.log("Displaying Task:", tasktoDisplay)
     }
@@ -76,7 +89,7 @@ function NewTaskAssigned() {
       setMessage("Please stop the timer first!")
     }else{
       setMessage("Saving...")
-      const taskData = {_id: tasktoDisplay._id, taskData: inputValues, timeTaken: timeTaken, status: status}
+      const taskData = {_id: tasktoDisplay._id, taskData: inputValues, timeTaken: timeTaken, status: status, projectId: projectToCompare?.projectId, buildingData: searchTerm}
       const updatedTasks = [...offlineTasks, taskData ];
       setOfflineTasks(updatedTasks);
       localStorage.setItem("offlineTasks", JSON.stringify(updatedTasks));
@@ -93,7 +106,9 @@ function NewTaskAssigned() {
       for(let task of tasks){
         console.log(task)
         try {
+          const {projectId}= task
           await editTasks({ task });
+          await editProject({ projectId, task })
           localStorage.removeItem("offlineTasks");
           setloading(false);
           setMessage("Successfully saved to database!")
@@ -221,6 +236,25 @@ function NewTaskAssigned() {
        </div>
         {tasktoDisplay?(
           <>
+          
+           <div className="h-10 rounded-full bg-gray-200 text-black px-4 h-10 text-center content-center lg:w-1/2">
+         
+      <input
+        type="text"
+        placeholder="Search or Select for a building number"
+        className="bg-gray-200 w-1/2 mr-8 mt-2"
+        value={searchTerm}
+        onChange={handleSearch}
+      />
+      <select className="bg-gray-200 " onChange={handleSearch}>
+        {filteredBuildings.map((building, index) => (
+          <option key={index} value={building["building number"||"כתובת"]}>
+            {building["building number"||"כתובת"]}
+          </option>
+        ))}
+      </select>
+           
+          </div>
           <div className="mt-6 text-white grid grid-cols-1 sm:grid-cols-2  md:grid-cols-3 gap-4">
           {Object.keys(tasktoDisplay?.taskData || {}).map((key) => (
               <div className="relative" key={key}>

@@ -104,7 +104,7 @@ function Project() {
       console.log("project", project)
       // Create an array to hold the project data
       const taskDataArray = project.tasks.map((task) => task.taskData);
-      const projectData = project.tasks.map((task) => task.taskData);
+      const projectData = project.completeData||project.tasks.map((task) => task.taskData);
       const tasks = project.tasks
       // Loop through the project object and add each key-value pair to the projectData array
       /* for (const key in project) {
@@ -118,7 +118,7 @@ function Project() {
         // No data to export, return early
         return;
       }
-      const data = projectData[9]
+
       // Create a blob with the project data
       const blob = await exportToExcel(projectData);
       console.log(blob)

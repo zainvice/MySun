@@ -17,7 +17,7 @@ function Tasks() {
     : {};
   const {role}= useAuth()
   
-  const tasks = project?.projectData?.tasks;
+  const tasks = project?.completeData||project?.buildingData?.tasks;
   const tasksAS = project?.tasks
   console.log("TASKS",tasks)
   console.log("TASKS TAB",tasksAS)
