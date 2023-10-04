@@ -40,7 +40,7 @@ function NewTaskAssigned() {
   useEffect(() => {
     async function fetchData() {
       
-      setloading(true)
+      //setloading(true)
       
       let filteredTasks;
       try {
@@ -77,11 +77,13 @@ function NewTaskAssigned() {
       setInputValues(filteredTasks[0]?.taskData)
       console.log("Displaying Task:", display)
       setSearchTerm(filteredTasks[0]?.taskData?.["building number"])
+      if(filteredTasks[0])
+          setloading(false);
     }
     if(!tasktoDisplay)
       setTaskToDisplay(); // Call the function to set tasktoDisplay
   }, []);
-  
+  console.log("LOADING", isloading)
   useEffect(() => {
     // Check if the app is online
     if (navigator.onLine) {
@@ -116,18 +118,23 @@ function NewTaskAssigned() {
           await editTasks({ task });
           await editProject({ projectId, task })
           localStorage.removeItem("offlineTasks");
+          console.log("MAKING IS LOADING FALSE")
           setloading(false);
           setMessage("Successfully saved to database!")
         } catch (error) {
           const data = error?.response?.data;
+          console.log("MAKING IS LOADING FALSE")
           setloading(false);
           setMessage("Something went wrong, try again in a moment!")
         }
       }
     }else{
-      setMessage("No Tasks found to be synced!")
+      if(message==="No Tasks found to be synced!")
+        setMessage("")
+      else
+        setMessage("No Tasks found to be synced!")
     }
-    setloading(false)
+    //setloading(false)
   };
 
   useEffect(() => {
@@ -177,7 +184,7 @@ function NewTaskAssigned() {
     setTasktoDisplay(taskto)
     setInputValues(taskto?.taskData)
     console.log("input values",inputValues)
-    setloading(false)
+    //setloading(false)
   },[dataToSearch])
   
   
