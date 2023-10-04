@@ -17,6 +17,7 @@ function NewTaskAssigned() {
   const onChange = (event) => {
     const target = event.target ?? {};
     setInputValues((prev) => ({ ...prev, [target.name]: target.value }));
+    console.log("INPUT VALUES",inputValues)
   };
   const [timerRunning, setTimerRunning] = useState(false);
   const [seconds, setSeconds] = useState(0);
@@ -28,20 +29,22 @@ function NewTaskAssigned() {
   const [timeTaken, setTimeTaken] = useState(0);
   const {role}= useAuth()
   const [searchTerm, setSearchTerm] = useState('');
-
+  const [display, setDisplay]= useState()
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);
   };
-
+  
   const filteredBuildings = projectToCompare?.buildingData?.tasks.filter((building) =>
     building["building number"||"כתובת"].toLowerCase().includes(searchTerm.toLowerCase())
   );
   useEffect(() => {
     async function fetchData() {
+      
+      setloading(true)
+      
       let filteredTasks;
       try {
-        console.log(id, "I'm here");
-        console.log("getting response");
+       
         const response = await getTasks();
         
         const tasks = response;
@@ -49,7 +52,7 @@ function NewTaskAssigned() {
         if (tasks?.length > 0) {
           console.log("TASKS from above", tasks);
           filteredTasks = tasks?.filter((task) => task?._id === id);
-          console.log("Filtered Tasks", filteredTasks[0]);
+          
           setStatus(filteredTasks[0].status)
           localStorage.setItem("taskNo", JSON.stringify(filteredTasks));
   
@@ -65,16 +68,19 @@ function NewTaskAssigned() {
   
     async function setTaskToDisplay() {
       const filteredTasks = await fetchData();
-      console.log("TASK now", filteredTasks[0]);
-      setTasktoDisplay(filteredTasks[0]);
+     
+      
+      //setTasktoDisplay(filteredTasks[0]);
+      setDisplay(filteredTasks[0])
       const projectId = filteredTasks[0].projectId
       setProject(projectId)
       setInputValues(filteredTasks[0]?.taskData)
-      console.log("Displaying Task:", tasktoDisplay)
+      console.log("Displaying Task:", display)
+      setSearchTerm(filteredTasks[0]?.taskData?.["building number"])
     }
     if(!tasktoDisplay)
       setTaskToDisplay(); // Call the function to set tasktoDisplay
-  }, [tasktoDisplay]);
+  }, []);
   
   useEffect(() => {
     // Check if the app is online
@@ -89,7 +95,7 @@ function NewTaskAssigned() {
       setMessage("Please stop the timer first!")
     }else{
       setMessage("Saving...")
-      const taskData = {_id: tasktoDisplay._id, taskData: inputValues, timeTaken: timeTaken, status: status, projectId: projectToCompare?.projectId, buildingData: searchTerm}
+      const taskData = {_id: display?._id, taskData: inputValues, timeTaken: timeTaken, status: status, projectId: projectToCompare?.projectId, buildingData: searchTerm}
       const updatedTasks = [...offlineTasks, taskData ];
       setOfflineTasks(updatedTasks);
       localStorage.setItem("offlineTasks", JSON.stringify(updatedTasks));
@@ -163,16 +169,23 @@ function NewTaskAssigned() {
   const handleStatusChange = (event) => {
     setStatus(event.target.value); // Update the status state with the selected value
   };
-
-
+  const [dataToSearch, setSearchData]= useState()
+  useEffect(()=>{
+    const task = projectToCompare?.projectData?.tasks.find(task => task["phyiscal number"]?.toString() === dataToSearch?.toString());
+    console.log("Task Found", task)
+    const taskto= {taskData: task}
+    setTasktoDisplay(taskto)
+    setInputValues(taskto?.taskData)
+    console.log("input values",inputValues)
+    setloading(false)
+  },[dataToSearch])
   
-
+  
   return (
-    <Layout activePageName={tasktoDisplay?.projectId?.projectName+"'s task"}>
+    <Layout activePageName={display?.projectId?.projectName+"'s task"}>
       <Container>
         {isloading?(
-          <Spinner/>
-          
+            <Spinner/>
         ):(
           <>
           <div className="grid grid-cols-3 items-center m-4">
@@ -182,7 +195,7 @@ function NewTaskAssigned() {
               alt="taskIcon"
               className="w-10 h-10 sm:w-14 sm:h-14"
             />
-            <label className="text-lg sm:text-xl font-bold">Task from {tasktoDisplay?.projectId?.projectName} </label>
+            <label className="text-lg sm:text-xl font-bold">Task from {display?.projectId?.projectName} </label>
           </span>
 
           {role==='worker'?(
@@ -237,25 +250,69 @@ function NewTaskAssigned() {
         {tasktoDisplay?(
           <>
           
-           <div className="h-10 rounded-full bg-gray-200 text-black px-4 h-10 text-center content-center lg:w-1/2">
+           <div className="h-10 rounded-full bg-gray-200 text-black px-4 h-10 text-center content-center lg:w-1/4">
          
-      <input
-        type="text"
-        placeholder="Search or Select for a building number"
-        className="bg-gray-200 w-1/2 mr-8 mt-2"
-        value={searchTerm}
-        onChange={handleSearch}
-      />
-      <select className="bg-gray-200 " onChange={handleSearch}>
-        {filteredBuildings.map((building, index) => (
-          <option key={index} value={building["building number"||"כתובת"]}>
-            {building["building number"||"כתובת"]}
-          </option>
-        ))}
-      </select>
+               <input
+                 type="text"
+                 placeholder="Search or Select for a building number"
+                 className="bg-gray-200 w-full text-center mr-8 mt-2"
+                 value={`Assigning to ${searchTerm}`}
+                 onChange={handleSearch}
+                 disabled
+               />
+               {/* <select className="bg-gray-200 " onChange={handleSearch}>
+                 {filteredBuildings?.map((building, index) => (
+                   <option key={index} value={building["building number"||"כתובת"]}>
+                     {building["building number"||"כתובת"]}
+                   </option>
+                 ))}
+               </select> */}
            
           </div>
+          <div className="lg-w-1/2 sm:w-full md:w-full mt-6 ">
+              <div className=" rounded-full bg-gray-200 text-black px-4 relative mt-10 w-full" >
+                <label className="text-gray-400 absolute top-0 left-3 -mt-6">
+                  Enter Physical Number
+                </label>
+                <input
+                  type="text"
+                  name="physical number"
+                  defaultValue={dataToSearch}
+                  /* disabled={!!tasktoDisplay?.taskData[key]} */
+                  placeholder={
+                    "Search using physical number"
+                  }
+                  className="bg-gray-200 h-12 w-1/2"
+                  onChange={(e)=>{
+                    const data = {"physical number": e.target.value}
+                    setSearchData(e.target.value)
+                    setTasktoDisplay(undefined)
+                  }}
+                />
+                <select className="bg-gray-200 text-black w-1/2" 
+                  defaultValue={dataToSearch}
+                  onChange={(e)=>{
+                    const data = {"physical number": e.target.value}
+                    setSearchData(e.target.value)
+                    setTasktoDisplay(undefined)
+                  }}
+                >
+                 {projectToCompare?.projectData?.tasks?.map((phyisal, index) => (
+                  <option key={index} value={phyisal["phyiscal number"] || phyisal["כתובת"]}>
+                    {phyisal["phyiscal number"] || phyisal["כתובת"]}
+                  </option>
+                ))}
+               </select>
+                
+                
+              </div>
+              
+             
+          </div>
           <div className="mt-6 text-white grid grid-cols-1 sm:grid-cols-2  md:grid-cols-3 gap-4">
+          {tasktoDisplay?.taskData?(
+          <>
+          
           {Object.keys(tasktoDisplay?.taskData || {}).map((key) => (
               <div className="relative" key={key}>
                 <label className="text-gray-400 absolute top-0 left-3 -mt-6">
@@ -276,6 +333,18 @@ function NewTaskAssigned() {
                 />
               </div>
             ))}
+          
+          </>
+          ):(
+          <>
+          <p></p>
+          {dataToSearch&&(
+            <Spinner message={"FINDING DATA!!"}/>
+          )}
+          <p></p>
+          </>
+          )}  
+          
             
   
           </div>

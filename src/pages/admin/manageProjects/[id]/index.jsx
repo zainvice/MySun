@@ -54,7 +54,8 @@ function Project() {
     });
   }, []);
   useEffect(()=>{
-
+  console.log(project)
+  
   }, [project])
   if (project) {
     const completedTask = project.projectData.tasks.filter(task => task.completed);
@@ -135,35 +136,91 @@ function Project() {
     
 
   const onTasksClick = () => {};
+  const [isOpen2, setIsOpen2] = useState(false);
 
+  const toggleDropdown = () => {
+    console.log("option", isOpen2)
+    if(isOpen2===true)
+      setIsOpen2(false);
+    else
+      setIsOpen2(true)
+  };
   return (
     <>
     <Layout activePageName={`Projects / ${id}`}>
       <Container>
         <div className="flex flex-col lg:flex-row lg:items-center gap-3">
-          <div className="lg:w-1/3 flex justify-between">
+          <div className="lg:w-full flex justify-between">
             <Heading title={"Project Details"} />
            
-                <Button
+               {/*  <Button
                   title={`ADD A WORKER <span class='material-symbols-outlined'>add</span>`}
                   titleClasses={"flex items-center gap-2"}
                   onClick={onOpen}
                 />
+                <Button
+                  title={`ADD A TASK <span class='material-symbols-outlined'>add</span>`}
+                  titleClasses={"flex items-center gap-2"}
+                  onClick={onOpen}
+                />
               
-            {dimension <= 640 && (
-              <>
+            
               <NavLink to={`/manage-projects/${id}/tasks`}>
                 <Button
                   title={`Show Tasks <span class='material-symbols-outlined'>chevron_right</span>`}
                   titleClasses={"flex items-center gap-2"}
                   onClick={onTasksClick}
                 />
-              </NavLink>
+              </NavLink> */}
+               <div className="relative inline-block text-left">
+      <button
+        type="button"
+        className="inline-flex justify-center items-center w-full px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+        onClick={toggleDropdown}
+      >
+        Options <span class='material-symbols-outlined text-sm'>expand_more</span>
+      </button>
+
+      {isOpen2 ? (
+        <div className="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
+          <div className="py-1 " role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
+          <NavLink to={`/manage-projects/${id}/tasks`}>
+            <button
+              type="button"
+              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+              role="menuitem"
+
+            >
+              Show Tasks
+            </button>
+            </NavLink>
+            <button
+              type="button"
+              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+              role="menuitem"
+              onClick={onOpen}
+            >
+              Add A New Worker
+            </button>
+            <button
+              type="button"
+              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+              role="menuitem"
               
-              </>
-            )}
+            >
+               Add A New Task
+            </button>
           </div>
-          <div className="flex-1 w-full flex justify-between">
+        </div>
+      ):(
+        <>
+        </>
+      )}
+    </div>
+              
+             
+          </div>
+          {/* <div className="flex-1 w-full flex justify-between">
             <div className="flex-1 flex gap-4 justify-between sm:justify-start">
              {/*  <DateInput
                 placeholder={"Select from"}
@@ -173,7 +230,7 @@ function Project() {
                 placeholder={"Select to"}
                 additionalClasses={`${dateInputClasses} transition-transform transform hover:scale-105`}
               /> */}
-            </div>
+            {/* </div>
 
             {dimension >= 640 && (
               <NavLink to={`/manage-projects/${id}/tasks`}>
@@ -183,7 +240,7 @@ function Project() {
                 />
               </NavLink>
             )}
-          </div>
+          </div> */} 
         </div>
 
         <div className="py-4">
@@ -209,7 +266,7 @@ function Project() {
 
             <p className="">
               <span className="font-bold mr-3">Assigned Workers: </span>
-              <span className="text-[#34F5C5]">{workers?.length}</span>
+              <span className="text-[#34F5C5]">{project?.workers?.length}</span>
             </p>
 
             <p className="">

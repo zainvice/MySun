@@ -3,7 +3,7 @@ import axios from "axios";
 import { async } from "q";
 
 
-const BASE_URL = "https://mysunapi.onrender.com/api/v1/";
+const BASE_URL = "http://localhost:3500/api/v1/";
 
 const api = axios.create({
   baseURL: BASE_URL,
@@ -91,7 +91,7 @@ export const editTasks = async ({task}) => {
   const{_id, taskData, status, timeTaken}= task
   console.log("Sending", _id, taskData, status, timeTaken)
   return await api.patch("/tasks", {
-   _id, taskData, status, timeTaken}
+    taskData, status, timeTaken, _id}
   );}catch(error){
     if (error?.status === 500) return error.message;
     return error?.response?.data;

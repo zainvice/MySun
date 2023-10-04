@@ -103,14 +103,14 @@ function Dashboard() {
           const workerList = data.filter((worker) => worker.role === "worker");
         
          
-          workerList.forEach((worker) => {
+          workerList?.forEach((worker) => {
             const completedTasks = worker.tasks.filter((task) => task.status==="Delivered");
             worker.completedTasksCount = completedTasks.length;
             
           });
         
           
-          const sortedWorkers = workerList.sort(
+          const sortedWorkers = workerList?.sort(
             (a, b) => b.completedTasksCount - a.completedTasksCount
           );
           

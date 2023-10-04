@@ -31,8 +31,8 @@ function TaskCard({ variant, task }) {
         />
         <div>
           <h2 className="font-semibold text-3xl line-clamp-0">
-            {project?.projectName ? <p className="text-sm"> TASK FROM </p> : <p className="text-sm"> PHYSICAL INFO </p>}
-            {project?.projectName || (task?.taskData && Object.entries(task.taskData)[0]?.join(': '))}          
+            {project?.projectName ? <p className="text-sm"> TASK FROM </p> : <p className="text-sm"> TASK INFO </p>}
+            {project?.projectName || (task?.taskData && Object.entries(task.taskData)[0]?.[1])}          
             </h2>
         </div>
       </div>
