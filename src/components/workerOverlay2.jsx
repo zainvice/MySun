@@ -50,7 +50,11 @@ export default function WorkerOverlay({
   const onSearch = () =>{
     console.log("Searching")
     setMessage("Searching")
-    const filtered = workers.filter(worker=>worker.email===email)
+    const filtered = workers.filter(worker=>{
+      if(worker.email.includes(email)){
+            return worker
+      }
+    })
     setWorkers(filtered)
     console.log("FOUND", filtered)
     
@@ -59,7 +63,11 @@ export default function WorkerOverlay({
     if(email){
       console.log("Searching")
       setMessage("Searching.....", email)
-    const filtered = workers.filter(worker=>worker.email===email)
+      const filtered = workers.filter(worker=>{
+        if(worker.email.includes(email)){
+              return worker
+        }
+      })
     
     console.log("FOUND", filtered)
     if(filtered.length){
