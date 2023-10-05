@@ -9,6 +9,8 @@ import { useProjects } from "../../context/projectsContext";
 import { NavLink } from "react-router-dom";
 import TaskCard from "../../components/taskCard";
 import useAuth from "../../hooks/useAuth";
+import Spinner from "../../common/spinner";
+
 function Tasks() {
   const { id } = useParams();
   const { projects } = useProjects();
@@ -16,11 +18,20 @@ function Tasks() {
     ? projects?.filter((project) => project?.projectId === id)[0]
     : {};
   const {role}= useAuth()
-  
+  console.log(projects)
   const tasks = project?.completeData||project?.buildingData?.tasks;
   const [tasksAS, setTasks] = useState(project?.tasks)
   const headings = tasks?.length ? Object.keys(tasks[0]) : [];
-
+  const [Loading, setloading]= useState(true)
+  useEffect(()=>{
+    console.log("Displaying",project?.tasks)
+    if(projects!==null){
+      setloading(false)
+    }
+    if(project?.tasks){
+      setTasks(project?.tasks)
+    }
+  },[projects])
   const [viewAs, setView]= useState(true)
   const changeView = () =>{
     if(viewAs)
@@ -34,9 +45,9 @@ function Tasks() {
     setSearchTerm(event.target.value);
   };
   useEffect(()=>{
-    console.log("Displaying",project.tasks)
+    console.log("Displaying",project?.tasks)
      // Filter the tasks based on the searchTerm
-    const filteredTasks = project.tasks.filter((task) => {
+    const filteredTasks = project?.tasks?.filter((task) => {
     const buildingNumber = task.taskData["building number"];
     // Convert buildingNumber to a string for comparison
     const buildingNumberString = buildingNumber.toString();
@@ -47,7 +58,7 @@ function Tasks() {
   },[searchTerm])
 
   const buildingNumberCounts = {};
-  const tasksBN = tasks.map((task, index) => {
+  const tasksBN = tasks?.map((task, index) => {
   const buildingNumber = task["building number"];
   if (buildingNumberCounts[buildingNumber] === undefined) {
     buildingNumberCounts[buildingNumber] = 1;
@@ -66,7 +77,7 @@ function Tasks() {
     return task;
   }
 });
-tasksBN.sort((a, b) => {
+tasksBN?.sort((a, b) => {
   const buildingNumberA = a["building number"];
   const buildingNumberB = b["building number"];
   
@@ -77,8 +88,11 @@ tasksBN.sort((a, b) => {
       <Layout activePageName={`Projects / ${id} / Tasks`}>
         <Container>
           <div >
-            
-            <div className="flex justify-between mb-2">
+            {Loading?(
+                <Spinner/>
+            ):(
+              <>
+              <div className="flex justify-between mb-2">
             <Heading title={"Project Tasks"}></Heading>
                
                
@@ -185,6 +199,9 @@ tasksBN.sort((a, b) => {
               )}
               {/* */}
             </div>
+              </>
+            )}
+            
           </div>
         </Container>
       </Layout>

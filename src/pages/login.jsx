@@ -148,7 +148,7 @@ const LoginPage = () => {
         </div>
       </div>
       <Modal isOpen={isOpen}>
-        <Spinner />
+        <Spinner message={"Logging in..."} />
       </Modal>
     </>
   );

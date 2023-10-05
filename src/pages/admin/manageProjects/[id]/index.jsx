@@ -11,6 +11,7 @@ import Modal from "../../../../common/modal";
 import WorkerOverlay from "../../../../components/workerOverlay2";
 import { useModal } from "../../../../hooks";
 import { getWorkers } from "../../../../api";
+import { RingLoader } from "react-spinners";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -23,6 +24,7 @@ import {
 } from "chart.js";
 import { Doughnut, Bar } from "react-chartjs-2";
 import { useEffect, useState } from "react";
+import { createTask } from "../../../../api";
 
 ChartJS.register(
   BarElement,
@@ -36,11 +38,49 @@ ChartJS.register(
 
 const dateInputClasses = `!font-semibold !text-white !bg-[#34F5C5] border-none focus-within:!outline-none white-placeholder h-10 !w-40`;
 
+function getNextBuildingNumber(tasks) {
+  // Create a map to store the highest number for each letter
+  const letterToMaxNumberMap = new Map();
+
+  // Loop through existing tasks to find the maximum number for each letter
+  tasks?.forEach((task) => {
+    const buildingNumber = task.taskData["building number"];
+    const letter = buildingNumber.charAt(0);
+    const number = parseInt(buildingNumber.slice(1));
+
+    if (!isNaN(number)) {
+      if (!letterToMaxNumberMap.has(letter) || number > letterToMaxNumberMap.get(letter)) {
+        letterToMaxNumberMap.set(letter, number);
+      }
+    }
+  });
+
+  // Find the next available building number
+  let nextBuildingNumber;
+
+  for (const letter of 'ABCDEFGHIJKLMNOPQRSTUVWXYZ') {
+    const maxNumberForLetter = letterToMaxNumberMap.get(letter) || 0;
+    if (maxNumberForLetter < 12) {
+      nextBuildingNumber = `${letter}${maxNumberForLetter + 1}`;
+      break;
+    }
+  }
+
+  // If no available number was found, start with 'A1'
+  if (!nextBuildingNumber) {
+    nextBuildingNumber = 'A1';
+  }
+
+  return nextBuildingNumber;
+}
+
+
 function Project() {
   const { isOpen, onOpen, onClose } = useModal();
   const dimension = useDimensions();
   const { id } = useParams();
   const { projects } = useProjects();
+  const [isloading, setloading]= useState(false)
   const project = projects?.filter((project) => project.projectId === id)[0];
   let workersInProject
   let completedTasks= 0
@@ -55,7 +95,7 @@ function Project() {
   }, []);
   useEffect(()=>{
   console.log(project)
-  
+ 
   }, [project])
   if (project) {
     const completedTask = project.projectData.tasks.filter(task => task.completed);
@@ -145,13 +185,56 @@ function Project() {
     else
       setIsOpen2(true)
   };
+  console.log(project)
+  const nextBuildingNumber = getNextBuildingNumber(project?.tasks)
+
+  const onCreateTask = async() =>{
+    setloading(true)
+    setMessage(`Please wait, creating task ${nextBuildingNumber} in ${project?.projectName}`)
+    const supervisord = project?.workers.find((worker)=> worker.role==='supervisor')
+  
+    console.log("BUILDING NUMBER", nextBuildingNumber)
+    try{
+      const task = {
+
+        projectId: project?._id,
+        taskData:{
+          "building number": nextBuildingNumber
+        },
+        supervisor: supervisord
+      }
+      setTimeout(4000)
+      await createTask({task});
+      setTimeout(4000)
+      setMessage("Successfully created!")
+      setTimeout(2000)
+      setloading(false)
+      window.location.reload()
+    }catch(error){
+      console.log("Error occured!", error)
+      setloading(false)
+    }
+  }
+  const [message, setMessage]= useState("")
   return (
     <>
     <Layout activePageName={`Projects / ${id}`}>
+    {isloading?(
+          <div className="flex flex-col h-full w-full bg-black bg-opacity-40 flex items-center justify-center absolute z-10">
+          <RingLoader color="#FFC94A" size={150}/>
+          <p className="mt-3 text-[#FFC94A] text-4xl font-bold text-center">{message}</p>
+        </div>
+
+        ):(
+          <></>
+        )}
       <Container>
+        
         <div className="flex flex-col lg:flex-row lg:items-center gap-3">
           <div className="lg:w-full flex justify-between">
+           
             <Heading title={"Project Details"} />
+            <p className="text-[#FFC94A] font-bold text-base">{message}</p>
            
                {/*  <Button
                   title={`ADD A WORKER <span class='material-symbols-outlined'>add</span>`}
@@ -206,6 +289,7 @@ function Project() {
               type="button"
               className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
               role="menuitem"
+              onClick={onCreateTask}
               
             >
                Add A New Task

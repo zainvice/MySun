@@ -51,8 +51,15 @@ export default function WorkerOverlay({
     console.log("Searching")
     setMessage("Searching")
     const filtered = workers.filter(worker=>{
-      if(worker.email.includes(email)){
+      const searchItem = email.toLowerCase()
+      if(worker.email.toLowerCase().includes(searchItem)){
             return worker
+      }
+      if(worker.fullName.toLowerCase().includes(searchItem)){
+            return worker
+      }
+      if(worker.role.toLowerCase().includes(searchItem)){
+        return worker
       }
     })
     setWorkers(filtered)
@@ -64,9 +71,16 @@ export default function WorkerOverlay({
       console.log("Searching")
       setMessage("Searching.....", email)
       const filtered = workers.filter(worker=>{
-        if(worker.email.includes(email)){
+        const searchItem = email.toLowerCase()
+        if(worker.email.toLowerCase().includes(searchItem)){
               return worker
         }
+        if(worker.fullName.toLowerCase().includes(searchItem)){
+              return worker
+        }
+        if(worker.role.toLowerCase().includes(searchItem)){
+          return worker
+       }
       })
     
     console.log("FOUND", filtered)
