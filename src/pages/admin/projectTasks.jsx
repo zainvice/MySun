@@ -14,15 +14,17 @@ import Spinner from "../../common/spinner";
 function Tasks() {
   const { id } = useParams();
   const { projects } = useProjects();
+  const [filter, setSelectedFilter]= useState()
   const project = projects?.length
     ? projects?.filter((project) => project?.projectId === id)[0]
     : {};
-  const {role}= useAuth()
+  const { role }= useAuth()
   console.log(projects)
-  const tasks = project?.completeData||project?.buildingData?.tasks;
+  const[tasks, setTask] = useState(project?.completeData||project?.buildingData?.tasks)
   const [tasksAS, setTasks] = useState(project?.tasks)
   const headings = tasks?.length ? Object.keys(tasks[0]) : [];
   const [Loading, setloading]= useState(true)
+  const originalTasks = project?.tasks
   useEffect(()=>{
     console.log("Displaying",project?.tasks)
     if(projects!==null){
@@ -44,6 +46,75 @@ function Tasks() {
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);
   };
+  useEffect(()=>{
+    if(filter==="assigned"){
+      setTask(project?.completeData)
+    }else if(filter==="unassigned"){
+      setTask(project?.projectData?.tasks)
+    }else if(filter==="original"){
+      setTask(project?.originalData?.tasks)
+    }
+    if(filter==="assignment"){
+      const sortedTasks = project?.tasks.sort((taskA, taskB) => {
+        // Check if taskA has an array in taskData
+        const hasArrayA = Array.isArray(taskA.taskData[taskA['building number']]);
+        
+        // Check if taskB has an array in taskData
+        const hasArrayB = Array.isArray(taskB.taskData[taskB['building number']]);
+        
+        // Compare tasks based on the presence of an array in taskData
+        if (hasArrayA && !hasArrayB) {
+          return 1; // taskA has an array, so it comes first
+        } else if (!hasArrayA && hasArrayB) {
+          return -1; // taskB has an array, so it comes first
+        } else {
+          return 0; // Both tasks have or don't have arrays, maintain the order
+        }
+      });
+      console.log(originalTasks)
+      // Update the state with the sorted tasks
+      setTasks(originalTasks);
+     
+      
+    }else if(filter==="status"){
+      const sortedTasks = project?.tasks.sort((task1, task2) => {
+        const statusOrder = {
+          'Pending': 1,
+          'Coordination Letter': 2,
+          'Coordination Letter 1': 2,
+          'Coordination Letter 2': 3,
+          'Office Work': 4,
+          'Measurement in Assessment': 5,
+          'Partly Measured': 6,
+          'Missing Information': 7,
+          'United Address': 8,
+          'Refused Survey': 9,
+          'Fixing Required': 10,
+          'Examination': 11,
+          'Ready for Delivery': 12,
+          'Delivered': 13,
+        };
+    
+        const status1 = task1.status;
+        const status2 = task2.status;
+    
+        return statusOrder[status1] - statusOrder[status2];
+      });
+      setTasks(sortedTasks)
+    }else if(filter==="most recent"){
+      const sortedTasks = project?.tasks.sort((taskA, taskB) => {
+        const dateA = new Date(taskA.createdAt);
+        const dateB = new Date(taskB.createdAt);
+      
+        // Compare tasks based on 'createdAt' date in descending order
+        return dateB - dateA;
+      });
+      console.log("SORT", sortedTasks)
+      // Update the state with the sorted tasks
+      setTasks(sortedTasks);
+    }
+
+  },[filter])
   useEffect(()=>{
     console.log("Displaying",project?.tasks)
      // Filter the tasks based on the searchTerm
@@ -94,7 +165,18 @@ tasksBN?.sort((a, b) => {
               <>
               <div className="flex justify-between mb-2">
             <Heading title={"Project Tasks"}></Heading>
-               
+             
+              <div className="flex flex-row">
+                 <select
+                 value={filter}
+                 onChange={(e) => setSelectedFilter(e.target.value)}
+                 className="border-2 border-[#00FFD3] text-[#00FFD3] p-2 rounded-full focus-within:outline-none transform transition-transform  hover:bg-[#00FFD3] hover:text-white"
+               >
+                <option value={viewAs? "assigned": "assignment"}>{viewAs? "Assigned": "Assignment"}</option>
+                 <option value={viewAs? "unassigned": "status"}>{viewAs? "Unssigned": "Status"}</option>
+                 <option value={viewAs? "original": "most recent"}>{viewAs? "Original": "Most Recent"}</option>
+                 
+               </select>
                
                <>
               
@@ -108,18 +190,8 @@ tasksBN?.sort((a, b) => {
                  </button>
                 ): (
                   <>
-                  <div className="h-10 rounded-full bg-gray-200 text-black px-4 h-10 text-center content-center lg:w-1/4 sm:w-1/3 sm:mr-4">
-         
-                  <input
-                    type="text"
-                    placeholder="Search..."
-                    className="bg-gray-200 w-3/4 mr-8 mt-2"
-                    value={searchTerm}
-                    onChange={handleSearch}
-                  />
                   
-               
-                </div>
+                
                   <button className="ml-5 bg-[#00FFD3] hover:bg-green-400 rounded-lg content-center w-[3.0rem] h-10 hover:ease-in-out duration-300 shadow-md">
                   <span className="justify-center material-symbols-outlined text-4xl text-white hover:cursor-pointer hover:text-white-200" 
                   onClick={changeView}
@@ -130,9 +202,24 @@ tasksBN?.sort((a, b) => {
                   </>
                 )}
                </>
-             
+             </div>
               </div>
             <div className="my-4 ">
+            {viewAs?(<></>):(
+              <div className="flex items-center justify-center">
+                 <label className="mr-5 font-bold text-1xl">Search: </label>
+              <div className="h-10 rounded-full bg-gray-200 text-black px-4 lg:w-1/4 sm:w-1/3 sm:mr-4">
+               
+                <input
+                  type="text"
+                  placeholder="Search..."
+                  className="bg-gray-200 w-3/4 mr-8 mt-2"
+                  value={searchTerm}
+                  onChange={handleSearch}
+                />
+              </div>
+            </div>
+             )}
               {viewAs? (
                 <table className="w-full bg-white border-separate border-spacing-y-3">
                 <thead>

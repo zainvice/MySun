@@ -137,6 +137,10 @@ function Project() {
     ?.map((worker) => worker?.fullName)
     ?.join(", ");
 
+  const [value, setValue]= useState()
+  useEffect(()=>{
+    handleExport()
+  }, [value])
    const handleExport = async () => {
       if (!project) {
         // If there's no project, return early
@@ -145,7 +149,11 @@ function Project() {
       console.log("project", project)
       // Create an array to hold the project data
       const taskDataArray = project.tasks.map((task) => task.taskData);
-      const projectData = project.completeData||project.tasks.map((task) => task.taskData);
+      let projectData
+      if(value==="updated")
+          projectData = project.completeData||project.tasks.map((task) => task.taskData);
+      if(value==="original")
+          projectData = project?.originalData?.tasks
       const tasks = project.tasks
       // Loop through the project object and add each key-value pair to the projectData array
       /* for (const key in project) {
@@ -161,6 +169,7 @@ function Project() {
       }
 
       // Create a blob with the project data
+     if(projectData){
       const blob = await exportToExcel(projectData);
       console.log(blob)
       // Create a download link and trigger the download
@@ -169,9 +178,11 @@ function Project() {
       a.href = url;
       a.download = "project_data.xlsx";
       a.click();
+      window.URL.revokeObjectURL(url);
+     }
     
       // Revoke the object URL to free up resources
-      window.URL.revokeObjectURL(url);
+      
     };
     
 
@@ -293,6 +304,24 @@ function Project() {
               
             >
                Add A New Task
+            </button>
+            <button
+              type="button"
+              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+              role="menuitem"
+              onClick={()=>{setValue("original")}}
+              
+            >
+               Download Original Data
+            </button>
+            <button
+              type="button"
+              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+              role="menuitem"
+              onClick={()=>{setValue("updated")}}
+              
+            >
+               Download Updated Data
             </button>
           </div>
         </div>

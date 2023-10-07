@@ -9,6 +9,7 @@ import Spinner from "../../common/spinner";
 import useAuth from "../../hooks/useAuth";
 import { editTasks } from "../../api";
 import { editProject } from "../../api";
+import { useRef } from "react";
 
 function NewTaskAssigned() {
   const {t}= useTranslation()
@@ -30,6 +31,7 @@ function NewTaskAssigned() {
   const {role}= useAuth()
   const [searchTerm, setSearchTerm] = useState('');
   const [display, setDisplay]= useState()
+  const searchRef = useRef(null)
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);
   };
@@ -178,12 +180,27 @@ function NewTaskAssigned() {
   };
   const [dataToSearch, setSearchData]= useState()
   useEffect(()=>{
-    const task = projectToCompare?.projectData?.tasks.find(task => task["phyiscal number"]?.toString() === dataToSearch?.toString());
+    const task = projectToCompare?.projectData?.tasks.find(task => {
+      // Iterate through each property in the task object
+      for (const key in task) {
+        if (task.hasOwnProperty(key)) {
+          // Check if the property value includes the dataToSearch
+          if (task[key]?.toString().includes(dataToSearch)) {
+            return task; // Found a match, return the task
+          }
+        }
+      }
+      return null; // No match found in any property, return null or handle it as needed
+    });
+    
     console.log("Task Found", task)
     const taskto= {taskData: task}
     setTasktoDisplay(taskto)
     setInputValues(taskto?.taskData)
     console.log("input values",inputValues)
+    if (searchRef.current) {
+      searchRef.current.focus();
+    }
     //setloading(false)
   },[dataToSearch])
   
@@ -279,16 +296,18 @@ function NewTaskAssigned() {
           <div className="lg-w-1/2 sm:w-full md:w-full mt-6 ">
               <div className=" rounded-full bg-gray-200 text-black px-4 relative mt-10 w-full" >
                 <label className="text-gray-400 absolute top-0 left-3 -mt-6">
-                  Enter Physical Number
+                  Enter Search Key
                 </label>
                 <input
                   type="text"
                   name="physical number"
                   defaultValue={dataToSearch}
+                  value={dataToSearch}
                   /* disabled={!!tasktoDisplay?.taskData[key]} */
                   placeholder={
-                    "Search using physical number"
+                    "Search using any key"
                   }
+                  ref={searchRef}
                   className="bg-gray-200 h-12 w-1/2"
                   onChange={(e)=>{
                     const data = {"physical number": e.target.value}
@@ -360,7 +379,26 @@ function NewTaskAssigned() {
             <>
             <p className="m-3 font-bold">Status</p>
           <div className="mt-0 sm:mt-8 mx-2 grid grid-cols-2  md:grid-cols-3 lg:grid-cols-4 justify-center items-center">
-          
+            {/* Radio button for "Fully Mapped" */}
+            <label className="inline-flex items-center mb-2 sm:mb-5">
+            <input
+              name="status"
+              type="radio"
+              className="hidden peer"
+              value="Fully Mapped"
+              onChange={handleStatusChange} // Add onChange handler
+              checked={status === "Fully Mapped"||status === "Pending"} // Check if this radio button is selected
+              defaultChecked
+            />
+            <span className="w-5 h-5 border rounded-full border-gray-800 mr-1 peer-checked:bg-gray-800 flex justify-center items-center">
+              <span className="material-symbols-outlined text-sm font-bold text-white peer-checked:inline-block">
+                done
+              </span>
+            </span>
+            <span className="text-gray-700 text-base sm:text-lg">
+              Fully Mapped 
+            </span>
+          </label>
            {/* Radio button for "Coordination Letter" */}
           <label className="inline-flex items-center mb-2 sm:mb-5">
             <input
