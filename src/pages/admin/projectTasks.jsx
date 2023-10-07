@@ -19,14 +19,14 @@ function Tasks() {
     ? projects?.filter((project) => project?.projectId === id)[0]
     : {};
   const { role }= useAuth()
-  console.log(projects)
+  //console.log(projects)
   const[tasks, setTask] = useState(project?.completeData||project?.buildingData?.tasks)
   const [tasksAS, setTasks] = useState(project?.tasks)
   const headings = tasks?.length ? Object.keys(tasks[0]) : [];
   const [Loading, setloading]= useState(true)
   const originalTasks = project?.tasks
   useEffect(()=>{
-    console.log("Displaying",project?.tasks)
+    //console.log("Displaying",project?.tasks)
     if(projects!==null){
       setloading(false)
     }
@@ -54,30 +54,38 @@ function Tasks() {
     }else if(filter==="original"){
       setTask(project?.originalData?.tasks)
     }
-    if(filter==="assignment"){
-      const sortedTasks = project?.tasks.sort((taskA, taskB) => {
+    if (filter === "assignment") {
+      console.log("UPDATING BY ", filter);
+    
+      // Create a shallow copy of the tasks array
+      const tasksCopy = [...project?.tasks];
+    
+      const sortedTasks = tasksCopy.sort((taskA, taskB) => {
         // Check if taskA has an array in taskData
         const hasArrayA = Array.isArray(taskA.taskData[taskA['building number']]);
-        
+    
         // Check if taskB has an array in taskData
         const hasArrayB = Array.isArray(taskB.taskData[taskB['building number']]);
-        
+    
         // Compare tasks based on the presence of an array in taskData
         if (hasArrayA && !hasArrayB) {
-          return 1; // taskA has an array, so it comes first
+          return -1; // taskA has an array, so it comes first
         } else if (!hasArrayA && hasArrayB) {
-          return -1; // taskB has an array, so it comes first
+          return 1; // taskB has an array, so it comes first
         } else {
           return 0; // Both tasks have or don't have arrays, maintain the order
         }
       });
-      console.log(originalTasks)
+    
       // Update the state with the sorted tasks
-      setTasks(originalTasks);
-     
-      
-    }else if(filter==="status"){
-      const sortedTasks = project?.tasks.sort((task1, task2) => {
+      setTasks(sortedTasks);
+    } else if (filter === "status") {
+      console.log("UPDATING BY ", filter);
+    
+      // Create a shallow copy of the tasks array
+      const tasksCopy = [...project?.tasks];
+    
+      const sortedTasks = tasksCopy.sort((task1, task2) => {
         const statusOrder = {
           'Pending': 1,
           'Coordination Letter': 2,
@@ -100,23 +108,30 @@ function Tasks() {
     
         return statusOrder[status1] - statusOrder[status2];
       });
-      setTasks(sortedTasks)
-    }else if(filter==="most recent"){
-      const sortedTasks = project?.tasks.sort((taskA, taskB) => {
+    
+      setTasks(sortedTasks);
+    } else if (filter === "most recent") {
+      console.log("UPDATING BY ", filter);
+    
+      // Create a shallow copy of the tasks array
+      const tasksCopy = [...project?.tasks];
+    
+      const sortedTasks = tasksCopy.sort((taskA, taskB) => {
         const dateA = new Date(taskA.createdAt);
         const dateB = new Date(taskB.createdAt);
-      
+    
         // Compare tasks based on 'createdAt' date in descending order
         return dateB - dateA;
       });
-      console.log("SORT", sortedTasks)
+    
       // Update the state with the sorted tasks
       setTasks(sortedTasks);
     }
+    
 
   },[filter])
   useEffect(()=>{
-    console.log("Displaying",project?.tasks)
+    //console.log("Displaying",project?.tasks)
      // Filter the tasks based on the searchTerm
     const filteredTasks = project?.tasks?.filter((task) => {
     const buildingNumber = task.taskData["building number"];
@@ -124,7 +139,7 @@ function Tasks() {
     const buildingNumberString = buildingNumber.toString();
     return buildingNumberString.includes(searchTerm.toUpperCase());
     });
-    console.log("Filtered Tasks:", filteredTasks);
+    //console.log("Filtered Tasks:", filteredTasks);
     setTasks(filteredTasks)
   },[searchTerm])
 
@@ -173,7 +188,7 @@ tasksBN?.sort((a, b) => {
                  className="border-2 border-[#00FFD3] text-[#00FFD3] p-2 rounded-full focus-within:outline-none transform transition-transform  hover:bg-[#00FFD3] hover:text-white"
                >
                 <option value={viewAs? "assigned": "assignment"}>{viewAs? "Assigned": "Assignment"}</option>
-                 <option value={viewAs? "unassigned": "status"}>{viewAs? "Unssigned": "Status"}</option>
+                 <option value={viewAs? "unassigned": "status"}>{viewAs? "Unassigned": "Status"}</option>
                  <option value={viewAs? "original": "most recent"}>{viewAs? "Original": "Most Recent"}</option>
                  
                </select>

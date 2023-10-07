@@ -324,8 +324,8 @@ function NewTaskAssigned() {
                   }}
                 >
                  {projectToCompare?.projectData?.tasks?.map((phyisal, index) => (
-                  <option key={index} value={phyisal["phyiscal number"] || phyisal["כתובת"]}>
-                    {phyisal["phyiscal number"] || phyisal["כתובת"]}
+                  <option key={index} value={phyisal["phyiscal number"] || phyisal["מס נכס/פיזי"]|| phyisal["כתובת"]}>
+                    {phyisal["phyiscal number"] || phyisal["כתובת"]|| phyisal["מס נכס/פיזי"]}
                   </option>
                 ))}
                </select>
@@ -386,7 +386,12 @@ function NewTaskAssigned() {
               type="radio"
               className="hidden peer"
               value="Fully Mapped"
-              onChange={handleStatusChange} // Add onChange handler
+              onChange={(e)=>{
+                if(status==="Pending"){
+                  setStatus("Fully Mapped")
+                }
+                handleStatusChange(e)
+              }} // Add onChange handler
               checked={status === "Fully Mapped"||status === "Pending"} // Check if this radio button is selected
               defaultChecked
             />

@@ -5,11 +5,11 @@ const RequireAuth = ({ allowedRoles }) => {
   const location = useLocation();
   const { role } = useAuth();
   let content;
-  console.log(role, allowedRoles)
+  //console.log(role, allowedRoles)
   
   if (allowedRoles.includes(role)) {
     content = <Outlet />;
-    console.log('Good to go!')
+    //console.log('Good to go!')
   } else {
     content = (
       <Navigate to="/login" state={{ from: location }} replace />

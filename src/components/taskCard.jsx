@@ -14,7 +14,7 @@ function TaskCard({ variant, task }) {
   const project = task?.projectId;
   const timeAgo = new TimeAgo("en-US");
   const arrayName = Object.entries(task.taskData)[0]?.[1];
-  console.log(task?.taskData[arrayName]?.length, "SHOWING");
+  /* console.log(task?.taskData[arrayName]?.length, "SHOWING"); */
   return (
     <div
       className={`w-full p-4 sm:p-6 rounded-3xl text-white shadow-lg ${

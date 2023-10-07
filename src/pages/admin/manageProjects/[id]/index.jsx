@@ -163,7 +163,7 @@ function Project() {
       } */
      console.log(projectData)
       // Check if any data to export
-      if (projectData.length === 0) {
+      if (projectData?.length === 0) {
         // No data to export, return early
         return;
       }
