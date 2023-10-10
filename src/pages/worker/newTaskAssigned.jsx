@@ -117,7 +117,7 @@ function NewTaskAssigned() {
         console.log(task)
         try {
           const {projectId}= task
-          await editTasks({ task });
+          await editTasks({ task, manual });
           await editProject({ projectId, task })
           localStorage.removeItem("offlineTasks");
           console.log("MAKING IS LOADING FALSE")
@@ -174,18 +174,39 @@ function NewTaskAssigned() {
   const remainingSeconds = seconds % 60;
 
   const [status, setStatus] = useState(tasktoDisplay?.status); // Initialize the status state variable
+  const [key, setKey]= useState("")
   console.log("TASK STATUS", status)
+  useEffect(()=>{
+    
+      if(status==="Pending"){
+        setStatus("Fully Mapped")
+      }
+
+    
+  },[status])
   const handleStatusChange = (event) => {
     setStatus(event.target.value); // Update the status state with the selected value
   };
   const [dataToSearch, setSearchData]= useState()
+  const [manual, setManual]= useState(false)
+  const onManualClick = (e) => {
+    if(manual===false){
+      setManual(true)
+      setSearchData('1')
+    }else{
+      setManual(false)
+      setSearchData('')
+    }
+  }
   useEffect(()=>{
     const task = projectToCompare?.projectData?.tasks.find(task => {
       // Iterate through each property in the task object
       for (const key in task) {
+        console.log("Key", key)
+        setKey(key)
         if (task.hasOwnProperty(key)) {
           // Check if the property value includes the dataToSearch
-          if (task[key]?.toString().includes(dataToSearch)) {
+          if (task[key]?.toString().includes(dataToSearch?.toString())) {
             return task; // Found a match, return the task
           }
         }
@@ -271,32 +292,40 @@ function NewTaskAssigned() {
        <div className="w-full text-center">
        <p className="text-lg font-bold text-[#34F5C5]">{message}</p>
        </div>
-        {tasktoDisplay?(
-          <>
-          
-           <div className="h-10 rounded-full bg-gray-200 text-black px-4 h-10 text-center content-center lg:w-1/4">
+       <div className="h-10 rounded-full bg-gray-200 text-black px-4 h-10 text-center content-center lg:w-1/4">
          
-               <input
-                 type="text"
-                 placeholder="Search or Select for a building number"
-                 className="bg-gray-200 w-full text-center mr-8 mt-2"
-                 value={`Assigning to ${searchTerm}`}
-                 onChange={handleSearch}
-                 disabled
-               />
-               {/* <select className="bg-gray-200 " onChange={handleSearch}>
-                 {filteredBuildings?.map((building, index) => (
-                   <option key={index} value={building["building number"||"כתובת"]}>
-                     {building["building number"||"כתובת"]}
-                   </option>
-                 ))}
-               </select> */}
-           
-          </div>
-          <div className="lg-w-1/2 sm:w-full md:w-full mt-6 ">
+         <input
+           type="text"
+           placeholder="Search or Select for a building number"
+           className="bg-gray-200 w-full text-center mr-8 mt-2"
+           value={`Assigning to ${searchTerm}`}
+           onChange={handleSearch}
+           disabled
+         />
+         {/* <select className="bg-gray-200 " onChange={handleSearch}>
+           {filteredBuildings?.map((building, index) => (
+             <option key={index} value={building["building number"||"כתובת"]}>
+               {building["building number"||"כתובת"]}
+             </option>
+           ))}
+         </select> */}
+         
+         <div className="absolute lg:top-[11%] lg:right-6 md:right-0 right-4 top-2">
+              
+              <Button className="m-4" title={manual?"Re-Automate":"Enter Data Manually"} onClick={onManualClick} />
+        </div>
+     
+    </div>
+       {manual?(
+        <></>
+       ):(
+        <div className="lg-w-1/2 sm:w-full md:w-full mt-6 ">
               <div className=" rounded-full bg-gray-200 text-black px-4 relative mt-10 w-full" >
                 <label className="text-gray-400 absolute top-0 left-3 -mt-6">
-                  Enter Search Key
+                  Search  (e.g phyisal number, address etc)
+                </label>
+                <label className="text-gray-400 absolute top-0 right-3 -mt-6">
+                  {key?`Finding from ${key}`:""}
                 </label>
                 <input
                   type="text"
@@ -305,7 +334,7 @@ function NewTaskAssigned() {
                   value={dataToSearch}
                   /* disabled={!!tasktoDisplay?.taskData[key]} */
                   placeholder={
-                    "Search using any key"
+                    "Search using any data (e.g phyisal number, address etc)"
                   }
                   ref={searchRef}
                   className="bg-gray-200 h-12 w-1/2"
@@ -324,8 +353,8 @@ function NewTaskAssigned() {
                   }}
                 >
                  {projectToCompare?.projectData?.tasks?.map((phyisal, index) => (
-                  <option key={index} value={phyisal["phyiscal number"] || phyisal["מס נכס/פיזי"]|| phyisal["כתובת"]}>
-                    {phyisal["phyiscal number"] || phyisal["כתובת"]|| phyisal["מס נכס/פיזי"]}
+                  <option key={index} value={phyisal[key]}>
+                    {phyisal[key]}
                   </option>
                 ))}
                </select>
@@ -333,8 +362,17 @@ function NewTaskAssigned() {
                 
               </div>
               
-             
+             {/*  {!tasktoDisplay?.taskData&&(<div className="mt-3 flex flex-row w-full">
+              <p className="ml-4 mr-4 mt-2 font-bold">OR</p>
+              <Button className="m-4" title={"Enter Data Manually"} onClick={onManualClick} />
+              </div>)} */}
           </div>
+       )}
+        {tasktoDisplay?(
+          <>
+          
+          
+          
           <div className="mt-6 text-white grid grid-cols-1 sm:grid-cols-2  md:grid-cols-3 gap-4">
           {tasktoDisplay?.taskData?(
           <>
@@ -347,15 +385,16 @@ function NewTaskAssigned() {
                 <input
                   type="text"
                   name={key}
-                  defaultValue={tasktoDisplay?.taskData[key] || ''}
+                  defaultValue={manual ? "" :  tasktoDisplay?.taskData[key]}
                   /* disabled={!!tasktoDisplay?.taskData[key]} */
                   placeholder={
                     !tasktoDisplay?.taskData[key]
-                      ? t(`newTaskAssigned.${key}`)
+                      ? t(`Enter data for .${key}`)
                       : ''
                   }
                   className="rounded-full bg-gray-200 text-black px-4 h-12 w-full"
                   onChange={onChange}
+                  required = {manual ? true : false}
                 />
               </div>
             ))}
@@ -386,14 +425,10 @@ function NewTaskAssigned() {
               type="radio"
               className="hidden peer"
               value="Fully Mapped"
-              onChange={(e)=>{
-                if(status==="Pending"){
-                  setStatus("Fully Mapped")
-                }
-                handleStatusChange(e)
-              }} // Add onChange handler
-              checked={status === "Fully Mapped"||status === "Pending"} // Check if this radio button is selected
+              onChange={handleStatusChange} // Add onChange handler
+              checked={status === "Fully Mapped"} // Check if this radio button is selected
               defaultChecked
+              
             />
             <span className="w-5 h-5 border rounded-full border-gray-800 mr-1 peer-checked:bg-gray-800 flex justify-center items-center">
               <span className="material-symbols-outlined text-sm font-bold text-white peer-checked:inline-block">
@@ -402,6 +437,27 @@ function NewTaskAssigned() {
             </span>
             <span className="text-gray-700 text-base sm:text-lg">
               Fully Mapped 
+            </span>
+          </label>
+          {/* Radio button for "Field Mapped" */}
+          <label className="inline-flex items-center mb-2 sm:mb-5">
+            <input
+              name="status"
+              type="radio"
+              className="hidden peer"
+              value="Field Mapped"
+              onChange={handleStatusChange} // Add onChange handler
+              checked={status === "Field Mapped"} // Check if this radio button is selected
+              defaultChecked
+              
+            />
+            <span className="w-5 h-5 border rounded-full border-gray-800 mr-1 peer-checked:bg-gray-800 flex justify-center items-center">
+              <span className="material-symbols-outlined text-sm font-bold text-white peer-checked:inline-block">
+                done
+              </span>
+            </span>
+            <span className="text-gray-700 text-base sm:text-lg">
+              Field Mapped 
             </span>
           </label>
            {/* Radio button for "Coordination Letter" */}

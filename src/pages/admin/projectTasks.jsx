@@ -88,6 +88,8 @@ function Tasks() {
       const sortedTasks = tasksCopy.sort((task1, task2) => {
         const statusOrder = {
           'Pending': 1,
+          'Field Mapped':2,
+          'Fully Mapped':2,
           'Coordination Letter': 2,
           'Coordination Letter 1': 2,
           'Coordination Letter 2': 3,
@@ -187,15 +189,15 @@ tasksBN?.sort((a, b) => {
                  onChange={(e) => setSelectedFilter(e.target.value)}
                  className="border-2 border-[#00FFD3] text-[#00FFD3] p-2 rounded-full focus-within:outline-none transform transition-transform  hover:bg-[#00FFD3] hover:text-white"
                >
-                <option value={viewAs? "assigned": "assignment"}>{viewAs? "Assigned": "Assignment"}</option>
-                 <option value={viewAs? "unassigned": "status"}>{viewAs? "Unassigned": "Status"}</option>
-                 <option value={viewAs? "original": "most recent"}>{viewAs? "Original": "Most Recent"}</option>
+                <option value={!viewAs? "assigned": "assignment"}>{!viewAs? "Assigned": "Assignment"}</option>
+                 <option value={!viewAs? "unassigned": "status"}>{!viewAs? "Unassigned": "Status"}</option>
+                 <option value={!viewAs? "original": "most recent"}>{!viewAs? "Original": "Most Recent"}</option>
                  
                </select>
                
                <>
               
-                {viewAs? (
+                {!viewAs? (
                   <button className="ml-5 bg-[#00FFD3] hover:bg-green-400 rounded-lg content-center w-5/2 h-10 hover:ease-in-out duration-300 shadow-md">
                   <span className="justify-center material-symbols-outlined text-4xl rounded text-white hover:cursor-pointer hover:text-white-200" 
                   onClick={changeView}
@@ -220,7 +222,7 @@ tasksBN?.sort((a, b) => {
              </div>
               </div>
             <div className="my-4 ">
-            {viewAs?(<></>):(
+            {!viewAs?(<></>):(
               <div className="flex items-center justify-center">
                  <label className="mr-5 font-bold text-1xl">Search: </label>
               <div className="h-10 rounded-full bg-gray-200 text-black px-4 lg:w-1/4 sm:w-1/3 sm:mr-4">
@@ -235,7 +237,7 @@ tasksBN?.sort((a, b) => {
               </div>
             </div>
              )}
-              {viewAs? (
+              {!viewAs? (
                 <table className="w-full bg-white border-separate border-spacing-y-3">
                 <thead>
                   <tr className="bg-white text-gray-800 text-sm font-thin">
