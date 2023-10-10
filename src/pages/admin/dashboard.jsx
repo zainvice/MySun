@@ -19,8 +19,13 @@ import { selectCurrentToken } from "../../features/auth/authSlice";
 
 function findProjectByWorker(worker, projects) {
   if(worker){
-    const project = projects.find(project => project._id === worker.projects[0]);
-    return project;
+    console.log("worker", worker)
+    const lenght = worker?.projects.length - 1
+    console.log("Projects", lenght)
+    console.log(worker.projects[lenght], "project")
+    const project = projects.find(project => project._id === worker.projects[lenght]);
+    console.log(project, "project")
+    return worker.projects[lenght];
 }
   
   return {Project: "Not Found!"};

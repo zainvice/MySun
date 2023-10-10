@@ -30,7 +30,7 @@ function ProjectCard({ variant, project }) {
   useEffect(()=>{
     if(project?.completeData){
       const complete = project?.completeData?.length 
-      const total = project?.originalData?.tasks.length
+      const total = project?.originalData?.tasks?.length
       const percent = (complete/total)*100 
       if(percent!=NaN){
         setCompletion(percent.toFixed(2).toString())
