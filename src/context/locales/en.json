@@ -57,7 +57,7 @@
                 "daysAgoLabel": "3 days ago",
                 "description": "Some description of the project",
                 "completedLabel": "Completed",
-                "startedOnLabel": "Started On:",
+                "startedOnLabel": "Started: ",
                 "timeTakenLabel": "Time Taken:",
                 "assignedToLabel": "Assigned to:"
               },

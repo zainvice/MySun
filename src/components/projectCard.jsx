@@ -2,6 +2,7 @@ import { publicUrl } from "../utils";
 import { useTranslation } from "react-i18next";
 import TimeAgo from "javascript-time-ago";
 import en from "javascript-time-ago/locale/en";
+import { useEffect, useState } from "react";
 
 TimeAgo.addDefaultLocale(en);
 
@@ -24,6 +25,19 @@ function ProjectCard({ variant, project }) {
     timeTaken = new Date(project?.updatedAt);
   }
 
+  const [completionPercentage, setCompletion]= useState('0')
+  
+  useEffect(()=>{
+    if(project?.completeData){
+      const complete = project?.completeData?.length 
+      const total = project?.originalData?.tasks.length
+      const percent = (complete/total)*100 
+      if(percent!=NaN){
+        setCompletion(percent.toFixed(2).toString())
+      }
+      console.log("COMPLETION", completionPercentage,"From", complete, total)
+    }
+  }, [project, completionPercentage])
   return (
     <div
       className={`w-full p-4 sm:p-6 rounded-3xl text-white shadow-lg ${
@@ -51,16 +65,13 @@ function ProjectCard({ variant, project }) {
       <div className="mt-2 w-full">
         <p className="line-clamp-2 mb-2">{project?.projectDescription ?? ""}</p>
         <div className="relative h-7 rounded-full flex justify-center items-center text-sm text-[#00FFD3] bg-[#505050]">
-          <div
-            className={`absolute top-0 -left-[2px] rounded-full border-white h-full w-[${
-              project?.projectData?.completionPercentage ?? 0
-            }%] bg-white`}
-          />
-          <span className="z-[1]">
-            {`${project?.projectData?.completionPercentage ?? 0}%`}{" "}
-            {t("taskCard.completedLabel")}
-          </span>
-        </div>
+  <div
+    className={`absolute top-0 -left-[2px] rounded-full border-white h-full w-[${completionPercentage}%] bg-white`}
+  />
+  <span className="z-[1]">
+    {completionPercentage} {t("taskCard.completedLabel")}
+  </span>
+</div>
       </div>
       <div className="mt-3 text-sm">
         <p className="flex items-center gap-2">
