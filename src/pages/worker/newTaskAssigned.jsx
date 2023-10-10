@@ -118,7 +118,7 @@ function NewTaskAssigned() {
         try {
           const {projectId}= task
           await editTasks({ task, manual });
-          await editProject({ projectId, task })
+          await editProject({ projectId, task, manual })
           localStorage.removeItem("offlineTasks");
           console.log("MAKING IS LOADING FALSE")
           setloading(false);

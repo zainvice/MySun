@@ -149,11 +149,12 @@ export const editNotes = async ({
 export const editProject = async ({
   projectId,
   task,
-  workers
+  workers,
+  manual
 }) => {
   console.log("I GOT THIS DATA", task)
   const{_id, taskData, status, timeTaken, buildingData}= task
-  console.log("Sending", _id, taskData, status, timeTaken, buildingData, projectId)
+  console.log("Sending", _id, taskData, status, timeTaken, buildingData, projectId, manual)
 
   return await api.patch("/projects", {
     projectId, 
@@ -161,6 +162,7 @@ export const editProject = async ({
     buildingData,
     taskData,
     timeTaken,
+    manual
   });
 };
 

@@ -401,7 +401,7 @@ function Project() {
                 Total Surveys Completed
               </span>
               <span className="text-[#00ABE0] before:content-[':'] before:mr-4">
-                {completedTasks}
+                {project?.completeData?.length}
               </span>
             </p>
             <p className="mb-2">
