@@ -150,8 +150,36 @@ function Project() {
       // Create an array to hold the project data
       const taskDataArray = project.tasks.map((task) => task.taskData);
       let projectData
-      if(value==="updated")
-          projectData = project.completeData||project.tasks.map((task) => task.taskData);
+      if(value==="updated"){
+          const buildingNumberCounts = {};
+          const taske = project?.completeData;
+          const tasksBN = taske?.map((task, index) => {
+            const buildingNumber = task["building number"];
+            if (buildingNumberCounts[buildingNumber] === undefined) {
+              buildingNumberCounts[buildingNumber] = 1;
+            } else {
+              buildingNumberCounts[buildingNumber]++;
+            }
+          
+            const count = buildingNumberCounts[buildingNumber];
+          
+            if (count > 1) {
+              return {
+                ...task,
+                "building number": `${buildingNumber}-${count}`
+              };
+            } else {
+              return task;
+            }
+          });
+          tasksBN?.sort((a, b) => {
+            const buildingNumberA = a["building number"];
+            const buildingNumberB = b["building number"];
+            
+            return buildingNumberA.localeCompare(buildingNumberB);
+          });
+          projectData = tasksBN
+       }
       if(value==="original")
           projectData = project?.originalData?.tasks
       const tasks = project.tasks
