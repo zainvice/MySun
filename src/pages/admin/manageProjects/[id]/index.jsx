@@ -456,7 +456,7 @@ function Project() {
               data={{
                 datasets: [
                   {
-                    label: "# of tasks",
+                    label: "Number of tasks",
                     data: [project?.completeData?.length, remainingTasks, remainingTasks],
                     weight: 2,
                     clip: 4,

@@ -320,13 +320,11 @@ function NewTaskAssigned() {
         <></>
        ):(
         <div className="lg-w-1/2 sm:w-full md:w-full mt-6 ">
-              <div className=" rounded-full bg-gray-200 text-black px-4 relative mt-10 w-full" >
+              <div className=" rounded-full bg-gray-200 text-black px-4 relative mt-10 mb-10 w-full" >
                 <label className="text-gray-400 absolute top-0 left-3 -mt-6">
                   Search  (e.g phyisal number, address etc)
                 </label>
-                <label className="text-gray-400 absolute top-0 right-3 -mt-6">
-                  {key?`Finding from ${key}`:""}
-                </label>
+                
                 <input
                   type="text"
                   name="physical number"
@@ -334,7 +332,7 @@ function NewTaskAssigned() {
                   value={dataToSearch}
                   /* disabled={!!tasktoDisplay?.taskData[key]} */
                   placeholder={
-                    "Search using any data (e.g phyisal number, address etc)"
+                    "Enter data (e.g phyisal number, address etc)"
                   }
                   ref={searchRef}
                   className="bg-gray-200 h-12 w-1/2"
@@ -358,8 +356,10 @@ function NewTaskAssigned() {
                   </option>
                 ))}
                </select>
-                
-                
+               <label className="text-gray-400 absolute -bottom-5 right-3 -mt-6">
+                  {key?`Finding from ${key}`:""}
+                </label>
+              
               </div>
               
              {/*  {!tasktoDisplay?.taskData&&(<div className="mt-3 flex flex-row w-full">
