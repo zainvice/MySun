@@ -4,12 +4,13 @@ import Layout from "../../layout";
 import Button from "../../common/button";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router";
-import { getTasks } from "../../api";
+import { createTask, getTasks } from "../../api";
 import Spinner from "../../common/spinner";
 import useAuth from "../../hooks/useAuth";
 import { editTasks } from "../../api";
 import { editProject } from "../../api";
 import { useRef } from "react";
+import { useNavigate } from "react-router-dom";
 
 function NewTaskAssigned() {
   const {t}= useTranslation()
@@ -20,6 +21,7 @@ function NewTaskAssigned() {
     setInputValues((prev) => ({ ...prev, [target.name]: target.value }));
     console.log("INPUT VALUES",inputValues)
   };
+  const [already_assigned, setAAssigned]= useState()
   const [timerRunning, setTimerRunning] = useState(false);
   const [seconds, setSeconds] = useState(0);
   const [offlineTasks, setOfflineTasks] = useState([]);
@@ -32,13 +34,27 @@ function NewTaskAssigned() {
   const [searchTerm, setSearchTerm] = useState('');
   const [display, setDisplay]= useState()
   const searchRef = useRef(null)
+  const navigate = useNavigate()
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);
   };
-  
   const filteredBuildings = projectToCompare?.buildingData?.tasks.filter((building) =>
     building["building number"||"כתובת"].toLowerCase().includes(searchTerm.toLowerCase())
   );
+  const creatingNew=async(task )=>{
+    setloading(true)
+      try{
+          const response = await createTask({task})
+          console.log(response)
+          const {data} = response
+          /* navigate(`/task/${data._id}`) */
+          /* setloading(false) */
+      }catch(error){
+        console.log(error)
+        setloading(false)
+      }
+  }
+  const [initial, setInital]= useState()
   useEffect(() => {
     async function fetchData() {
       
@@ -76,15 +92,27 @@ function NewTaskAssigned() {
       setDisplay(filteredTasks[0])
       const projectId = filteredTasks[0].projectId
       setProject(projectId)
-      setInputValues(filteredTasks[0]?.taskData)
+      
+      if (filteredTasks[0]?.taskData && Array.isArray(filteredTasks[0].taskData[filteredTasks[0].taskData['building number']])) {
+        // Assuming 'assignedTask' is the variable where you want to store the array
+        const assignedTask = filteredTasks[0].taskData[filteredTasks[0].taskData['building number']];
+        setAAssigned(assignedTask[0])
+        console.log("Already Assigned", assignedTask[0])
+        const toAssign = {taskData: assignedTask[0]}
+        console.log("Already Assigned", toAssign)
+        setTasktoDisplay(toAssign)
+        setInputValues(toAssign?.taskData)
+      }
       console.log("Displaying Task:", display)
       setSearchTerm(filteredTasks[0]?.taskData?.["building number"])
       if(filteredTasks[0])
           setloading(false);
+          setInital(id)
     }
     if(!tasktoDisplay)
       setTaskToDisplay(); // Call the function to set tasktoDisplay
   }, []);
+  console.log(id)
   console.log("LOADING", isloading)
   useEffect(() => {
     // Check if the app is online
@@ -123,6 +151,7 @@ function NewTaskAssigned() {
           console.log("MAKING IS LOADING FALSE")
           setloading(false);
           setMessage("Successfully saved to database!")
+          window.location.reload()
         } catch (error) {
           const data = error?.response?.data;
           console.log("MAKING IS LOADING FALSE")
@@ -172,18 +201,114 @@ function NewTaskAssigned() {
   const hours = Math.floor(seconds / 3600);
   const minutes = Math.floor((seconds % 3600) / 60);
   const remainingSeconds = seconds % 60;
-
+  const [newn, setNew]= useState()
   const [status, setStatus] = useState(tasktoDisplay?.status); // Initialize the status state variable
   const [key, setKey]= useState("")
   console.log("TASK STATUS", status)
+  const [navLink, setLink]= useState()
+  const [nextTask, setNextTask]= useState()
+  const [isNextCreated, setNextCreated]= useState(false)
   useEffect(()=>{
-    
+    async function fetchData() {
       if(status==="Pending"){
         setStatus("Fully Mapped")
       }
+      if(display){
+        if(display?.status!=='Pending'){
+          if(projectToCompare){
+            console.log(display)
+            let building = display?.taskData["building number"];
 
-    
+            if (building) {
+              const regex = /^([A-Z]+)(\d+)(-(\d+))?$/; // Match alphabet(s) followed by a number and an optional hyphen and number
+              const match = building.match(regex);
+              console.log("Inital", building)
+              if (match) {
+                const alphabetPart = match[1];
+                const numberPart = parseInt(match[2]);
+                const hyphen = match[3];
+                let nextNumber=1;
+                console.log("APLHA", alphabetPart, "numberPard", numberPart, "hyphen", hyphen)
+                if (hyphen) {
+                  console.log("I got one hyphen")
+                  const secondNumber = parseInt(match[4]);
+                  if (secondNumber < 12&& secondNumber!==undefined) {
+                    nextNumber = secondNumber + 1;
+                  } else {
+                    // If the second number is 12, increment the alphabet part
+                    const alphabetCharCode = alphabetPart.charCodeAt(0);
+                    const nextAlphabet = String.fromCharCode(alphabetCharCode + 1);
+                    nextNumber = 1;
+                    alphabetPart = nextAlphabet;
+                  }
+                } else {
+                  if (numberPart < 12) {
+                   /*  nextNumber = numberPart + 1; */
+                  } else {
+                    // If the number is 12, increment the alphabet part
+                    const alphabetCharCode = alphabetPart.charCodeAt(0);
+                    const nextAlphabet = String.fromCharCode(alphabetCharCode + 1);
+                    nextNumber = 1;
+                    alphabetPart = nextAlphabet;
+                  }
+                }
+              
+                const newBuilding = hyphen ? `${alphabetPart}${numberPart}-${nextNumber}` : `${alphabetPart}${numberPart}-${nextNumber}`;
+                console.log(newBuilding);
+                building = newBuilding
+                setNew(building)
+              } else {
+                // Handle the case when the format is not as expected
+                console.log("Invalid format");
+              }
+            } else {
+              // Handle the case when 'building' is undefined or null
+              console.log("No building information available");
+            }
+
+
+            const supervisord = projectToCompare?.workers.find((worker)=> worker.role==='supervisor')
+            
+              const task = {
+        
+                projectId: projectToCompare?._id,
+                taskData:{
+                  "building number": building
+                },
+                supervisor: supervisord
+              }
+              console.log("task", task)
+              
+              setNextTask(task)
+              
+            /*  */
+            
+          }
+        }
+      }
+    }
+    fetchData();
   },[status])
+  const onNavC =()=>{
+    navigate(navLink)
+    window.location.reload()
+  }
+  const onCreateNext = async() =>{
+    try {
+      setloading(true);
+      const task = nextTask
+      const response = await createTask({ task } );
+      console.log(response);
+      const { data } = response;
+      /* navigate(`/task/${data._id}`); */
+      setLink(`/task/${data._id}`)
+      setloading(false);
+      setNextCreated(true)
+    } catch (error) {
+      console.log(error);
+      setloading(false);
+    }
+  }
   const handleStatusChange = (event) => {
     setStatus(event.target.value); // Update the status state with the selected value
   };
@@ -298,7 +423,7 @@ function NewTaskAssigned() {
            type="text"
            placeholder="Search or Select for a building number"
            className="bg-gray-200 w-full text-center mr-8 mt-2"
-           value={`Assigning to ${searchTerm}`}
+           value={already_assigned ?  `Already Assigned to ${searchTerm} (Edit Mode)` : `Assigning to ${searchTerm}`}
            onChange={handleSearch}
            disabled
          />
@@ -312,7 +437,15 @@ function NewTaskAssigned() {
          
          <div className="absolute lg:top-[11%] lg:right-6 md:right-0 right-4 top-2">
               
-              <Button className="m-4" title={manual?"Re-Automate":"Enter Data Manually"} onClick={onManualClick} />
+              {already_assigned?(
+              
+              
+              <>
+              {isNextCreated? (<Button className="m-4" title={`GO TO ${newn}` } onClick={onNavC} />):(<Button className="m-4" title={`CREATE ${newn}` } onClick={onCreateNext} />)}
+              
+              </>
+              
+              ):(<Button className="m-4" title={manual?"Re-Automate":"Enter Data Manually"} onClick={onManualClick} />)}
         </div>
      
     </div>
@@ -320,7 +453,10 @@ function NewTaskAssigned() {
         <></>
        ):(
         <div className="lg-w-1/2 sm:w-full md:w-full mt-6 ">
-              <div className=" rounded-full bg-gray-200 text-black px-4 relative mt-10 mb-10 w-full" >
+              { already_assigned?(
+                <></>
+              ):(
+                <div className=" rounded-full bg-gray-200 text-black px-4 relative mt-10 mb-10 w-full" >
                 <label className="text-gray-400 absolute top-0 left-3 -mt-6">
                   Search  (e.g phyisal number, address etc)
                 </label>
@@ -341,6 +477,7 @@ function NewTaskAssigned() {
                     setSearchData(e.target.value)
                     setTasktoDisplay(undefined)
                   }}
+                  disabled = {already_assigned? true: false}
                 />
                 <select className="bg-gray-200 text-black w-1/2" 
                   defaultValue={dataToSearch}
@@ -349,6 +486,7 @@ function NewTaskAssigned() {
                     setSearchData(e.target.value)
                     setTasktoDisplay(undefined)
                   }}
+                  disabled = {already_assigned? true: false}
                 >
                  {projectToCompare?.projectData?.tasks?.map((phyisal, index) => (
                   <option key={index} value={phyisal[key]}>
@@ -361,6 +499,7 @@ function NewTaskAssigned() {
                 </label>
               
               </div>
+              )}
               
              {/*  {!tasktoDisplay?.taskData&&(<div className="mt-3 flex flex-row w-full">
               <p className="ml-4 mr-4 mt-2 font-bold">OR</p>
@@ -394,6 +533,7 @@ function NewTaskAssigned() {
                   }
                   className="rounded-full bg-gray-200 text-black px-4 h-12 w-full"
                   onChange={onChange}
+                  disabled = {key==='phyiscal number'? true: false}
                   required = {manual ? true : false}
                 />
               </div>

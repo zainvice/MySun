@@ -543,7 +543,7 @@ function Project() {
               'Export to Excel <span class="material-symbols-outlined">chevron_right</span>'
             }
             titleClasses={"flex items-center"}
-            onClick={handleExport}
+            onClick={()=>{setValue("updated")}}
           />
         </div>
         
