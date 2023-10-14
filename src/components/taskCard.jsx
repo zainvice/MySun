@@ -68,8 +68,8 @@ function TaskCard({ variant, task }) {
         <p className="flex items-center gap-2">
           <span className="font-semibold">Time Elapsed</span>
           <span className={"line-clamp-1 flex-1 w-full"}>
-            {task?.timeElapsed
-              ? timeAgo.format(task?.timeElapsed)?.replace("ago", "")
+            {task?.timeTaken
+              ? timeAgo.format(task?.timeTaken)?.replace("ago", "")
               : "Not yet started"}
           </span>
         </p>

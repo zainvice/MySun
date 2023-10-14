@@ -22,11 +22,12 @@ function Tasks() {
   //console.log(projects)
   const[tasks, setTask] = useState(project?.completeData||project?.buildingData?.tasks)
   const [tasksAS, setTasks] = useState(project?.tasks)
-  const taskWithMostKeys = tasks.reduce((prevTask, currentTask) => {
+  const taskWithMostKeys = tasks?.reduce((prevTask, currentTask) => {
     return Object.keys(prevTask).length > Object.keys(currentTask).length ? prevTask : currentTask;
   }, {});
-  
-  const headings = Object.keys(taskWithMostKeys);
+  let headings = [];
+  if(taskWithMostKeys)
+      headings = Object.keys(taskWithMostKeys);
   const [Loading, setloading]= useState(true)
   const originalTasks = project?.tasks
   useEffect(()=>{

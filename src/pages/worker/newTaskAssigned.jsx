@@ -92,7 +92,7 @@ function NewTaskAssigned() {
       setDisplay(filteredTasks[0])
       const projectId = filteredTasks[0].projectId
       setProject(projectId)
-      
+      handleStartClick()
       if (filteredTasks[0]?.taskData && Array.isArray(filteredTasks[0].taskData[filteredTasks[0].taskData['building number']])) {
         // Assuming 'assignedTask' is the variable where you want to store the array
         const assignedTask = filteredTasks[0].taskData[filteredTasks[0].taskData['building number']];
@@ -102,6 +102,7 @@ function NewTaskAssigned() {
         console.log("Already Assigned", toAssign)
         setTasktoDisplay(toAssign)
         setInputValues(toAssign?.taskData)
+       
       }
       console.log("Displaying Task:", display)
       setSearchTerm(filteredTasks[0]?.taskData?.["building number"])
@@ -123,6 +124,7 @@ function NewTaskAssigned() {
   }, [navigator.onLine]);
 
   const addToOfflineTasks = () => {
+   
     if(timerRunning){
       setMessage("Please stop the timer first!")
     }else{
@@ -139,8 +141,9 @@ function NewTaskAssigned() {
   const[message, setMessage]= useState("")
   const sendOfflineTasksToDatabase = async() => {
     const tasks = JSON.parse(localStorage.getItem("offlineTasks"));
-    setloading(true)
+    
     if (tasks && tasks.length > 0) {
+      setloading(true)
       for(let task of tasks){
         console.log(task)
         try {
@@ -367,32 +370,7 @@ function NewTaskAssigned() {
             />
             <label className="text-lg sm:text-xl font-bold">Task from {display?.projectId?.projectName} </label>
           </span>
-
-          {role==='worker'?(
-            <>
-            <div className="flex items-center mx-auto">
-          {isPlaying ? (
-        <button
-          onClick={handleStopClick}
-          className="hover:bg-red-200 hover:text-red-800 p-2 rounded-full transition duration-300 ease-in-out"
-        >
-          <span className="material-symbols-outlined text-red-600 text-4xl">
-            stop_circle
-          </span>
-        </button>
-      ) : (
-        <button
-          onClick={handleStartClick}
-          className="hover:bg-green-200  p-2 rounded-full transition duration-300 ease-in-out"
-        >
-          <span className="material-symbols-outlined text-[#34F5C5] text-4xl hover:text-green-600">
-            play_circle
-          </span>
-        </button>
-      )}
-          </div>
-
-          <div className=" flex justify-end items-center">
+          <div className=" flex items-center mx-auto">
             
             <span className="material-symbols-outlined text-[#34F5C5] text-4xl hidden sm:inline">
               schedule
@@ -408,6 +386,32 @@ function NewTaskAssigned() {
                 {remainingSeconds.toString().padStart(2, "0")}
               </span>
             </div>
+          </div>
+          {role==='worker'?(
+            <>
+            
+
+          
+          <div className="flex justify-end items-center ">
+           {isPlaying ? (
+              <button
+                onClick={handleStopClick}
+                className="hover:bg-red-200 hover:text-red-800 p-2 rounded-full transition duration-300 ease-in-out"
+              >
+                <span className="material-symbols-outlined text-red-600 text-4xl">
+                  stop_circle
+                </span>
+              </button>
+            ) : (
+              <button
+                onClick={handleStartClick}
+                className="hover:bg-green-200  p-2 rounded-full transition duration-300 ease-in-out"
+              >
+                <span className="material-symbols-outlined text-[#34F5C5] text-4xl hover:text-green-600">
+                  play_circle
+                </span>
+              </button>
+            )}
           </div>
             </>
           ):(
@@ -770,12 +774,12 @@ function NewTaskAssigned() {
         )}
         {role!=="worker"?(
           <div className="mt-3 flex flex-row w-full">
-           <Button className="m-4" title={"Update Progress"} onClick={() => { addToOfflineTasks(); sendOfflineTasksToDatabase(); }} />
+           <Button className="m-4" title={"Update Progress"} onClick={() => { handleStopClick(); addToOfflineTasks(); sendOfflineTasksToDatabase(); }} />
            </div>
         ):(
           <div className="mt-3 flex flex-row w-full">
-        <Button  title={"Save Progress"} onClick={addToOfflineTasks} />
-        <Button className="ml-4" title={"Sync Manually"} onClick={()=>{addToOfflineTasks(); sendOfflineTasksToDatabase();}} />
+        <Button  title={"Save Progress"} onClick={()=> {handleStopClick(); addToOfflineTasks();}} />
+        <Button className="ml-4" title={"Sync Manually"} onClick={()=>{ handleStopClick(); addToOfflineTasks(); sendOfflineTasksToDatabase();}} />
         </div>
         )}
           
