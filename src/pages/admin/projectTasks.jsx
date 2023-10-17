@@ -22,12 +22,20 @@ function Tasks() {
   //console.log(projects)
   const[tasks, setTask] = useState(project?.completeData||project?.buildingData?.tasks)
   const [tasksAS, setTasks] = useState(project?.tasks)
-  const taskWithMostKeys = tasks?.reduce((prevTask, currentTask) => {
-    return Object.keys(prevTask).length > Object.keys(currentTask).length ? prevTask : currentTask;
-  }, {});
-  let headings = [];
-  if(taskWithMostKeys)
-      headings = Object.keys(taskWithMostKeys);
+  const taskWithMostKeys = tasksAS?.reduce((prevTask, currentTask) => {
+    const prevKeys = prevTask?.taskData ? Object.keys(prevTask.taskData).length : 0;
+    const currentKeys = currentTask?.taskData ? Object.keys(currentTask.taskData).length : 0;
+    
+    return prevKeys > currentKeys ? prevTask : currentTask;
+}, {});
+  const [headings, setHeadings] = useState([]);
+  console.log("TASK", taskWithMostKeys)
+  useEffect(()=>{
+    if(taskWithMostKeys)
+      setHeadings(Object.keys(taskWithMostKeys?.taskData));
+   
+  }, [taskWithMostKeys])
+  console.log("headings", headings)
   const [Loading, setloading]= useState(true)
   const originalTasks = project?.tasks
   useEffect(()=>{
@@ -151,25 +159,11 @@ function Tasks() {
   },[searchTerm])
 
   const buildingNumberCounts = {};
-  const tasksBN = tasks?.map((task, index) => {
-  const buildingNumber = task["building number"];
-  if (buildingNumberCounts[buildingNumber] === undefined) {
-    buildingNumberCounts[buildingNumber] = 1;
-  } else {
-    buildingNumberCounts[buildingNumber]++;
-  }
-
-  const count = buildingNumberCounts[buildingNumber];
-
-  if (count > 1) {
-    return {
-      ...task,
-      "building number": `${buildingNumber}-${count}`
-    };
-  } else {
-    return task;
-  }
+  const tasksBN = tasksAS?.map((task) => {
+  return task.taskData
 });
+console.log(tasksBN)
+console.log(tasksAS)
 tasksBN?.sort((a, b) => {
   const buildingNumberA = a["building number"];
   const buildingNumberB = b["building number"];
@@ -194,9 +188,9 @@ tasksBN?.sort((a, b) => {
                  onChange={(e) => setSelectedFilter(e.target.value)}
                  className="border-2 border-[#00FFD3] text-[#00FFD3] p-2 rounded-full focus-within:outline-none transform transition-transform  hover:bg-[#00FFD3] hover:text-white"
                >
-                <option value={!viewAs? "assigned": "assignment"}>{!viewAs? "Assigned": "Assignment"}</option>
-                 <option value={!viewAs? "unassigned": "status"}>{!viewAs? "Unassigned": "Status"}</option>
-                 <option value={!viewAs? "original": "most recent"}>{!viewAs? "Original": "Most Recent"}</option>
+                <option value={!viewAs? "assignment": "assignment"}>{!viewAs? "Assignment": "Assignment"}</option>
+                 <option value={!viewAs? "status": "status"}>{!viewAs? "Status": "Status"}</option>
+                 <option value={!viewAs? "most recent": "most recent"}>{!viewAs? "Most Recent": "Most Recent"}</option>
                  
                </select>
                
@@ -246,6 +240,7 @@ tasksBN?.sort((a, b) => {
                 <table className="w-full bg-white border-separate border-spacing-y-3">
                 <thead>
                   <tr className="bg-white text-gray-800 text-sm font-thin">
+                    <th className="px-3 text-lg">Status</th>
                     {headings?.length > 0 &&
                       headings?.map((heading) => (
                         <th key={heading} className="px-3 text-lg">{heading}</th>
@@ -253,35 +248,37 @@ tasksBN?.sort((a, b) => {
                   </tr>
                 </thead>
                 <tbody className="rounded-full text-center text-sm font-thin">
-                  {tasksBN?.length > 0 ? (
-                    tasksBN.map((task, index) => (
-                      <tr className="bg-gray-200" key={index}>
-                        {headings?.map((heading, index) => (
-                          <td
-                            key={index}
-                            className={`p-3 ${
-                              index === 0
-                                ? "rounded-l-full"
-                                : index === headings?.length - 1
-                                ? "rounded-r-full"
-                                : ""
-                            }`}
-                          >     
-                            {task[heading]}
-                          </td>
-                        ))}
-                      </tr>
-                    ))
-                  ) : (
-                    <p className="absolute left-[50%] top-[50%] -translate-x-[50%]">
-                      No Combinations Found, complete some tasks first!
-                    </p>
-                  )}
-                 
-                </tbody>
+                {tasksAS?.length > 0 ? (
+                  tasksAS?.map((task, index) => (
+                    <tr className="bg-gray-200" key={index}>
+                      <td className="p4 rounded-l-full">
+                        <NavLink to={`/task/${task._id}`}> {task?.status}</NavLink>
+                      </td>
+                      {headings?.map((heading, index) => (
+                        <td
+                          key={index}
+                          className={`p-3 ${
+                            index === headings?.length - 1 ? "rounded-r-full" : ""
+                          }`}
+                        >
+                          <div>
+                            <NavLink to={`/task/${task._id}`}>
+                              {task?.taskData[heading]}
+                            </NavLink>
+                          </div>
+                        </td>
+                      ))}
+                    </tr>
+                  ))
+                ) : (
+                  <p className="absolute left-[50%] top-[50%] -translate-x-[50%]">
+                    No Combinations Found, complete some tasks first!
+                  </p>
+                )}
+              </tbody>
               </table>
               ): (
-                <div className="mt-4 grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                <div className="mt-4 grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-4">
                    {tasksAS?.length > 0 ? (
                      tasksAS?.map((task, index) => (
                        <NavLink

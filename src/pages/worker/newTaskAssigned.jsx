@@ -74,7 +74,7 @@ function NewTaskAssigned() {
           setStatus(filteredTasks[0].status)
           localStorage.setItem("taskNo", JSON.stringify(filteredTasks));
   
-          return filteredTasks; // Return filteredTasks here
+          return filteredTasks; // Return filtere dTasks here
         }
       } catch (error) {
         localStorage.removeItem("tasks");
@@ -93,17 +93,20 @@ function NewTaskAssigned() {
       const projectId = filteredTasks[0].projectId
       setProject(projectId)
       handleStartClick()
-      if (filteredTasks[0]?.taskData && Array.isArray(filteredTasks[0].taskData[filteredTasks[0].taskData['building number']])) {
-        // Assuming 'assignedTask' is the variable where you want to store the array
-        const assignedTask = filteredTasks[0].taskData[filteredTasks[0].taskData['building number']];
-        setAAssigned(assignedTask[0])
-        console.log("Already Assigned", assignedTask[0])
-        const toAssign = {taskData: assignedTask[0]}
-        console.log("Already Assigned", toAssign)
-        setTasktoDisplay(toAssign)
-        setInputValues(toAssign?.taskData)
+      if (filteredTasks[0]?.taskData) {
+        const taskDataKeys = Object.keys(filteredTasks[0].taskData);
+        if (taskDataKeys.length > 2) {
+          const assignedTask = filteredTasks[0].taskData;
+          setAAssigned(assignedTask);
+          console.log("Already Assigned", assignedTask);
+          const toAssign = { taskData: assignedTask };
+          console.log("Already Assigned", toAssign);
+          setTasktoDisplay(toAssign);
+          setInputValues(toAssign?.taskData);
+        }
        
       }
+
       console.log("Displaying Task:", display)
       setSearchTerm(filteredTasks[0]?.taskData?.["building number"])
       if(filteredTasks[0])
@@ -242,7 +245,7 @@ function NewTaskAssigned() {
                     const alphabetCharCode = alphabetPart.charCodeAt(0);
                     const nextAlphabet = String.fromCharCode(alphabetCharCode + 1);
                     nextNumber = 1;
-                    alphabetPart = nextAlphabet;
+                    //alphabetPart = nextAlphabet;
                   }
                 } else {
                   if (numberPart < 12) {
@@ -252,7 +255,7 @@ function NewTaskAssigned() {
                     const alphabetCharCode = alphabetPart.charCodeAt(0);
                     const nextAlphabet = String.fromCharCode(alphabetCharCode + 1);
                     nextNumber = 1;
-                    alphabetPart = nextAlphabet;
+                    //alphabetPart = nextAlphabet;
                   }
                 }
               
@@ -320,7 +323,7 @@ function NewTaskAssigned() {
   const onManualClick = (e) => {
     if(manual===false){
       setManual(true)
-      setSearchData('1')
+      setSearchData('')
     }else{
       setManual(false)
       setSearchData('')
@@ -346,14 +349,23 @@ function NewTaskAssigned() {
     const taskto= {taskData: task}
     setTasktoDisplay(taskto)
     setInputValues(taskto?.taskData)
+    if(manual){
+      const inputValues = taskto?.taskData ? Object.keys(taskto.taskData).reduce((acc, key) => {
+        acc[key] = "";
+        return acc;
+      }, {}) : {};
+      const taska= {taskData: inputValues}
+      setTasktoDisplay(taska)
+      setInputValues(inputValues);
+    }
     console.log("input values",inputValues)
     if (searchRef.current) {
       searchRef.current.focus();
     }
     //setloading(false)
   },[dataToSearch])
-  
-  
+  console.log(inputValues)
+  console.log(manual,"MANUAL")
   return (
     <Layout activePageName={display?.projectId?.projectName+"'s task"}>
       <Container>
@@ -387,7 +399,7 @@ function NewTaskAssigned() {
               </span>
             </div>
           </div>
-          {role==='worker'?(
+          {role?(
             <>
             
 
@@ -439,7 +451,7 @@ function NewTaskAssigned() {
            ))}
          </select> */}
          
-         <div className="absolute lg:top-[11%] lg:right-6 md:right-0 right-4 top-2">
+         <div className="absolute lg:top-[20%] lg:right-6 md:right-0 right-4 top-2">
               
               {already_assigned?(
               
@@ -528,7 +540,7 @@ function NewTaskAssigned() {
                 <input
                   type="text"
                   name={key}
-                  defaultValue={manual ? "" :  tasktoDisplay?.taskData[key]}
+                  defaultValue={manual ? tasktoDisplay?.taskData[key] :  tasktoDisplay?.taskData[key]}
                   /* disabled={!!tasktoDisplay?.taskData[key]} */
                   placeholder={
                     !tasktoDisplay?.taskData[key]
@@ -537,7 +549,10 @@ function NewTaskAssigned() {
                   }
                   className="rounded-full bg-gray-200 text-black px-4 h-12 w-full"
                   onChange={onChange}
-                  disabled = {key==='phyiscal number'? true: false}
+                  disabled={
+                    (key === "phyiscal number" && tasktoDisplay?.taskData[key]!=='') ||
+                    (key === "building number" && !!tasktoDisplay?.taskData[key])
+                  }
                   required = {manual ? true : false}
                 />
               </div>

@@ -68,9 +68,11 @@ function TaskCard({ variant, task }) {
         <p className="flex items-center gap-2">
           <span className="font-semibold">Time Elapsed</span>
           <span className={"line-clamp-1 flex-1 w-full"}>
-            {task?.timeTaken
-              ? timeAgo.format(task?.timeTaken)?.replace("ago", "")
-              : "Not yet started"}
+          {task?.timeTaken
+            ? task?.timeTaken > 60
+              ? `${Math.floor(task?.timeTaken / 60)} minutes and ${task?.timeTaken % 60} seconds`
+              : `${task?.timeTaken} seconds`
+            : "Not yet started"}
           </span>
         </p>
         <p className="flex items-center gap-2">
@@ -78,13 +80,10 @@ function TaskCard({ variant, task }) {
           <span>{task?.status}</span>
         </p>
         <p className="flex items-center gap-2">
-          <span className="font-semibold">Assigned Yet: </span>
-          <span>{task?.taskData[arrayName]?.length ? "YES" : "NO"} </span>
+          <span className="font-semibold">Manually Entered: </span>
+          <span>{task?.manual ? "YES" : "NO"} </span>
         </p>
-        <p className="flex items-center gap-2">
-          <span className="font-semibold">Assigned Data: </span>
-          <span>{task?.taskData[arrayName]?.length || 0} </span>
-        </p>
+        
         <p className="flex items-center gap-2">
           <span className="font-semibold">Created On: </span>
           <span>{new Date(task?.createdAt).toLocaleString()} </span>
