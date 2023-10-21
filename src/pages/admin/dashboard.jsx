@@ -294,7 +294,7 @@ function Dashboard() {
               <ul className="font-semibold list-disc list-outside ml-1 sm:ml-4">
                 <li className="line-clamp-1">
                   <p>
-                    0{" "}
+                  {project?.tasks?.filter(task => task.status === "Fully Mapped").length}{" "}
                     <span className="text-[#00FFD3]">
                       {t("dashboard.statistics.surveysCompleted")}
                     </span>{" "}
@@ -303,7 +303,7 @@ function Dashboard() {
                 </li>
                 <li className="mt-1 sm:mt-2 line-clamp-1">
                   <p>
-                    {tasksremaining}{" "}
+                  {project?.tasks?.filter(task => task.status !== "Fully Mapped").length}{" "}
                     <span className="text-[#00FFD3]">
                       {t("dashboard.statistics.surveysRemaining")}
                     </span>{" "}
@@ -312,6 +312,7 @@ function Dashboard() {
                 </li>
                 <li className="mt-1 sm:mt-2 line-clamp-1">
                   <p>
+                  {project?.timeTaken}
                     <span className="text-[#00FFD3]">
                       {t("dashboard.statistics.averageTimeSpent")}{avarageTime}
                     </span>{" "}
