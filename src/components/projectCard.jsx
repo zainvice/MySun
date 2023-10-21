@@ -28,15 +28,20 @@ function ProjectCard({ variant, project }) {
   const [completionPercentage, setCompletion]= useState('0')
   
   useEffect(()=>{
-    if(project?.completeData){
-      const complete = project?.completeData?.length 
-      const total = project?.originalData?.tasks?.length
-      const percent = (complete/total)*100 
-      if(percent!=NaN){
-        setCompletion(percent.toFixed(2).toString())
+    if (project?.completeData) {
+      const total = project?.tasks?.length;
+  
+      // Calculate the number of tasks completed with the status "Fully Mapped"
+      const complete = project?.tasks?.filter(task => task.status === "Fully Mapped").length;
+  
+      if (!isNaN(complete) && !isNaN(total) && total > 0) {
+          // Calculate the completion percentage
+          const percent = (complete / total) * 100;
+          setCompletion(percent.toFixed(2).toString());
+          console.log("COMPLETION", completionPercentage, "From", complete, total);
       }
-      console.log("COMPLETION", completionPercentage,"From", complete, total)
     }
+  
   }, [project, completionPercentage])
   return (
     <div
@@ -85,6 +90,12 @@ function ProjectCard({ variant, project }) {
             {startDate < Date.now()
               ? timeAgo.format(timeTaken).replace("ago", "")
               : "Not yet started"}
+          </span>
+        </p>
+        <p className="flex items-center gap-2">
+          <span className="font-semibold">Tasks Completed </span>
+          <span>
+            {project?.tasks?.filter(task => task.status === "Fully Mapped").length}
           </span>
         </p>
       </div>

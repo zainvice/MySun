@@ -13,6 +13,7 @@ import { useProjects } from "../../context/projectsContext";
 import { useSelector } from 'react-redux';
 import { selectCurrentToken } from "../../features/auth/authSlice";
 import jwtDecode from "jwt-decode";
+import Notification from "../../components/taskNotification";
 function AssignedTasks() {
   const { t } = useTranslation();
   const [isloading, setloading] = useState(true);
@@ -20,7 +21,7 @@ function AssignedTasks() {
   const token = useSelector(selectCurrentToken);
   const userInfo = jwtDecode(token);
   const {role}= userInfo.UserInfo
-  
+  const[taskTonotify, setTaskNote]= useState([]);
   useEffect(() => {     
     getProjects()
       .then((data) => {
@@ -32,6 +33,7 @@ function AssignedTasks() {
           //console.log("Project",assignedProjects[i])
           filteredProjects= data.filter(project=>project._id===assignedProjects[i])
         }
+        setTaskNote(filteredProjects?.flatMap((project) => project?.tasks?.filter((task) => task.status === "Coordination Letter")))
         //console.log("filtered Projects",filteredProjects)
         setProjects(filteredProjects);
         localStorage.setItem("projects", JSON.stringify(data));
@@ -40,11 +42,31 @@ function AssignedTasks() {
       .finally(() => setloading(false));
   }, []);
 
+  const notificationMessages = taskTonotify?.map((task) => {
+    const buildingNumber = task.taskData['building number'];
+    const status = task.status;
+    const timer = new Date(task.timer);
+  
+    const today = new Date();
+    
+  
+    const daysRemaining = Math.ceil((timer - today) / (1000 * 60 * 60 * 24));
+    const countdown = daysRemaining >= 1 ? `in ${daysRemaining} day${daysRemaining > 1 ? 's' : ''}` : 'today';
+  
+    const message = {
+      taskId: task._id,
+      message: `The task ${buildingNumber} was assigned status ${status} on ${new Date(task.updatedAt).toLocaleDateString()}. Please complete it ${countdown}.`
+    };
+  
+    return message;
+  });
+
   return (
-    <Layout activePageName={t("dashboard.title")}>
+    <Layout activePageName={t("dashboard.title")} notifications={notificationMessages}>
       <Container showMoreButton={projects?.length > 0}>
-        
+      
         <div className="flex justify-between mb-2">
+          
           <Heading title={t("projectsHeading")} />
           {role!=='admin'?(
             <>
@@ -68,7 +90,7 @@ function AssignedTasks() {
           <Spinner />
         ) : (
           
-          <div className="relative mt-4 grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+          <div className="relative mt-4 grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-4">
             {projects?.length > 0 ? (
               projects?.map((project, index) => (
                 <Link

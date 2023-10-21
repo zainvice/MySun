@@ -16,7 +16,7 @@ import { NavLink } from "react-router-dom";
 import { editNotes } from "../../api";
 import { useSelector } from 'react-redux';
 import { selectCurrentToken } from "../../features/auth/authSlice";
-
+import Notification from "../../components/taskNotification";
 function findProjectByWorker(worker, projects) {
   if(worker){
     console.log("worker", worker)
@@ -50,6 +50,7 @@ function Dashboard() {
   const [iswLoading, setwLoading]= useState(true)
   const [selectedFilter, setSelectedFilter] = useState("0");
   const [filteredProjects, setFilteredProjects] = useState([]);
+  const[taskTonotify, setTaskNote]= useState([]);
 
   useEffect(() => {
     setPLoading(true);
@@ -57,8 +58,11 @@ function Dashboard() {
     getProjects()
     .then((data) => {
       setProjects(data);
-      
-      const filteredData = projects.filter((project) => {
+      setTaskNote(
+        data
+          .flatMap((project) => project?.tasks?.filter((task) => task.status === "Coordination Letter"))
+      );
+      const filteredData = data.filter((project) => {
         const projectDate = new Date(project.startDate); 
         const currentDate = new Date();
         
@@ -98,7 +102,7 @@ function Dashboard() {
   
     //setPLoading(false);
   }, [selectedFilter]);
-  
+  console.log("TASKS WITH NOTIFICATION", taskTonotify)
   
   useEffect(() => {
     if (projects) {
@@ -109,7 +113,7 @@ function Dashboard() {
         
          
           workerList?.forEach((worker) => {
-            const completedTasks = worker.tasks.filter((task) => task.status==="Delivered");
+            const completedTasks = worker.tasks.filter((task) => task.status==="Fully Mapped");
             worker.completedTasksCount = completedTasks.length;
             
           });
@@ -191,7 +195,25 @@ function Dashboard() {
   
     
   }, [projects]);
-
+  const notificationMessages = taskTonotify?.map((task) => {
+    const buildingNumber = task.taskData['building number'];
+    const status = task.status;
+    const timer = new Date(task.timer);
+  
+    const today = new Date();
+    
+  
+    const daysRemaining = Math.ceil((timer - today) / (1000 * 60 * 60 * 24));
+    const countdown = daysRemaining >= 1 ? `in ${daysRemaining} day${daysRemaining > 1 ? 's' : ''}` : 'today';
+  
+    const message = {
+      taskId: task._id,
+      message: `The task ${buildingNumber} was assigned status ${status} on ${new Date(task.updatedAt).toLocaleDateString()}. Please complete it ${countdown}.`
+    };
+  
+    return message;
+  });
+  
 
   useEffect(() => {     
     getProjects()
@@ -230,9 +252,13 @@ function Dashboard() {
   
   
   return (
-    <Layout activePageName={t("dashboard.title")}>
+    <Layout activePageName={t("dashboard.title")} notifications={notificationMessages}>
+      
       <Container>
+      
         <div className="flex justify-between mb-2">
+       
+          
           <Heading title={t("dashboard.recentUpdates.title")} />
 
           <select

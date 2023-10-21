@@ -366,6 +366,7 @@ function NewTaskAssigned() {
   },[dataToSearch])
   console.log(inputValues)
   console.log(manual,"MANUAL")
+
   return (
     <Layout activePageName={display?.projectId?.projectName+"'s task"}>
       <Container>
@@ -572,6 +573,19 @@ function NewTaskAssigned() {
             
   
           </div>
+          {display?.statusHistory?(<>
+            <div className="m-6 ml-3 flex flex-col">
+            <label htmlFor="statusHistory" className="font-bold">Status History</label>
+            <ul className="ml-6">
+              {display?.statusHistory?.map((history, index) => (
+                <li key={index}>
+                  Changed from <strong>{history.changedFrom}</strong> to <strong>{history.changedTo}</strong> on {new Date(history.changedOn).toLocaleString()}
+                </li>
+              ))}
+            </ul>
+          </div>
+          </>):(<></>)}
+          
           
           {role!=="supervisor"?(
             <>

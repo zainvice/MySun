@@ -10,6 +10,7 @@ import { NavLink } from "react-router-dom";
 import TaskCard from "../../components/taskCard";
 import useAuth from "../../hooks/useAuth";
 import Spinner from "../../common/spinner";
+import { isEmpty } from "lodash";
 
 function Tasks() {
   const { id } = useParams();
@@ -29,11 +30,11 @@ function Tasks() {
     return prevKeys > currentKeys ? prevTask : currentTask;
 }, {});
   const [headings, setHeadings] = useState([]);
-  console.log("TASK", taskWithMostKeys)
+  console.log("TASK", tasksAS)
   useEffect(()=>{
-    if(taskWithMostKeys)
-      setHeadings(Object.keys(taskWithMostKeys?.taskData));
-   
+    if(taskWithMostKeys!==undefined&&taskWithMostKeys!==null&&!isEmpty(taskWithMostKeys)){
+           setHeadings(Object.keys(taskWithMostKeys?.taskData));
+     }
   }, [taskWithMostKeys])
   console.log("headings", headings)
   const [Loading, setloading]= useState(true)
@@ -141,6 +142,86 @@ function Tasks() {
     
       // Update the state with the sorted tasks
       setTasks(sortedTasks);
+    }else if (filter === "fully_mapped") {
+      console.log("UPDATING BY ", filter);
+    
+      // Create a shallow copy of the tasks array
+      const tasksCopy = [...project?.tasks];
+    
+      const sortedTasks = tasksCopy.filter((task)=> task.status==="Fully Mapped")
+    
+      // Update the state with the sorted tasks
+      setTasks(sortedTasks);
+    }else if (filter === "field_mapped") {
+      console.log("UPDATING BY ", filter);
+    
+      // Create a shallow copy of the tasks array
+      const tasksCopy = [...project?.tasks];
+    
+      const sortedTasks = tasksCopy.filter((task)=> task.status==="Field Mapped")
+    
+      // Update the state with the sorted tasks
+      setTasks(sortedTasks);
+    }else if (filter === "missing_information") {
+      console.log("UPDATING BY ", filter);
+    
+      // Create a shallow copy of the tasks array
+      const tasksCopy = [...project?.tasks];
+    
+      const sortedTasks = tasksCopy.filter((task)=> task.status==="Missing Information")
+    
+      // Update the state with the sorted tasks
+      setTasks(sortedTasks);
+    }else if (filter === "coordination_letter") {
+      console.log("UPDATING BY ", filter);
+    
+      // Create a shallow copy of the tasks array
+      const tasksCopy = [...project?.tasks];
+    
+      const sortedTasks = tasksCopy.filter((task)=> task.status==="Coordination Letter")
+    
+      // Update the state with the sorted tasks
+      setTasks(sortedTasks);
+    }else if (filter === "refused_survey") {
+      console.log("UPDATING BY ", filter);
+    
+      // Create a shallow copy of the tasks array
+      const tasksCopy = [...project?.tasks];
+    
+      const sortedTasks = tasksCopy.filter((task)=> task.status==="Refused Survey")
+    
+      // Update the state with the sorted tasks
+      setTasks(sortedTasks);
+    }else if (filter === "aerial_mapping") {
+      console.log("UPDATING BY ", filter);
+    
+      // Create a shallow copy of the tasks array
+      const tasksCopy = [...project?.tasks];
+    
+      const sortedTasks = tasksCopy.filter((task)=> task.status==="Aerial Mapping")
+    
+      // Update the state with the sorted tasks
+      setTasks(sortedTasks);
+    }else if (filter === "unite_address") {
+      console.log("UPDATING BY ", filter);
+    
+      // Create a shallow copy of the tasks array
+      const tasksCopy = [...project?.tasks];
+    
+      const sortedTasks = tasksCopy.filter((task)=> task.status==="Unite Address")
+    
+      // Update the state with the sorted tasks
+      setTasks(sortedTasks);
+    }else if (filter === "under_construction") {
+      console.log("UPDATING BY ", filter);
+    
+      // Create a shallow copy of the tasks array
+      const tasksCopy = [...project?.tasks];
+    
+      const sortedTasks = tasksCopy.filter((task)=> task.status==="Under Construction")
+    
+      // Update the state with the sorted tasks
+      setTasks(sortedTasks);
     }
     
 
@@ -183,17 +264,32 @@ tasksBN?.sort((a, b) => {
             <Heading title={"Project Tasks"}></Heading>
              
               <div className="flex flex-row">
-                 <select
-                 value={filter}
-                 onChange={(e) => setSelectedFilter(e.target.value)}
-                 className="border-2 border-[#00FFD3] text-[#00FFD3] p-2 rounded-full focus-within:outline-none transform transition-transform  hover:bg-[#00FFD3] hover:text-white"
-               >
-                <option value={!viewAs? "assignment": "assignment"}>{!viewAs? "Assignment": "Assignment"}</option>
-                 <option value={!viewAs? "status": "status"}>{!viewAs? "Status": "Status"}</option>
-                 <option value={!viewAs? "most recent": "most recent"}>{!viewAs? "Most Recent": "Most Recent"}</option>
-                 
-               </select>
-               
+              <select
+                value={filter}
+                onChange={(e) => setSelectedFilter(e.target.value)}
+                className="h-[65%] lg:h-[100%] border-2 border-[#00FFD3] text-[#00FFD3] p-2 rounded-full focus-within:outline-none transform transition-transform hover:bg-[#00FFD3] hover:text-white"
+              >
+                <option value={!viewAs ? "assignment" : "assignment"}>
+                  {!viewAs ? "Assignment" : "Assignment"}
+                </option>
+                <optgroup label={!viewAs ? "Status" : "Status"}>
+                  <option value="fully_mapped">Fully Mapped</option>
+                  <option value="field_mapped">Field Mapped</option>
+                  <option value="coordination_letter">Coordination Letter</option>
+                  <option value="refused_survey">Refused Survey</option>
+                  <option value="aerial_mapping">Aerial Mapping</option>
+                  <option value="missing_information">Missing Information</option>
+                  <option value="unite_address">Unite Address</option>
+                  <option value="under_construction">Under Construction</option>
+                </optgroup>
+                <option value={!viewAs ? "most recent" : "most recent"}>
+                  {!viewAs ? "Most Recent" : "Most Recent"}
+                </option>
+              </select>
+
+               {/* <>
+               <span class="material-symbols-outlined">tune</span>
+               </> */}
                <>
               
                 {!viewAs? (
@@ -250,8 +346,8 @@ tasksBN?.sort((a, b) => {
                 <tbody className="rounded-full text-center text-sm font-thin">
                 {tasksAS?.length > 0 ? (
                   tasksAS?.map((task, index) => (
-                    <tr className="bg-gray-200" key={index}>
-                      <td className="p4 rounded-l-full">
+                    <tr className="bg-gray-200 w-[60%]" key={index}>
+                      <td className="p4 pl-8 rounded-l-full ">
                         <NavLink to={`/task/${task._id}`}> {task?.status}</NavLink>
                       </td>
                       {headings?.map((heading, index) => (

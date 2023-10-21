@@ -1,6 +1,5 @@
 import ExcelJS from "exceljs";
 
-
 export async function exportToExcel(projectData) {
   // Create a workbook and add a worksheet
   const excel = new ExcelJS.Workbook();
@@ -8,7 +7,7 @@ export async function exportToExcel(projectData) {
 
   // Create an array to store the header row
   const headerRow = [];
-  
+
   // Iterate over the projectData to dynamically generate headers
   projectData.forEach((project) => {
     for (const key in project) {
@@ -30,11 +29,26 @@ export async function exportToExcel(projectData) {
     sheet.addRow(rowData);
   });
 
+  // Auto-size columns to fit content
+  sheet.columns.forEach((column, index) => {
+    sheet.getColumn(index + 1).eachCell({ includeEmpty: true }, (cell) => {
+      if (cell.value && typeof cell.value === "string") {
+        const columnLength = cell.value.length;
+        if (!column.width || columnLength > column.width) {
+          column.width = columnLength;
+        }
+      }
+    });
+  });
+
   // Generate the Excel file and return it as a blob
   const data = await excel.xlsx.writeBuffer();
-  const blob = new Blob([data], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
+  const blob = new Blob([data], {
+    type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+  });
   return blob;
 }
+
 
 
 

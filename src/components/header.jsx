@@ -1,7 +1,8 @@
 import React from "react";
 import { useTranslation } from 'react-i18next';
 
-function Header({ onSidebarOpen, activePageName }) {
+import Notification from "./taskNotification";
+function Header({ onSidebarOpen, activePageName, notifications }) {
   const { t } = useTranslation();
   const username = sessionStorage.getItem("Name");
   return (
@@ -23,6 +24,8 @@ function Header({ onSidebarOpen, activePageName }) {
             <span className="text-[#00C191] font-medium">{username}</span>
           </h1>
         </div>
+        {activePageName==="Dashboard"?(<Notification messages={notifications}/>):(<></>)}
+        
       </div>
     </div>
   );

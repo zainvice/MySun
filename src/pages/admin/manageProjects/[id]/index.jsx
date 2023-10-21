@@ -139,20 +139,30 @@ function Project() {
 
   const [value, setValue]= useState()
   useEffect(()=>{
-    handleExport()
+    console.log("exporting")
+    handleExport(value)
   }, [value])
-   const handleExport = async () => {
+   const handleExport = async (value) => {
+    console.log("project", project)
       if (!project) {
         // If there's no project, return early
         return;
       }
-      console.log("project", project)
+      
       // Create an array to hold the project data
       const taskDataArray = project.tasks.map((task) => task.taskData);
       let projectData
       if(value==="updated"){
           const buildingNumberCounts = {};
-          const taske = project?.completeData;
+          const taske = project?.tasks?.map((task) => {
+            let history="No History Found!"
+            if(task?.statusHistory?.length>0){
+              const latestStatusHistory = task?.statusHistory[task?.statusHistory?.length - 1];
+              history = `Changed from ${latestStatusHistory?.changedFrom} to ${latestStatusHistory?.changedTo} on ${new Date(latestStatusHistory?.changedOn).toLocaleDateString()}`
+            }
+              return { ...task.taskData, "Status": task.status, "Latest Status Change": history};
+          });
+          console.log("TASKS", taske);
           const tasksBN = taske?.map((task, index) => {
             const buildingNumber = task["building number"];
             if (buildingNumberCounts[buildingNumber] === undefined) {
@@ -183,12 +193,7 @@ function Project() {
       if(value==="original")
           projectData = project?.originalData?.tasks
       const tasks = project.tasks
-      // Loop through the project object and add each key-value pair to the projectData array
-      /* for (const key in project) {
-        if (project.hasOwnProperty(key) && project[key]) {
-          projectData.push({ [key]: project[key] });
-        }
-      } */
+      
      console.log(projectData)
       // Check if any data to export
       if (projectData?.length === 0) {
@@ -224,7 +229,7 @@ function Project() {
     else
       setIsOpen2(true)
   };
-  console.log(project)
+
   const nextBuildingNumber = getNextBuildingNumber(project?.tasks)
 
   const onCreateTask = async() =>{
@@ -425,28 +430,28 @@ function Project() {
         <div className="grid md:grid-cols-2 lg:grid-cols-3 sm:gap-4 items-center">
           <div>
             <p className="mb-2">
-              <span className="inline-block w-10/12 md:w-60">
+              <span className="text-[#00ABE0] font-bold inline-block w-10/12 md:w-60">
                 Total Surveys Completed
               </span>
-              <span className="text-[#00ABE0] before:content-[':'] before:mr-4">
-                {project?.completeData?.length}
+              <span className="text-[#00ABE0] font-bold before:content-[':'] before:mr-4">
+                {project?.tasks?.filter(task => task.status === "Fully Mapped").length}
               </span>
             </p>
             <p className="mb-2">
-              <span className="inline-block w-10/12 md:w-60">
+              <span className="text-[#FF7258] font-bold inline-block w-10/12 md:w-60">
                 Total surveys remaining
               </span>
-              <span className="text[#FF7258] before:content-[':'] before:mr-4">
-                {remainingTasks}
+              <span className="text-[#FF7258] font-bold before:content-[':'] before:mr-4">
+                {project?.tasks?.filter(task => task.status === "Pending").length}
               </span>
             </p>
 
             <p className="mb-2">
-              <span className="inline-block w-10/12 md:w-60">
+              <span className="text-[#FFC94B] font-bold inline-block w-10/12 md:w-60">
                 Surverys in Progress
               </span>
-              <span className="text-[#FFC94A] before:content-[':'] before:mr-4">
-              {remainingTasks}
+              <span className="text-[#FFC94B] font-bold before:content-[':'] before:mr-4">
+              {project?.tasks?.filter(task => task.status !== "Pending" && task.status !== "Fully Mapped").length}
               </span>
             </p>
           </div>
@@ -457,7 +462,7 @@ function Project() {
                 datasets: [
                   {
                     label: "Number of tasks",
-                    data: [project?.completeData?.length, remainingTasks, remainingTasks],
+                    data: [project?.tasks?.filter(task => task.status === "Fully Mapped").length, project?.tasks?.filter(task => task.status === "Pending").length, project?.tasks?.filter(task => task.status !== "Pending").length],
                     weight: 2,
                     clip: 4,
                     backgroundColor: ["#00ABE0", "#FF7258", "#FFC94A"],
