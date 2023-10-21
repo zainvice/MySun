@@ -38,7 +38,7 @@ function ProjectCard({ variant, project }) {
       if (!isNaN(complete) && !isNaN(total) && total > 0) {
           // Calculate the completion percentage
           const percent = (complete / total) * 100;
-          setCompletion(percent.toFixed(2).toString());
+          setCompletion(percent.toFixed(2).toString()+"%");
           console.log("COMPLETION", completionPercentage, "From", complete, total);
       }
     }
@@ -80,7 +80,7 @@ function ProjectCard({ variant, project }) {
         <p className="line-clamp-2 mb-2">{project?.projectDescription ?? ""}</p>
         <div className="relative h-7 rounded-full flex justify-center items-center text-sm text-[#00FFD3] bg-[#505050]">
   <div
-    className={`absolute top-0 -left-[2px] rounded-full border-white h-full w-[${completionPercentage}%] bg-white`}
+    className={`absolute top-0 -left-[2px] rounded-full border-white h-full w-[${completionPercentage}] bg-white`}
   />
   <span className="z-[1]">
     {completionPercentage} {t("taskCard.completedLabel")}
