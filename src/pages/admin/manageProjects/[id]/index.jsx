@@ -462,7 +462,7 @@ function Project() {
                 datasets: [
                   {
                     label: "Number of tasks",
-                    data: [project?.tasks?.filter(task => task.status === "Fully Mapped").length, project?.tasks?.filter(task => task.status === "Pending").length, project?.tasks?.filter(task => task.status !== "Pending").length],
+                    data: [project?.tasks?.filter(task => task.status === "Fully Mapped").length, project?.tasks?.filter(task => task.status === "Pending").length, project?.tasks?.filter(task => task.status !== "Pending" && task.status !== "Fully Mapped").length],
                     weight: 2,
                     clip: 4,
                     backgroundColor: ["#00ABE0", "#FF7258", "#FFC94A"],
