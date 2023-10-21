@@ -52,7 +52,7 @@ function ManageProjects() {
         {isloading ? (
           <Spinner />
         ) : (
-          <div className="relative mt-4 grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+          <div className="relative mt-4 grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-4">
             {projects?.length > 0 ? (
               projects?.map((project, index) => (
                 <Link

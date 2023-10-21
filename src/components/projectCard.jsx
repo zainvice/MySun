@@ -26,8 +26,9 @@ function ProjectCard({ variant, project }) {
   }
 
   const [completionPercentage, setCompletion]= useState('0')
-  
+  const [totalTimeTaken, setTimeTaken]= useState()
   useEffect(()=>{
+    let totalTimeTaken = 0
     if (project?.completeData) {
       const total = project?.tasks?.length;
   
@@ -40,6 +41,14 @@ function ProjectCard({ variant, project }) {
           setCompletion(percent.toFixed(2).toString());
           console.log("COMPLETION", completionPercentage, "From", complete, total);
       }
+    }
+    if(project?.tasks){
+      project?.tasks.map((task)=>{
+          if(task?.timeTaken){
+            totalTimeTaken= totalTimeTaken+ task?.timeTaken
+          }
+      })
+      setTimeTaken(totalTimeTaken)
     }
   
   }, [project, completionPercentage])
@@ -85,11 +94,21 @@ function ProjectCard({ variant, project }) {
         </p>
 
         <p className="flex items-center gap-2">
-          <span className="font-semibold">{t("taskCard.timeTakenLabel")} </span>
+          <span className="font-semibold">Latest Change </span>
           <span>
             {startDate < Date.now()
-              ? timeAgo.format(timeTaken).replace("ago", "")
+              ? timeAgo.format(timeTaken).replace("ago", "ago")
               : "Not yet started"}
+          </span>
+        </p>
+        <p className="flex items-center gap-2">
+          <span className="font-semibold">Total Time Taken </span>
+          <span>
+            {totalTimeTaken
+            ? totalTimeTaken > 60
+              ? `${Math.floor(totalTimeTaken / 60)} minutes and ${totalTimeTaken % 60} seconds`
+              : `${totalTimeTaken} seconds`
+            : "Not yet started"}
           </span>
         </p>
         <p className="flex items-center gap-2">

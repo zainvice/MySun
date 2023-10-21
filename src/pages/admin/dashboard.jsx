@@ -45,13 +45,13 @@ function Dashboard() {
   const token = useSelector(selectCurrentToken);
   const userInfo = jwtDecode(token);
   const [avarageTime, setAverge]= useState("")
-  const [completed, setCompleted]= useState("")
+  const [completed, setCompleted]= useState()
   const [isPLoading, setPLoading]= useState(true)
   const [iswLoading, setwLoading]= useState(true)
   const [selectedFilter, setSelectedFilter] = useState("0");
   const [filteredProjects, setFilteredProjects] = useState([]);
   const[taskTonotify, setTaskNote]= useState([]);
-
+  const [averageTimeTaken, setAverageTimeTaken]= useState()
   useEffect(() => {
     setPLoading(true);
     console.log('IM here')
@@ -166,24 +166,26 @@ function Dashboard() {
         setNotes(userInfo.UserInfo.notes)
       }
       let totalCompletedTasks = 0;
+      let totalremainingTasks = 0;
       let totalCompletedTime = 0;
+     
+      let totalTasks= 0
+      let timeofEachTask= 0
       projects.forEach(project => {
         //console.log('Project Data', project.projectData.tasks)
-        
-        const incompleteTasks = project.projectData.tasks.filter(task => !task.completed);
-        const completedTasks = project.projectData.tasks.filter(task => task.completed);
-        totalIncompleteTasks += incompleteTasks.length;
-        completedTasks.forEach(task => {
-          // Assuming each task has a timeTaken property in milliseconds
-          totalCompletedTime += task.timeTaken;
-          totalCompletedTasks += completedTasks.length;
-        });
-    
+        totalTasks = totalTasks + project?.tasks?.length
+        project.tasks.map((task)=>{
+            if(task?.timeTaken){
+              timeofEachTask = timeofEachTask + task.timeTaken
+            }
+        })
+        totalCompletedTasks = totalCompletedTasks + project?.tasks?.filter(task => task.status === "Fully Mapped").length
+        totalremainingTasks = totalremainingTasks + project?.tasks?.filter(task => task.status !== "Fully Mapped").length
       });
-      
-      
+      console.log("Total Tasks", totalTasks, "Time Taken", timeofEachTask)
+      setAverageTimeTaken(timeofEachTask/totalTasks);
       setCompleted(totalCompletedTasks)
-      setRemaining(totalIncompleteTasks)
+      setRemaining(totalremainingTasks)
       // Calculate the average time
       const averageTime = totalCompletedTasks > 0 ? totalCompletedTime / totalCompletedTasks : 0;
     
@@ -294,7 +296,7 @@ function Dashboard() {
               <ul className="font-semibold list-disc list-outside ml-1 sm:ml-4">
                 <li className="line-clamp-1">
                   <p>
-                  {project?.tasks?.filter(task => task.status === "Fully Mapped").length}{" "}
+                  {completed}{" "}
                     <span className="text-[#00FFD3]">
                       {t("dashboard.statistics.surveysCompleted")}
                     </span>{" "}
@@ -303,7 +305,7 @@ function Dashboard() {
                 </li>
                 <li className="mt-1 sm:mt-2 line-clamp-1">
                   <p>
-                  {project?.tasks?.filter(task => task.status !== "Fully Mapped").length}{" "}
+                  {tasksremaining}{" "}
                     <span className="text-[#00FFD3]">
                       {t("dashboard.statistics.surveysRemaining")}
                     </span>{" "}
@@ -312,7 +314,7 @@ function Dashboard() {
                 </li>
                 <li className="mt-1 sm:mt-2 line-clamp-1">
                   <p>
-                  {project?.timeTaken}
+                    {averageTimeTaken}{" "}
                     <span className="text-[#00FFD3]">
                       {t("dashboard.statistics.averageTimeSpent")}{avarageTime}
                     </span>{" "}

@@ -39,7 +39,7 @@
                 "statistics": {
                   "surveysCompleted": "surveys completed on",
                   "surveysRemaining": "surveys remaining on",
-                  "averageTimeSpent": "average time spent on surveys on"
+                  "averageTimeSpent": "seconds average time spent on surveys on"
                 }
               },
               "workerCard": {
