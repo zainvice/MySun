@@ -142,6 +142,22 @@ function Tasks() {
     
       // Update the state with the sorted tasks
       setTasks(sortedTasks);
+    }else if (filter === "latest update") {
+      console.log("UPDATING BY ", filter);
+    
+      // Create a shallow copy of the tasks array
+      const tasksCopy = [...project?.tasks];
+    
+      const sortedTasks = tasksCopy.sort((taskA, taskB) => {
+        const dateA = new Date(taskA.updatedAt);
+        const dateB = new Date(taskB.updatedAt);
+    
+        // Compare tasks based on 'createdAt' date in descending order
+        return dateB - dateA;
+      });
+    
+      // Update the state with the sorted tasks
+      setTasks(sortedTasks);
     }else if (filter === "fully_mapped") {
       console.log("UPDATING BY ", filter);
     
@@ -284,6 +300,9 @@ tasksBN?.sort((a, b) => {
                 </optgroup>
                 <option value={!viewAs ? "most recent" : "most recent"}>
                   {!viewAs ? "Most Recent" : "Most Recent"}
+                </option>
+                <option value={!viewAs ? "latest update" : "latest update"}>
+                  {!viewAs ? "Latest Update" : "Latest Update"}
                 </option>
               </select>
 

@@ -11,6 +11,8 @@ import { editTasks } from "../../api";
 import { editProject } from "../../api";
 import { useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import { getProjects } from "../../api";
+import { getTaskById } from "../../api";
 
 function NewTaskAssigned() {
   const {t}= useTranslation()
@@ -63,19 +65,14 @@ function NewTaskAssigned() {
       let filteredTasks;
       try {
        
-        const response = await getTasks();
+        const response = await getTaskById(id);
         
         const tasks = response;
         console.log(response);
-        if (tasks?.length > 0) {
-          console.log("TASKS from above", tasks);
-          filteredTasks = tasks?.filter((task) => task?._id === id);
-          
-          setStatus(filteredTasks[0].status)
-          localStorage.setItem("taskNo", JSON.stringify(filteredTasks));
+        
   
-          return filteredTasks; // Return filtere dTasks here
-        }
+        return response; // Return filtere dTasks here
+       
       } catch (error) {
         localStorage.removeItem("tasks");
         console.error("Error fetching tasks:", error);
@@ -87,16 +84,16 @@ function NewTaskAssigned() {
     async function setTaskToDisplay() {
       const filteredTasks = await fetchData();
      
-      
-      //setTasktoDisplay(filteredTasks[0]);
-      setDisplay(filteredTasks[0])
-      const projectId = filteredTasks[0].projectId
+      console.log("TASK FOUND", filteredTasks)
+      //setTasktoDisplay(filteredTasks);
+      setDisplay(filteredTasks)
+      const projectId = filteredTasks?.projectId
       setProject(projectId)
       handleStartClick()
-      if (filteredTasks[0]?.taskData) {
-        const taskDataKeys = Object.keys(filteredTasks[0].taskData);
+      if (filteredTasks?.taskData) {
+        const taskDataKeys = Object.keys(filteredTasks?.taskData);
         if (taskDataKeys.length > 2) {
-          const assignedTask = filteredTasks[0].taskData;
+          const assignedTask = filteredTasks.taskData;
           setAAssigned(assignedTask);
           console.log("Already Assigned", assignedTask);
           const toAssign = { taskData: assignedTask };
@@ -108,8 +105,8 @@ function NewTaskAssigned() {
       }
 
       console.log("Displaying Task:", display)
-      setSearchTerm(filteredTasks[0]?.taskData?.["building number"])
-      if(filteredTasks[0])
+      setSearchTerm(filteredTasks?.taskData?.["building number"])
+      if(filteredTasks)
           setloading(false);
           setInital(id)
     }

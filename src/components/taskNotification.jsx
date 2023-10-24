@@ -39,7 +39,7 @@ const NotificationItem = ({ message, index }) => {
   return (
     showNotification && (
       <div
-        className="p-4 shadow-lg rounded-lg bg-green-400 text-white lg:left-[45%] sm:left-[0%] hover:bg-red-400 hover:ease-in-out duration-300 cursor-pointer md:left-[0%] lg:left-[0%] border-2 border-gray-400"
+        className="p-4 shadow-lg rounded-lg bg-gradient-to-b from-[#00FFD3] from-60% to-[#37C19F] text-white lg:left-[45%] sm:left-[0%] hover:bg-red-400 hover:ease-in-out duration-300 cursor-pointer md:left-[0%] lg:left-[0%] border-2 border-gray-400"
         style={{ top: `${5 + index * 10}rem`, right: '5rem', transition: '0.2s' }}
       >
         <button

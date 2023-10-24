@@ -3,7 +3,7 @@ import axios from "axios";
 import { async } from "q";
 
 
-const BASE_URL = 'https://mysunapi.onrender.com/api/v1/';
+const BASE_URL = 'http://localhost:3500/api/v1/';
 
 const api = axios.create({
   baseURL: BASE_URL,
@@ -178,6 +178,18 @@ export const getProjects = async () => {
 export const getTasks = async () => {
   try {
     const response = await api.get("/tasks");
+    return response?.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getTaskById = async (_id) => {
+  try {
+    console.log("SENDING POST TO GET TASK", _id)
+    const response = await api.post(`/tasks/byId`,{
+      _id
+    });
     return response?.data;
   } catch (error) {
     throw error;
