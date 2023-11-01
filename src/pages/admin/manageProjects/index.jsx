@@ -26,6 +26,7 @@ function ManageProjects() {
       .then((data) => {
         setProjects(data);
         localStorage.setItem("projects", JSON.stringify(data));
+        setloading(false)
       })
       .catch(() => localStorage.removeItem("projects"))
       .finally(() => setloading(false));

@@ -60,7 +60,7 @@ function Dashboard() {
       setProjects(data);
       setTaskNote(
         data
-          .flatMap((project) => project?.tasks?.filter((task) => task.status === "Coordination Letter"))
+          .flatMap((project) => project?.tasks?.filter((task) => task.status === "Coordination Letter 1"))
       );
       const filteredData = data.filter((project) => {
         const projectDate = new Date(project.startDate); 

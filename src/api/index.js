@@ -88,10 +88,10 @@ export const removeWorkers = async ( values ) => {
 export const editTasks = async ({task, manual}) => {
   try {
   console.log("I GOT THIS DATA", task)
-  const{_id, taskData, status, timeTaken}= task
-  console.log("Sending", _id, taskData, status, timeTaken, manual)
+  const{_id, taskData, status, classification, propertyType, stats, floor,  timeTaken}= task
+  console.log("Sending", _id, taskData, status,classification, propertyType, stats, timeTaken, floor, manual)
   return await api.patch("/tasks", {
-    taskData, status, timeTaken, _id, manual}
+    taskData, status, timeTaken, _id, manual,classification, propertyType, stats, floor}
   );}catch(error){
     if (error?.status === 500) return error.message;
     return error?.response?.data;

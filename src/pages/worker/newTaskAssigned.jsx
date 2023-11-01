@@ -13,9 +13,143 @@ import { useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { getProjects } from "../../api";
 import { getTaskById } from "../../api";
+import ResetModal from "../../components/ResetModal";
+import { exportToExcel } from "../../global";
 
 function NewTaskAssigned() {
   const {t}= useTranslation()
+  const [status, setStatus] = useState(); // Initialize the status state variable
+  const [floor, setFloor]= useState()
+  const handleFloorChange = (e)=> setFloor(e.target.value)
+  const [classification, setClassification]= useState()
+  const handleClassificationChange = (e)=> setClassification(e.target.value)
+  const [propertyType, setPropertyType] = useState([]);
+  // For Property Type
+  const [resetType, setResetType] = useState(null);
+  const handlePropertyTypeChange = (e) => {
+    const value = e.target.value;
+    if (propertyType?.includes(value)) {
+      // If the value is already in the array, remove it
+      setPropertyType(propertyType.filter(item => item !== value));
+    } else {
+      // If the value is not in the array, add it
+      if(propertyType?.length>0)
+        setPropertyType([...propertyType, value]);
+      else
+        setPropertyType([value])
+    }
+  };
+  
+  const [stats, setStats] = useState([]);
+  const handleStatsChange = (e) => {
+    const value = e.target.value;
+    if (stats?.includes(value)) {
+      // If the value is already in the array, remove it
+      setStats(stats.filter(item => item !== value));
+    } else {
+      // If the value is not in the array, add it
+      if(stats?.length>0)
+        setStats([...stats, value]);
+      else
+        setStats([value]);
+    }
+  };
+  
+  const [isResetModalOpen, setIsResetModalOpen] = useState(false);
+
+  const handlePartialReset = () => {
+    // Implement logic to reset data captured from the Excel file
+    // Show a success message or perform other actions
+    closeResetModal();
+  };
+
+  const handleFullReset = () => {
+    // Implement logic to reset all features of the task
+    // Show a success message or perform other actions
+    closeResetModal();
+  };
+
+  const openResetModal = () => {
+    setIsResetModalOpen(true);
+  };
+
+  const closeResetModal = () => {
+    setIsResetModalOpen(false);
+  };
+ 
+  const handleExport = async () => {
+    console.log("project", display)
+      if (!display) {
+        // If there's no display, return early
+        return;
+      }
+      
+      
+    let projectData
+      
+     const buildingNumberCounts = {};
+     const task = display ? [display] : []; // Create an array with a single object or an empty arr 
+     let taske = [];
+     
+     if (task.length > 0) {
+       let history = "No History Found!";
+       let classificationHistory = "No History";
+     
+       if (task[0]?.statusHistory?.length > 0) {
+         const latestStatusHistory = task[0].statusHistory[task[0].statusHistory.length - 1];
+         history = `Changed from ${latestStatusHistory?.changedFrom} to ${latestStatusHistory?.changedTo} on ${new Date(latestStatusHistory?.changedOn).toLocaleDateString()}`;
+       }
+     
+       if (task[0]?.classificationHistory?.length > 0) {
+         const latestClassificationHistory = task[0].classificationHistory[task[0].classificationHistory.length - 1];
+         classificationHistory = `Changed from ${latestClassificationHistory?.changedFrom} to ${latestClassificationHistory?.changedTo} on ${new Date(latestClassificationHistory?.changedOn).toLocaleDateString()}`;
+       }
+     
+       taske = [
+         {
+           ...task[0].taskData,
+           "Status": task[0].status,
+           "Classification": task[0].classification,
+           "Lastest Update On": new Date(task[0].updatedAt).toLocaleString(),
+           "Property Type": task[0].propertyType.join(', '),
+           "Stats": task[0].stats.join(', '),
+           "Latest Status Change": history,
+           "Latest Classification Change": classificationHistory
+           
+         },
+       ];
+     }
+     
+     console.log("TASKS", taske);
+     
+     projectData = taske
+       
+      
+     console.log(projectData)
+      // Check if any data to export
+      if (projectData?.length === 0) {
+        // No data to export, return early
+        return;
+      }
+
+      // Create a blob with the project data
+     if(projectData){
+      const blob = await exportToExcel(projectData);
+      console.log(blob)
+      // Create a download link and trigger the download
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      const timestamp = new timestamp
+      a.href = url;
+      a.download = `task_data_${projectData[0]["building number"]}.xlsx`;
+      a.click();
+      window.URL.revokeObjectURL(url);
+     }
+    
+      // Revoke the object URL to free up resources
+      
+  };
+  
   const [tasktoDisplay, setTasktoDisplay]= useState()
   const [inputValues, setInputValues] = useState(tasktoDisplay?.taskData || {});
   const onChange = (event) => {
@@ -40,6 +174,7 @@ function NewTaskAssigned() {
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);
   };
+  console.log("DISPLAy", display)
   const filteredBuildings = projectToCompare?.buildingData?.tasks.filter((building) =>
     building["building number"||"כתובת"].toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -88,7 +223,12 @@ function NewTaskAssigned() {
       //setTasktoDisplay(filteredTasks);
       setDisplay(filteredTasks)
       const projectId = filteredTasks?.projectId
+      setStatus(filteredTasks?.status)
+      setPropertyType(filteredTasks?.propertyType)
+      setClassification(filteredTasks?.classification)
+      setStats(filteredTasks?.stats)
       setProject(projectId)
+      setFloor(filteredTasks?.floor)
       handleStartClick()
       if (filteredTasks?.taskData) {
         const taskDataKeys = Object.keys(filteredTasks?.taskData);
@@ -129,7 +269,7 @@ function NewTaskAssigned() {
       setMessage("Please stop the timer first!")
     }else{
       setMessage("Saving...")
-      const taskData = {_id: display?._id, taskData: inputValues, timeTaken: timeTaken, status: status, projectId: projectToCompare?.projectId, buildingData: searchTerm}
+      const taskData = {_id: display?._id, taskData: inputValues, timeTaken: timeTaken, status: status, classification: classification, propertyType: propertyType, stats: stats, floor: floor, projectId: projectToCompare?.projectId, buildingData: searchTerm}
       const updatedTasks = [...offlineTasks, taskData ];
       setOfflineTasks(updatedTasks);
       localStorage.setItem("offlineTasks", JSON.stringify(updatedTasks));
@@ -205,16 +345,15 @@ function NewTaskAssigned() {
   const minutes = Math.floor((seconds % 3600) / 60);
   const remainingSeconds = seconds % 60;
   const [newn, setNew]= useState()
-  const [status, setStatus] = useState(tasktoDisplay?.status); // Initialize the status state variable
   const [key, setKey]= useState("")
-  console.log("TASK STATUS", status)
+  console.log("TASK STATUS", status, classification, propertyType, stats)
   const [navLink, setLink]= useState()
   const [nextTask, setNextTask]= useState()
   const [isNextCreated, setNextCreated]= useState(false)
   useEffect(()=>{
     async function fetchData() {
       if(status==="Pending"){
-        setStatus("Fully Mapped")
+        setStatus("Not Mapped")
       }
       if(display){
         if(display?.status!=='Pending'){
@@ -560,6 +699,10 @@ function NewTaskAssigned() {
           ):(
           <>
           <p></p>
+          <>
+         
+
+                </>
           {dataToSearch&&(
             <Spinner message={"FINDING DATA!!"}/>
           )}
@@ -569,6 +712,21 @@ function NewTaskAssigned() {
           
             
   
+          </div>
+          <div className="ml-3 mt-8 flex flex-row items-center text-left text-black ">
+            <label className="mr-2 font-bold">Floor:</label>
+            <select
+              className="rounded-full bg-gray-200 text-black px-4 h-12 w-full lg:w-1/2"
+              value={floor}
+              onChange={(e) => setFloor(e.target.value)}
+            >
+              <option value="All">All</option>
+              {Array.from({ length: 21 }, (_, index) => (
+                <option key={index} value={index - 10}>
+                  {index - 10}
+                </option>
+              ))}
+            </select>
           </div>
           {display?.statusHistory?(<>
             <div className="m-6 ml-3 flex flex-col">
@@ -594,9 +752,9 @@ function NewTaskAssigned() {
               name="status"
               type="radio"
               className="hidden peer"
-              value="Fully Mapped"
+              value="Not Mapped"
               onChange={handleStatusChange} // Add onChange handler
-              checked={status === "Fully Mapped"} // Check if this radio button is selected
+              checked={status === "Not Mapped"} // Check if this radio button is selected
               defaultChecked
               
             />
@@ -606,7 +764,7 @@ function NewTaskAssigned() {
               </span>
             </span>
             <span className="text-gray-700 text-base sm:text-lg">
-              Fully Mapped 
+              Not Mapped 
             </span>
           </label>
           {/* Radio button for "Field Mapped" */}
@@ -636,9 +794,9 @@ function NewTaskAssigned() {
               name="status"
               type="radio"
               className="hidden peer"
-              value="Coordination Letter"
+              value="Drawing Ready"
               onChange={handleStatusChange} // Add onChange handler
-              checked={status === "Coordination Letter"} // Check if this radio button is selected
+              checked={status === "Drawing Ready"} // Check if this radio button is selected
             />
             <span className="w-5 h-5 border rounded-full border-gray-800 mr-1 peer-checked:bg-gray-800 flex justify-center items-center">
               <span className="material-symbols-outlined text-sm font-bold text-white peer-checked:inline-block">
@@ -646,7 +804,7 @@ function NewTaskAssigned() {
               </span>
             </span>
             <span className="text-gray-700 text-base sm:text-lg">
-              Coordination Letter 
+              Drawing Ready 
             </span>
           </label>
   
@@ -656,9 +814,9 @@ function NewTaskAssigned() {
               name="status"
               type="radio"
               className="hidden peer"
-              value="Refused Survey"
+              value="Fully Mapped"
               onChange={handleStatusChange} // Add onChange handler
-              checked={status === "Refused Survey"} // Check if this radio button is selected
+              checked={status === "Fully Mapped"} // Check if this radio button is selected
             />
             <span className="w-5 h-5 border rounded-full border-gray-800 mr-1 peer-checked:bg-gray-800 flex justify-center items-center">
               <span className="material-symbols-outlined text-sm font-bold text-white peer-checked:inline-block">
@@ -666,7 +824,7 @@ function NewTaskAssigned() {
               </span>
             </span>
             <span className="text-gray-700 text-base sm:text-lg">
-              Refused Survey
+              Fully Mapped
             </span>
           </label>
   
@@ -678,9 +836,9 @@ function NewTaskAssigned() {
               name="status"
               type="radio"
               className="hidden peer"
-              value="Aerial Mapping"
+              value="GIS Ready"
               onChange={handleStatusChange} // Add onChange handler
-              checked={status === "Aerial Mapping"} // Check if this radio button is selected
+              checked={status === "GIS Ready"} // Check if this radio button is selected
             />
             <span className="w-5 h-5 border rounded-full border-gray-800 mr-1 peer-checked:bg-gray-800 flex justify-center items-center">
               <span className="material-symbols-outlined text-sm font-bold text-white peer-checked:inline-block">
@@ -688,18 +846,20 @@ function NewTaskAssigned() {
               </span>
             </span>
             <span className="text-gray-700 text-base sm:text-lg">
-              Aerial Mapping
+              GIS Ready
             </span>
             </label>
-            {/* Radio button for "Missing Information" */}
-               <label className="inline-flex items-center mb-2 sm:mb-5">
+            {role!=="worker"?(
+              <>
+              {/* Radio button for "Checked" */}
+              <label className="inline-flex items-center mb-2 sm:mb-5">
                  <input
                    name="status"
                    type="radio"
                    className="hidden peer"
-                   value="Missing Information"
+                   value="Checked"
                    onChange={handleStatusChange} // Add onChange handler
-                   checked={status === "Missing Information"} // Check if this radio button is selected
+                   checked={status === "Checked"} // Check if this radio button is selected
                  />
                  <span className="w-5 h-5 border rounded-full border-gray-800 mr-1 peer-checked:bg-gray-800 flex justify-center items-center">
                    <span className="material-symbols-outlined text-sm font-bold text-white peer-checked:inline-block">
@@ -707,10 +867,36 @@ function NewTaskAssigned() {
                    </span>
                  </span>
                  <span className="text-gray-700 text-base sm:text-lg">
-                   Missing Information
+                   Checked
                  </span>
                </label>
                       
+               {/* Radio button for "Submitted" */}
+               <label className="inline-flex items-center mb-2 sm:mb-5">
+                 <input
+                   name="status"
+                   type="radio"
+                   className="hidden peer"
+                   value="Submitted"
+                   onChange={handleStatusChange} // Add onChange handler
+                   checked={status === "Submitted"} // Check if this radio button is selected
+                 />
+                 <span className="w-5 h-5 border rounded-full border-gray-800 mr-1 peer-checked:bg-gray-800 flex justify-center items-center">
+                   <span className="material-symbols-outlined text-sm font-bold text-white peer-checked:inline-block">
+                     done
+                   </span>
+                 </span>
+                 <span className="text-gray-700 text-base sm:text-lg">
+                   Submitted
+                 </span>
+               </label>
+                   
+              </>
+            ):(
+              <>
+              </>
+            )
+            }   
                {/* Radio button for "Unite Address" */}
                <label className="inline-flex items-center mb-2 sm:mb-5">
                  <input
@@ -730,28 +916,252 @@ function NewTaskAssigned() {
                    Unite Address
                  </span>
                </label>
-                      
-               {/* Radio button for "Under Construction" */}
-               <label className="inline-flex items-center mb-2 sm:mb-5">
-                 <input
-                   name="status"
-                   type="radio"
-                   className="hidden peer"
-                   value="Under Construction"
-                   onChange={handleStatusChange} // Add onChange handler
-                   checked={status === "Under Construction"} // Check if this radio button is selected
-                 />
-                 <span className="w-5 h-5 border rounded-full border-gray-800 mr-1 peer-checked:bg-gray-800 flex justify-center items-center">
-                   <span className="material-symbols-outlined text-sm font-bold text-white peer-checked:inline-block">
-                     done
-                   </span>
-                 </span>
-                 <span className="text-gray-700 text-base sm:text-lg">
-                   Under Construction
-                 </span>
-               </label>
                </div>
               
+       
+           
+            <p className="m-3 font-bold">Classfication</p>
+          <div className="mt-0 sm:mt-8 mx-2 grid grid-cols-2  md:grid-cols-3 lg:grid-cols-4 justify-center items-center">
+            {/* Radio button for "Coordination Letter 1" */}
+            <label className="inline-flex items-center mb-2 sm:mb-5">
+            <input
+              name="classification"
+              type="radio"
+              className="hidden peer"
+              value="Coordination Letter 1"
+              onChange={handleClassificationChange} // Add onChange handler
+              checked={classification === "Coordination Letter 1"} // Check if this radio button is selected
+              defaultChecked
+              
+            />
+            <span className="w-5 h-5 border rounded-full border-gray-800 mr-1 peer-checked:bg-gray-800 flex justify-center items-center">
+              <span className="material-symbols-outlined text-sm font-bold text-white peer-checked:inline-block">
+                done
+              </span>
+            </span>
+            <span className="text-gray-700 text-base sm:text-lg">
+              Coordination Letter 1 
+            </span>
+          </label>
+          {/* Radio button for "Coordination Letter 2" */}
+          <label className="inline-flex items-center mb-2 sm:mb-5">
+            <input
+              name="classification"
+              type="radio"
+              className="hidden peer"
+              value="Coordination Letter 2"
+              onChange={handleClassificationChange} // Add onChange handler
+              checked={classification === "Coordination Letter 2"} // Check if this radio button is selected
+              defaultChecked
+              
+            />
+            <span className="w-5 h-5 border rounded-full border-gray-800 mr-1 peer-checked:bg-gray-800 flex justify-center items-center">
+              <span className="material-symbols-outlined text-sm font-bold text-white peer-checked:inline-block">
+                done
+              </span>
+            </span>
+            <span className="text-gray-700 text-base sm:text-lg">
+              Coordination Letter 2 
+            </span>
+          </label>
+          
+          {/* Radio button for "Refused Survey" */}
+          <label className="inline-flex items-center mb-2 sm:mb-5">
+            <input
+              name="classification"
+              type="radio"
+              className="hidden peer"
+              value="Refused Survey"
+              onChange={handleClassificationChange} // Add onChange handler
+              checked={classification === "Refused Survey"} // Check if this radio button is selected
+            />
+            <span className="w-5 h-5 border rounded-full border-gray-800 mr-1 peer-checked:bg-gray-800 flex justify-center items-center">
+              <span className="material-symbols-outlined text-sm font-bold text-white peer-checked:inline-block">
+                done
+              </span>
+            </span>
+            <span className="text-gray-700 text-base sm:text-lg">
+              Refused Survey
+            </span>
+          </label>
+  
+          {/* Repeat similar code for other radio buttons */}
+          
+          
+              
+               </div>
+              
+            <p className="m-3 font-bold">Property Type</p>
+          <div className="mt-0 sm:mt-8 mx-2 grid grid-cols-2  md:grid-cols-3 lg:grid-cols-4 justify-center items-center">
+            {/* Checkbox button for "Residential" */}
+            <label className="inline-flex items-center mb-2 sm:mb-5">
+            <input
+              name="propertyType"
+              type="checkbox"
+              className="hidden peer"
+              value="Residential"
+              onChange={handlePropertyTypeChange} // Add onChange handler
+              checked={propertyType?.length>0 && propertyType?.includes("Residential")} // Check if this checkbox button is selected
+              defaultChecked
+              
+            />
+            <span className="w-5 h-5 border rounded-full border-gray-800 mr-1 peer-checked:bg-gray-800 flex justify-center items-center">
+              <span className="material-symbols-outlined text-sm font-bold text-white peer-checked:inline-block">
+                done
+              </span>
+            </span>
+            <span className="text-gray-700 text-base sm:text-lg">
+              Residential
+            </span>
+          </label>
+            <label className="inline-flex items-center mb-2 sm:mb-5">
+            <input
+              name="propertyType"
+              type="checkbox"
+              className="hidden peer"
+              value="Business"
+              onChange={handlePropertyTypeChange} // Add onChange handler
+              checked={propertyType?.length>0 && propertyType?.includes("Business")} // Check if this checkbox button is selected
+              defaultChecked
+              
+            />
+            <span className="w-5 h-5 border rounded-full border-gray-800 mr-1 peer-checked:bg-gray-800 flex justify-center items-center">
+              <span className="material-symbols-outlined text-sm font-bold text-white peer-checked:inline-block">
+                done
+              </span>
+            </span>
+            <span className="text-gray-700 text-base sm:text-lg">
+              Business
+            </span>
+          </label>
+          {/* Checkbox button for "Field Mapped" */}
+          <label className="inline-flex items-center mb-2 sm:mb-5">
+            <input
+              name="propertyType"
+              type="checkbox"
+              className="hidden peer"
+              value="Industry"
+              onChange={handlePropertyTypeChange} // Add onChange handler
+              checked={propertyType?.length>0 && propertyType?.includes("Industry")} // Check if this checkbox button is selected
+              defaultChecked
+              
+            />
+            <span className="w-5 h-5 border rounded-full border-gray-800 mr-1 peer-checked:bg-gray-800 flex justify-center items-center">
+              <span className="material-symbols-outlined text-sm font-bold text-white peer-checked:inline-block">
+                done
+              </span>
+            </span>
+            <span className="text-gray-700 text-base sm:text-lg">
+              Industry 
+            </span>
+          </label>
+           {/* Checkbox button for "Agricultural" */}
+          <label className="inline-flex items-center mb-2 sm:mb-5">
+            <input
+              name="propertyType"
+              type="checkbox"
+              className="hidden peer"
+              value="Agricultural"
+              onChange={handlePropertyTypeChange} // Add onChange handler
+              checked={propertyType?.length>0 && propertyType?.includes("Agricultural")} // Check if this checkbox button is selected
+            />
+            <span className="w-5 h-5 border rounded-full border-gray-800 mr-1 peer-checked:bg-gray-800 flex justify-center items-center">
+              <span className="material-symbols-outlined text-sm font-bold text-white peer-checked:inline-block">
+                done
+              </span>
+            </span>
+            <span className="text-gray-700 text-base sm:text-lg">
+              Agricultural 
+            </span>
+          </label>
+  
+          {/* Checkbox button for "Goverment" */}
+          <label className="inline-flex items-center mb-2 sm:mb-5">
+            <input
+              name="propertyType"
+              type="checkbox"
+              className="hidden peer"
+              value="Goverment"
+              onChange={handlePropertyTypeChange} // Add onChange handler
+              checked={propertyType?.length>0 && propertyType?.includes("Goverment")} // Check if this checkbox button is selected
+            />
+            <span className="w-5 h-5 border rounded-full border-gray-800 mr-1 peer-checked:bg-gray-800 flex justify-center items-center">
+              <span className="material-symbols-outlined text-sm font-bold text-white peer-checked:inline-block">
+                done
+              </span>
+            </span>
+            <span className="text-gray-700 text-base sm:text-lg">
+              Goverment
+            </span>
+          </label>
+          
+         
+               </div>
+               <p className="m-3 font-bold">Stats</p>
+          <div className="mt-0 sm:mt-8 mx-2 grid grid-cols-2  md:grid-cols-3 lg:grid-cols-4 justify-center items-center">
+            {/* Checkbox button for "Under Construction" */}
+            <label className="inline-flex items-center mb-2 sm:mb-5">
+            <input
+              name="stats"
+              type="checkbox"
+              className="hidden peer"
+              value="Under Construction"
+              onChange={handleStatsChange} // Add onChange handler
+              checked={stats?.length>0 && stats?.includes("Under Construction")} // Check if this checkbox button is selected
+              defaultChecked
+              
+            />
+            <span className="w-5 h-5 border rounded-full border-gray-800 mr-1 peer-checked:bg-gray-800 flex justify-center items-center">
+              <span className="material-symbols-outlined text-sm font-bold text-white peer-checked:inline-block">
+                done
+              </span>
+            </span>
+            <span className="text-gray-700 text-base sm:text-lg">
+              Under Construction
+            </span>
+          </label>
+            <label className="inline-flex items-center mb-2 sm:mb-5">
+            <input
+              name="stats"
+              type="checkbox"
+              className="hidden peer"
+              value="Ariel Mapped"
+              onChange={handleStatsChange} // Add onChange handler
+              checked={stats?.length>0 && stats?.includes("Ariel Mapped")} // Check if this checkbox button is selected
+              defaultChecked
+              
+            />
+            <span className="w-5 h-5 border rounded-full border-gray-800 mr-1 peer-checked:bg-gray-800 flex justify-center items-center">
+              <span className="material-symbols-outlined text-sm font-bold text-white peer-checked:inline-block">
+                done
+              </span>
+            </span>
+            <span className="text-gray-700 text-base sm:text-lg">
+              Ariel Mapped
+            </span>
+          </label>
+          {/* Checkbox button for "Missing Information" */}
+          <label className="inline-flex items-center mb-2 sm:mb-5">
+            <input
+              name="stats"
+              type="checkbox"
+              className="hidden peer"
+              value="Missing Information"
+              onChange={handleStatsChange} // Add onChange handler
+              checked={stats?.length>0 && stats?.includes("Missing Information")} // Check if this checkbox button is selected
+              defaultChecked
+              
+            />
+            <span className="w-5 h-5 border rounded-full border-gray-800 mr-1 peer-checked:bg-gray-800 flex justify-center items-center">
+              <span className="material-symbols-outlined text-sm font-bold text-white peer-checked:inline-block">
+                done
+              </span>
+            </span>
+            <span className="text-gray-700 text-base sm:text-lg">
+              Missing Information 
+            </span>
+          </label>
+          </div>  
        
             </>
             
@@ -804,13 +1214,28 @@ function NewTaskAssigned() {
            </div>
         ):(
           <div className="mt-3 flex flex-row w-full">
-        <Button  title={"Save Progress"} onClick={()=> {handleStopClick(); addToOfflineTasks();}} />
-        <Button className="ml-4" title={"Sync Manually"} onClick={()=>{ handleStopClick(); addToOfflineTasks(); sendOfflineTasksToDatabase();}} />
+        <Button  title={"Save Offline"} onClick={()=> {handleStopClick(); addToOfflineTasks();}} />
+        <Button className="ml-4" title={"Save"} onClick={()=>{ handleStopClick(); addToOfflineTasks(); sendOfflineTasksToDatabase();}} />
         </div>
         )}
-          
+          {already_assigned?(
+            <>
+            <div className="mt-3 flex flex-row w-full justify-end space-x-4">
+            <Button title={"Reset Task"} onClick={() => { openResetModal(); }} />
+            <Button title={"Export Task"} onClick={() => { handleExport(); }} />
+            </div>
+          </>
+          ):(
+            <></>
+          )}
           </>
         )}
+        <ResetModal
+        isOpen={isResetModalOpen}
+        onRequestClose={closeResetModal}
+        onPartialReset={handlePartialReset}
+        onFullReset={handleFullReset}
+       />
       </Container>
     </Layout>
   );
