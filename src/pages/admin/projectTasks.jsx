@@ -11,7 +11,8 @@ import TaskCard from "../../components/taskCard";
 import useAuth from "../../hooks/useAuth";
 import Spinner from "../../common/spinner";
 import { isEmpty } from "lodash";
-
+import { exportToExcel } from "../../global";
+import Button from "../../common/button";
 const LazyTaskCard = lazy(() => import("../../components/taskCard"));
 function Tasks() {
   const { id } = useParams();
@@ -67,6 +68,62 @@ function Tasks() {
 
 
 
+  //EXPORT MANAGMENT
+
+  const handleExport = async (value) => {
+    console.log("project", project)
+      if (!project) {
+        // If there's no project, return early
+        return;
+      }
+      
+      
+      let projectData
+      console.log(tasksAS)
+     
+      const buildingNumberCounts = {};
+      const taske = tasksAS?.map((task) => {
+        let history="No History Found!"
+        if(task?.statusHistory?.length>0){
+          const latestStatusHistory = task?.statusHistory[task?.statusHistory?.length - 1];
+          history = `Changed from ${latestStatusHistory?.changedFrom} to ${latestStatusHistory?.changedTo} on ${new Date(latestStatusHistory?.changedOn).toLocaleDateString()}`
+        }
+          return { ...task.taskData, "Status": task.status, "Latest Status Change": history};
+      });
+      console.log("TASKS", taske);
+      
+      projectData = taske
+       
+     const tasks = project.tasks
+      
+     console.log("Exporting",projectData)
+      // Check if any data to export
+      if (projectData?.length === 0) {
+        // No data to export, return early
+        return;
+      }
+     
+      // Create a blob with the project data
+     if(projectData){
+      const blob = await exportToExcel(projectData);
+      console.log(blob)
+      // Create a download link and trigger the download
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      const fier = filter.join(", ")
+      a.href = url;
+      a.download = `tasks_${fier}.xlsx`;
+      a.click();
+      window.URL.revokeObjectURL(url);
+     }
+    
+      // Revoke the object URL to free up resources
+      
+  };
+  //EXPORT MANAGMENT
+
+
+
   //ROWS MANAGEMENT
   const [visibleRows, setVisibleRows] = useState(12); // Initial number of rows
   const [allRows, setAllRows] = useState(tasksAS); // All rows data
@@ -85,6 +142,7 @@ function Tasks() {
 
 
 
+
   //ROWS MANAGEMENT
 
 
@@ -92,7 +150,7 @@ function Tasks() {
     setloading(true);
     const tasksCopy = [...project?.tasks];
     let sortedTasks = [];
-    console.log(filter)
+    /* console.log(filter)
     if(filter==="assigned"){
       setTask(project?.completeData)
       setloading(false)
@@ -102,7 +160,7 @@ function Tasks() {
     }else if(filter==="original"){
       setTask(project?.originalData?.tasks)
       setloading(false)
-    }
+    } */
     if (filter.length===0) {
       sortedTasks = tasksCopy.sort((taskA, taskB) => {
         // Check if taskA has an array in taskData
@@ -638,6 +696,7 @@ tasksBN?.sort((a, b) => {
                   onChange={handleSearch}
                 />
               </div>
+              <Button title={filter.length>0 ? "Export Filtered Tasks": "Export Tasks"} onClick={() => { handleExport(); }} />
             </div>
              )}
               {!viewAs? (

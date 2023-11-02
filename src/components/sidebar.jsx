@@ -1,14 +1,18 @@
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { publicUrl } from "../utils";
 import { logoutUser } from "../api";
-
+import jwtDecode from "jwt-decode";
 import { useLanguageSwitcher } from "../context/useLanguageSwitcher";
 import { useModal } from "../hooks";
 import Modal from "../common/modal";
 import Spinner from "../common/spinner";
-
+import { useSelector } from "react-redux/es/hooks/useSelector";
+import { selectCurrentToken } from "../features/auth/authSlice";
 function Sidebar({ isSidebarOpen, onSidebarClose }) {
   const navigate = useNavigate();
+  const token = useSelector(selectCurrentToken);
+  const userInfo = jwtDecode(token);
+  
   const { isOpen, onOpen, onClose } = useModal();
   const isAdmin = sessionStorage.getItem("Role") === "admin";
   const isSupervisor = sessionStorage.getItem("Role") === "supervisor";
@@ -131,7 +135,7 @@ function Sidebar({ isSidebarOpen, onSidebarClose }) {
               <span className="material-symbols-outlined text-2xl sm:text-3xl hover:text-[#2ce6bd] active:text-[#2ce6bd]">
                 person_pin
               </span>
-              <span className="inline-block lg:hidden text-lg hover:text-[#2ce6bd] active:text-[#2ce6bd]">
+              <span className="inline-block lg:hidden text-dlg hover:text-[#2ce6bd] active:text-[#2ce6bd]">
                 Workers
               </span>
             </NavLink>
@@ -140,6 +144,12 @@ function Sidebar({ isSidebarOpen, onSidebarClose }) {
         </div>
 
         <div className="flex flex-col absolute bottom-0">
+          <NavLink
+             to={
+               `/userDetails/${userInfo.UserInfo.email}`
+             }
+             className={isActive}
+           >
           <p
             className={`relative flex items-center gap-2 text-[#9DABA8] mb-6 cursor-pointer hover:text-[#34F5C5]`}
           >
@@ -151,6 +161,7 @@ function Sidebar({ isSidebarOpen, onSidebarClose }) {
               {sessionStorage.getItem("Name")?.split(" ")[0]}
             </span>
           </p>
+          </NavLink>
           <button
             className={
               "flex items-center gap-2 text-[#9DABA8] mb-6 hover:text-[#34F5C5]"

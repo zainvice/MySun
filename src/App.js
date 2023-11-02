@@ -20,6 +20,7 @@ import { ROLES } from './config/roles'
 import { LanguageProvider } from "./context/LanguageContext";
 
 // import NewWorker from "./pages/admin/newWorker";
+import UserDetail from "./pages/worker/userDetails";
 import NewTaskAssigned from "./pages/worker/newTaskAssigned";
 import Auth from "./auth/authorize";
 import Authenticate from "./auth/authenticate";
@@ -141,6 +142,10 @@ function App() {
               <Route
                 path="/resetPassword/:email"
                 element={<Password/>}
+              />
+              <Route
+                path="/userDetails/:email"
+                element={<UserDetail/>}
               />
 
 

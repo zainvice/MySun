@@ -29,7 +29,7 @@ ChartJS.register(
   Title
 );
 
-const dateInputClasses = `!font-semibold !text-white !bg-[#34F5C5] border-none focus-within:!outline-none white-placeholder h-10 !w-40`;
+const dateInputClasses = `!font-semibold !text-white !bg-[#2CDEB7] border-none focus-within:!outline-none white-placeholder h-10 !w-40`;
 
 function WorkerDetail(worker) {
   const dimension = useDimensions();
@@ -66,7 +66,7 @@ function WorkerDetail(worker) {
 
 
   return (
-    <Layout>
+    <Layout activePageName={workerData?.fullName+"'s Details"}>
       <Container>
         {isloading? (
           <Spinner/>
@@ -100,23 +100,24 @@ function WorkerDetail(worker) {
           <div className="w-full grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-5 gap-3">
             <p className="">
               <span className="font-bold mr-3">Worker Name: </span>
-              <span className="text-[#34F5C5]">{workerData?.fullName}</span>
+              <span className="text-[#2CDEB7]">{workerData?.fullName}</span>
             </p>
 
             <p className="">
               <span className="font-bold mr-3">Start Date: </span>
-              <span className="text-[#34F5C5]">{new Date(workerData?.createdAt).toLocaleString()}</span>
+              <span className="text-[#2CDEB7]">{new Date(workerData?.createdAt).toLocaleString()}</span>
             </p>
 
             <p className="">
               <span className="font-bold mr-3">Total Projects: </span>
-              <span className="text-[#34F5C5]">{workerData?.projects.length}</span>
+              <span className="text-[#2CDEB7]">{workerData?.projects.length}</span>
             </p>
 
             <p className="">
               <span className="font-bold mr-3">Role: </span>
-              <span className="text-[#34F5C5]">{workerData?.role}</span>
+              <span className="text-[#2CDEB7]">{workerData?.role.toUpperCase()}</span>
             </p>
+            
           </div>
         </div>
 
@@ -196,7 +197,7 @@ function WorkerDetail(worker) {
             <p className="flex items-center mb-2">
               <span className="w-9/12 md:w-96 line-clamp-1">
                 Hours Completed by{" "}
-                <span className="text-[#34F5C5]">{workerData?.fullName}</span>
+                <span className="text-[#2CDEB7]">{workerData?.fullName}</span>
               </span>
               <span className="before:content-[':'] before:mr-4">Hours HHHH</span>
             </p>

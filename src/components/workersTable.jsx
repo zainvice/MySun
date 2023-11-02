@@ -57,7 +57,7 @@ function WorkersTable({ workers }) {
                   onClick={() => handleRowClick(worker._id)} // Handle row click
                 >{worker.fullName}</td>
                 <td>{worker.email}</td>
-                <td>{worker.role}</td>
+                <td>{worker.role.toUpperCase()}</td>
                 <td>{worker.active ? 'Active' : 'Inactive'}</td>
                 <td className="rounded-r-full">
                 

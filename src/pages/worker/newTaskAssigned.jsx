@@ -136,12 +136,13 @@ function NewTaskAssigned() {
      if(projectData){
       const blob = await exportToExcel(projectData);
       console.log(blob)
+      const name = projectData[0]["building number"]
       // Create a download link and trigger the download
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement("a");
-      const timestamp = new timestamp
+      
       a.href = url;
-      a.download = `task_data_${projectData[0]["building number"]}.xlsx`;
+      a.download = `task_data_${name}.xlsx`;
       a.click();
       window.URL.revokeObjectURL(url);
      }
@@ -155,7 +156,7 @@ function NewTaskAssigned() {
   const onChange = (event) => {
     const target = event.target ?? {};
     setInputValues((prev) => ({ ...prev, [target.name]: target.value }));
-    console.log("INPUT VALUES",inputValues)
+    //console.log("INPUT VALUES",inputValues)
   };
   const [already_assigned, setAAssigned]= useState()
   const [timerRunning, setTimerRunning] = useState(false);
@@ -174,7 +175,7 @@ function NewTaskAssigned() {
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);
   };
-  console.log("DISPLAy", display)
+  //console.log("DISPLAy", display)
   const filteredBuildings = projectToCompare?.buildingData?.tasks.filter((building) =>
     building["building number"||"כתובת"].toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -182,12 +183,12 @@ function NewTaskAssigned() {
     setloading(true)
       try{
           const response = await createTask({task})
-          console.log(response)
+          //console.log(response)
           const {data} = response
           /* navigate(`/task/${data._id}`) */
           /* setloading(false) */
       }catch(error){
-        console.log(error)
+        //console.log(error)
         setloading(false)
       }
   }
@@ -203,7 +204,7 @@ function NewTaskAssigned() {
         const response = await getTaskById(id);
         
         const tasks = response;
-        console.log(response);
+        //console.log(response);
         
   
         return response; // Return filtere dTasks here
@@ -219,7 +220,7 @@ function NewTaskAssigned() {
     async function setTaskToDisplay() {
       const filteredTasks = await fetchData();
      
-      console.log("TASK FOUND", filteredTasks)
+      //console.log("TASK FOUND", filteredTasks)
       //setTasktoDisplay(filteredTasks);
       setDisplay(filteredTasks)
       const projectId = filteredTasks?.projectId
@@ -235,16 +236,16 @@ function NewTaskAssigned() {
         if (taskDataKeys.length > 2) {
           const assignedTask = filteredTasks.taskData;
           setAAssigned(assignedTask);
-          console.log("Already Assigned", assignedTask);
+          //console.log("Already Assigned", assignedTask);
           const toAssign = { taskData: assignedTask };
-          console.log("Already Assigned", toAssign);
+          //console.log("Already Assigned", toAssign);
           setTasktoDisplay(toAssign);
           setInputValues(toAssign?.taskData);
         }
        
       }
 
-      console.log("Displaying Task:", display)
+      //console.log("Displaying Task:", display)
       setSearchTerm(filteredTasks?.taskData?.["building number"])
       if(filteredTasks)
           setloading(false);
@@ -253,8 +254,8 @@ function NewTaskAssigned() {
     if(!tasktoDisplay)
       setTaskToDisplay(); // Call the function to set tasktoDisplay
   }, []);
-  console.log(id)
-  console.log("LOADING", isloading)
+  //console.log(id)
+  //console.log("LOADING", isloading)
   useEffect(() => {
     // Check if the app is online
     if (navigator.onLine) {
@@ -273,7 +274,7 @@ function NewTaskAssigned() {
       const updatedTasks = [...offlineTasks, taskData ];
       setOfflineTasks(updatedTasks);
       localStorage.setItem("offlineTasks", JSON.stringify(updatedTasks));
-      console.log("OFFLINE TASK SAVED!", offlineTasks)
+      //console.log("OFFLINE TASK SAVED!", offlineTasks)
       setMessage("Saved!")
     }
     
@@ -285,19 +286,19 @@ function NewTaskAssigned() {
     if (tasks && tasks.length > 0) {
       setloading(true)
       for(let task of tasks){
-        console.log(task)
+        //console.log(task)
         try {
           const {projectId}= task
           await editTasks({ task, manual });
           await editProject({ projectId, task, manual })
           localStorage.removeItem("offlineTasks");
-          console.log("MAKING IS LOADING FALSE")
+          //console.log("MAKING IS LOADING FALSE")
           setloading(false);
           setMessage("Successfully saved to database!")
           window.location.reload()
         } catch (error) {
           const data = error?.response?.data;
-          console.log("MAKING IS LOADING FALSE")
+          //console.log("MAKING IS LOADING FALSE")
           setloading(false);
           setMessage("Something went wrong, try again in a moment!")
         }
@@ -346,7 +347,7 @@ function NewTaskAssigned() {
   const remainingSeconds = seconds % 60;
   const [newn, setNew]= useState()
   const [key, setKey]= useState("")
-  console.log("TASK STATUS", status, classification, propertyType, stats)
+  //console.log("TASK STATUS", status, classification, propertyType, stats)
   const [navLink, setLink]= useState()
   const [nextTask, setNextTask]= useState()
   const [isNextCreated, setNextCreated]= useState(false)
@@ -358,21 +359,21 @@ function NewTaskAssigned() {
       if(display){
         if(display?.status!=='Pending'){
           if(projectToCompare){
-            console.log(display)
+            //console.log(display)
             let building = display?.taskData["building number"];
 
             if (building) {
               const regex = /^([A-Z]+)(\d+)(-(\d+))?$/; // Match alphabet(s) followed by a number and an optional hyphen and number
               const match = building.match(regex);
-              console.log("Inital", building)
+              //console.log("Inital", building)
               if (match) {
                 const alphabetPart = match[1];
                 const numberPart = parseInt(match[2]);
                 const hyphen = match[3];
                 let nextNumber=1;
-                console.log("APLHA", alphabetPart, "numberPard", numberPart, "hyphen", hyphen)
+                //console.log("APLHA", alphabetPart, "numberPard", numberPart, "hyphen", hyphen)
                 if (hyphen) {
-                  console.log("I got one hyphen")
+                  //console.log("I got one hyphen")
                   const secondNumber = parseInt(match[4]);
                   if (secondNumber < 12&& secondNumber!==undefined) {
                     nextNumber = secondNumber + 1;
@@ -396,16 +397,16 @@ function NewTaskAssigned() {
                 }
               
                 const newBuilding = hyphen ? `${alphabetPart}${numberPart}-${nextNumber}` : `${alphabetPart}${numberPart}-${nextNumber}`;
-                console.log(newBuilding);
+                //console.log(newBuilding);
                 building = newBuilding
                 setNew(building)
               } else {
                 // Handle the case when the format is not as expected
-                console.log("Invalid format");
+                //console.log("Invalid format");
               }
             } else {
               // Handle the case when 'building' is undefined or null
-              console.log("No building information available");
+              //console.log("No building information available");
             }
 
 
@@ -419,7 +420,7 @@ function NewTaskAssigned() {
                 },
                 supervisor: supervisord
               }
-              console.log("task", task)
+              //console.log("task", task)
               
               setNextTask(task)
               
@@ -440,14 +441,14 @@ function NewTaskAssigned() {
       setloading(true);
       const task = nextTask
       const response = await createTask({ task } );
-      console.log(response);
+      //console.log(response);
       const { data } = response;
       /* navigate(`/task/${data._id}`); */
       setLink(`/task/${data._id}`)
       setloading(false);
       setNextCreated(true)
     } catch (error) {
-      console.log(error);
+      //console.log(error);
       setloading(false);
     }
   }
@@ -469,7 +470,7 @@ function NewTaskAssigned() {
     const task = projectToCompare?.projectData?.tasks.find(task => {
       // Iterate through each property in the task object
       for (const key in task) {
-        console.log("Key", key)
+        //console.log("Key", key)
         setKey(key)
         if (task.hasOwnProperty(key)) {
           // Check if the property value includes the dataToSearch
@@ -481,7 +482,7 @@ function NewTaskAssigned() {
       return null; // No match found in any property, return null or handle it as needed
     });
     
-    console.log("Task Found", task)
+    //console.log("Task Found", task)
     const taskto= {taskData: task}
     setTasktoDisplay(taskto)
     setInputValues(taskto?.taskData)
@@ -494,14 +495,14 @@ function NewTaskAssigned() {
       setTasktoDisplay(taska)
       setInputValues(inputValues);
     }
-    console.log("input values",inputValues)
+    //console.log("input values",inputValues)
     if (searchRef.current) {
       searchRef.current.focus();
     }
     //setloading(false)
   },[dataToSearch])
-  console.log(inputValues)
-  console.log(manual,"MANUAL")
+  //console.log(inputValues)
+  //console.log(manual,"MANUAL")
 
   return (
     <Layout activePageName={display?.projectId?.projectName+"'s task"}>

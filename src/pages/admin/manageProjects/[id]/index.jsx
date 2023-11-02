@@ -192,6 +192,11 @@ function Project() {
        }
       if(value==="original")
           projectData = project?.originalData?.tasks
+      if(value==="original-buildings"){
+          projectData = project?.tasks.map(task=>{
+            return {buildingNumber: task.taskData["building number"]}
+          })
+      }
       const tasks = project.tasks
       
      console.log(projectData)
@@ -338,15 +343,7 @@ function Project() {
             >
                Add A New Task
             </button>
-            <button
-              type="button"
-              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-              role="menuitem"
-              onClick={()=>{setValue("original")}}
-              
-            >
-               Download Original Data
-            </button>
+           
             <button
               type="button"
               className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
@@ -355,6 +352,24 @@ function Project() {
               
             >
                Download Updated Data
+            </button>
+            <button
+              type="button"
+              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+              role="menuitem"
+              onClick={()=>{setValue("original")}}
+              
+            >
+               Download Original Properties Data
+            </button>
+            <button
+              type="button"
+              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+              role="menuitem"
+              onClick={()=>{setValue("original-buildings")}}
+              
+            >
+               Download Original Buildings Data
             </button>
           </div>
         </div>
