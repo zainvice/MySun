@@ -22,7 +22,18 @@ function NewTaskAssigned() {
   const [floor, setFloor]= useState()
   const handleFloorChange = (e)=> setFloor(e.target.value)
   const [classification, setClassification]= useState()
-  const handleClassificationChange = (e)=> setClassification(e.target.value)
+  const handleClassificationChange = (e) => {
+    console.log(e.target.value)
+    console.log("C", classification)
+    if (classification === e.target.value) {
+     
+      setClassification(undefined);
+    } else {
+      
+      setClassification(e.target.value);
+    }
+  };
+  
   const [propertyType, setPropertyType] = useState([]);
   // For Property Type
   const [resetType, setResetType] = useState(null);
@@ -57,16 +68,74 @@ function NewTaskAssigned() {
   
   const [isResetModalOpen, setIsResetModalOpen] = useState(false);
 
-  const handlePartialReset = () => {
-    // Implement logic to reset data captured from the Excel file
-    // Show a success message or perform other actions
+  const handlePartialReset = async() => {
+    addToOfflineTasks()
     closeResetModal();
+    const tasks = JSON.parse(localStorage.getItem("offlineTasks"));
+    
+    if (tasks && tasks.length > 0) {
+      setloading(true)
+      for(let task of tasks){
+        //console.log(task)
+        const resetType = "Partial";
+        try {
+          const {projectId}= task
+          await editTasks({ task, manual, resetType });
+          await editProject({ projectId, task, manual, resetType })
+          localStorage.removeItem("offlineTasks");
+          //console.log("MAKING IS LOADING FALSE")
+          setloading(false);
+          setMessage("Successfully saved to database!")
+          window.location.reload()
+        } catch (error) {
+          const data = error?.response?.data;
+          //console.log("MAKING IS LOADING FALSE")
+          setloading(false);
+          setMessage("Something went wrong, try again in a moment!")
+        }
+      }
+    }else{
+      if(message==="No Tasks found to be synced!")
+        setMessage("")
+      else
+        setMessage("No Tasks found to be synced!")
+    }
+    
   };
 
-  const handleFullReset = () => {
-    // Implement logic to reset all features of the task
-    // Show a success message or perform other actions
+  const handleFullReset = async() => {
+    addToOfflineTasks()
     closeResetModal();
+    const tasks = JSON.parse(localStorage.getItem("offlineTasks"));
+    
+    if (tasks && tasks.length > 0) {
+      setloading(true)
+      for(let task of tasks){
+        //console.log(task)
+        const resetType = "Full";
+        try {
+          const {projectId}= task
+          await editTasks({ task, manual, resetType });
+          await editProject({ projectId, task, manual, resetType })
+          localStorage.removeItem("offlineTasks");
+          //console.log("MAKING IS LOADING FALSE")
+          setloading(false);
+          setMessage("Successfully saved to database!")
+          window.location.reload()
+        } catch (error) {
+          const data = error?.response?.data;
+          //console.log("MAKING IS LOADING FALSE")
+          setloading(false);
+          setMessage("Something went wrong, try again in a moment!")
+        }
+      }
+    }else{
+      if(message==="No Tasks found to be synced!")
+        setMessage("")
+      else
+        setMessage("No Tasks found to be synced!")
+    }
+    
   };
 
   const openResetModal = () => {
@@ -176,9 +245,9 @@ function NewTaskAssigned() {
     setSearchTerm(event.target.value);
   };
   //console.log("DISPLAy", display)
-  const filteredBuildings = projectToCompare?.buildingData?.tasks.filter((building) =>
+  /* const filteredBuildings = projectToCompare?.buildingData?.tasks.filter((building) =>
     building["building number"||"כתובת"].toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  ); */
   const creatingNew=async(task )=>{
     setloading(true)
       try{
@@ -266,9 +335,9 @@ function NewTaskAssigned() {
 
   const addToOfflineTasks = () => {
    
-    if(timerRunning){
+    /* if(timerRunning){
       setMessage("Please stop the timer first!")
-    }else{
+    }else{ */
       setMessage("Saving...")
       const taskData = {_id: display?._id, taskData: inputValues, timeTaken: timeTaken, status: status, classification: classification, propertyType: propertyType, stats: stats, floor: floor, projectId: projectToCompare?.projectId, buildingData: searchTerm}
       const updatedTasks = [...offlineTasks, taskData ];
@@ -276,7 +345,7 @@ function NewTaskAssigned() {
       localStorage.setItem("offlineTasks", JSON.stringify(updatedTasks));
       //console.log("OFFLINE TASK SAVED!", offlineTasks)
       setMessage("Saved!")
-    }
+    /* } */
     
   };
   const[message, setMessage]= useState("")
@@ -927,11 +996,11 @@ function NewTaskAssigned() {
             <label className="inline-flex items-center mb-2 sm:mb-5">
             <input
               name="classification"
-              type="radio"
+              type="checkbox"
               className="hidden peer"
               value="Coordination Letter 1"
               onChange={handleClassificationChange} // Add onChange handler
-              checked={classification === "Coordination Letter 1"} // Check if this radio button is selected
+              checked={classification === "Coordination Letter 1"} // Check if this checkbox button is selected
               defaultChecked
               
             />
@@ -944,15 +1013,15 @@ function NewTaskAssigned() {
               Coordination Letter 1 
             </span>
           </label>
-          {/* Radio button for "Coordination Letter 2" */}
+          {/* Checkbox button for "Coordination Letter 2" */}
           <label className="inline-flex items-center mb-2 sm:mb-5">
             <input
               name="classification"
-              type="radio"
+              type="checkbox"
               className="hidden peer"
               value="Coordination Letter 2"
               onChange={handleClassificationChange} // Add onChange handler
-              checked={classification === "Coordination Letter 2"} // Check if this radio button is selected
+              checked={classification === "Coordination Letter 2"} // Check if this checkbox button is selected
               defaultChecked
               
             />
@@ -966,15 +1035,15 @@ function NewTaskAssigned() {
             </span>
           </label>
           
-          {/* Radio button for "Refused Survey" */}
+          {/* Checkbox button for "Refused Survey" */}
           <label className="inline-flex items-center mb-2 sm:mb-5">
             <input
               name="classification"
-              type="radio"
+              type="checkbox"
               className="hidden peer"
               value="Refused Survey"
               onChange={handleClassificationChange} // Add onChange handler
-              checked={classification === "Refused Survey"} // Check if this radio button is selected
+              checked={classification === "Refused Survey"} // Check if this checkbox button is selected
             />
             <span className="w-5 h-5 border rounded-full border-gray-800 mr-1 peer-checked:bg-gray-800 flex justify-center items-center">
               <span className="material-symbols-outlined text-sm font-bold text-white peer-checked:inline-block">

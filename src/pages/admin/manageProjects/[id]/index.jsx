@@ -44,15 +44,20 @@ function getNextBuildingNumber(tasks) {
 
   // Loop through existing tasks to find the maximum number for each letter
   tasks?.forEach((task) => {
-    const buildingNumber = task.taskData["building number"];
-    const letter = buildingNumber.charAt(0);
-    const number = parseInt(buildingNumber.slice(1));
+    try {
+      const buildingNumber = task.taskData["building number"];
+      const letter = buildingNumber.charAt(0);
+      const number = parseInt(buildingNumber.slice(1));
 
-    if (!isNaN(number)) {
-      if (!letterToMaxNumberMap.has(letter) || number > letterToMaxNumberMap.get(letter)) {
-        letterToMaxNumberMap.set(letter, number);
+      if (!isNaN(number)) {
+          if (!letterToMaxNumberMap.has(letter) || number > letterToMaxNumberMap.get(letter)) {
+              letterToMaxNumberMap.set(letter, number);
+          }
       }
-    }
+  } catch (error) {
+      console.error("Error occurred in taskData:", task.taskData);
+      console.error("Error message:", error.message);
+  }
   });
 
   // Find the next available building number

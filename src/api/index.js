@@ -85,13 +85,13 @@ export const removeWorkers = async ( values ) => {
     return error?.response?.data;
   }
 };
-export const editTasks = async ({task, manual}) => {
+export const editTasks = async ({task, manual, resetType}) => {
   try {
   console.log("I GOT THIS DATA", task)
   const{_id, taskData, status, classification, propertyType, stats, floor,  timeTaken}= task
-  console.log("Sending", _id, taskData, status,classification, propertyType, stats, timeTaken, floor, manual)
+  console.log("Sending", _id, taskData, status,classification, propertyType, stats, timeTaken, floor, manual, resetType)
   return await api.patch("/tasks", {
-    taskData, status, timeTaken, _id, manual,classification, propertyType, stats, floor}
+    taskData, status, timeTaken, _id, manual,classification, propertyType, stats, floor, resetType}
   );}catch(error){
     if (error?.status === 500) return error.message;
     return error?.response?.data;
@@ -150,11 +150,11 @@ export const editProject = async ({
   projectId,
   task,
   workers,
-  manual
+  manual, resetType
 }) => {
   console.log("I GOT THIS DATA", task)
   const{_id, taskData, status, timeTaken, buildingData}= task
-  console.log("Sending", _id, taskData, status, timeTaken, buildingData, projectId, manual)
+  console.log("Sending", _id, taskData, status, timeTaken, buildingData, projectId, manual, resetType)
 
   return await api.patch("/projects", {
     projectId, 
@@ -162,7 +162,8 @@ export const editProject = async ({
     buildingData,
     taskData,
     timeTaken,
-    manual
+    manual,
+    resetType
   });
 };
 

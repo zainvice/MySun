@@ -179,13 +179,10 @@ function Tasks() {
         }
       });
     
-    } else if (filter.some(item => item.selectedValue === "most recent")) {
-      //console.log("UPDATING BY ", filter);
-    
-      // Create a shallow copy of the tasks array
-      const tasksCopy = [...project?.tasks];
-    
-      const sortedTasks = tasksCopy.sort((taskA, taskB) => {
+    }
+    if (filter.some(item => item.selectedValue === "most recent")) {
+      
+      sortedTasks = tasksCopy.sort((taskA, taskB) => {
         const dateA = new Date(taskA.createdAt);
         const dateB = new Date(taskB.createdAt);
     
@@ -196,13 +193,10 @@ function Tasks() {
       // Update the state with the sorted tasks
       setTasks(sortedTasks);
       setloading(false)
-    }else if (filter.some(item => item.selectedValue === "latest update")) {
-      //console.log("UPDATING BY ", filter);
-    
-      // Create a shallow copy of the tasks array
-      const tasksCopy = [...project?.tasks];
-    
-      const sortedTasks = tasksCopy.sort((taskA, taskB) => {
+    }
+    if (filter.some(item => item.selectedValue === "latest update")) {
+      console.log("SORTING BY", filter)
+      sortedTasks = tasksCopy.sort((taskA, taskB) => {
         const dateA = new Date(taskA.updatedAt);
         const dateB = new Date(taskB.updatedAt);
     
@@ -542,7 +536,7 @@ tasksBN?.sort((a, b) => {
                 }
                 setloading(true);
               }}
-                className="h-[65%] lg:h-[100%] border-2 border-[#00FFD3] text-[#00FFD3] p-2 rounded-full focus-within:outline-none transform transition-transform hover:bg-[#00FFD3] hover:text-white"
+                className="w-2/3 h-[65%] lg:h-[100%] border-2 border-[#00FFD3] text-[#00FFD3] p-2 rounded-full focus-within:outline-none transform transition-transform hover:bg-[#00FFD3] hover:text-white"
               >
                 <option value={filter.map(item => item.selectedValue).join(', ')} selected={""}>{filter.length>0? filter.map(item => item.selectedValue.toUpperCase()).join(', ').toUpperCase(): "Default".toUpperCase()}</option>
                 <option value={"assignment"} selected={filter?.includes('assignment')}>{"Default"}</option>
@@ -685,7 +679,7 @@ tasksBN?.sort((a, b) => {
             <div className="my-4 ">
             {!viewAs?(<></>):(
               <div className="flex items-center justify-center">
-                 <label className="mr-5 font-bold text-1xl">Search: </label>
+               {/*   <label className="mr-5 font-bold text-1xl">Search: </label> */}
               <div className="h-10 rounded-full bg-gray-200 text-black px-4 lg:w-1/4 sm:w-1/3 sm:mr-4">
                
                 <input
@@ -696,7 +690,7 @@ tasksBN?.sort((a, b) => {
                   onChange={handleSearch}
                 />
               </div>
-              <Button title={filter.length>0 ? "Export Filtered Tasks": "Export Tasks"} onClick={() => { handleExport(); }} />
+              <Button additionalClasses={"text-sm"} title={filter.length>0 ? "Export Filtered Tasks": "Export Tasks"} onClick={() => { handleExport(); }} />
             </div>
              )}
               {!viewAs? (
