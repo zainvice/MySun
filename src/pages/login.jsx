@@ -31,7 +31,7 @@ const LoginPage = () => {
     try{
        const {email, password} = inputValues
        const response = await login({ email, password}).unwrap()
-       console.log(response)
+       
        const {accessToken, Role, lastLogin} = response
       
        dispatch(setCredentials({ accessToken }))

@@ -2,8 +2,10 @@ import Layout from "../../layout";
 import Heading from "../../common/heading";
 import Container from "../../common/container";
 import DateInput from "../../common/dateInput";
+import { useProjects } from "../../context/projectsContext";
 import { useDimensions } from "../../hooks";
 import { useParams } from "react-router";
+import { useWorkers } from "../../context/workersContext";
 import Spinner from "../../common/spinner";
 import {
   Chart as ChartJS,
@@ -18,7 +20,6 @@ import {
 import { Doughnut, Bar } from "react-chartjs-2";
 import { useState, useEffect } from "react";
 import { getWorkers } from "../../api";
-
 ChartJS.register(
   BarElement,
   ArcElement,
@@ -34,32 +35,47 @@ const dateInputClasses = `!font-semibold !text-white !bg-[#2CDEB7] border-none f
 function WorkerDetail(worker) {
   const dimension = useDimensions();
   const {id}= useParams()
+  const {projects} = useProjects()
+  const {workers } = useWorkers();
   const [workerData, setData]= useState()
   const [surveyData, setSurveys]= useState()
   const [isloading, setloading] = useState(true);
   useEffect(() => {
     if (id) {
-      getWorkers()
-        .then((data) => {
-          const worker = data.filter((worker) => worker._id === id);
+      
+        if(workers){
+          const worker = workers.filter((worker) => worker._id === id);
           setData(worker[0])
           setloading(false)
-        })
+        }
+       
     }
     
-  }, [id]);
+  }, [id, workers]);
   useEffect(() => {
-    if (workerData) {
-      const taskCompleted = workerData.tasks.filter((task) => task.completed);
-      const taskIncomplete = workerData.tasks.filter((task) => !task.completed);
-      const taskCompletedCount = taskCompleted.length;
-      const taskIncompleteCount = taskIncomplete.length;
-      setSurveys({
-        taskCompleted: taskCompleted, // Corrected this line
-        taskCompletedCount: taskCompletedCount,
-        taskIncomplete: taskIncompleteCount,
+    if(projects){
+      let completed = 0;
+      console.log("projects", projects, "mail", workerData?.email)
+      projects.map(project => {
+        console.log("got inside project", project)
+        project?.tasks.forEach(task => {
+          console.log("tasks", task.status)
+          if (task.status === "Fully Mapped") {
+            console.log("COMPLETED", task)
+            const editBy = task.editedBy?.filter(edit => edit.email === workerData?.email);
+            if (editBy?.length > 0) {
+              completed++;
+            }
+          }
+        });
       });
+
+      setSurveys({
+        taskCompleted: completed,
+      });
+
     }
+    
     console.log('Worker Data', workerData)
     console.log("surverys", surveyData)
   }, [workerData])
@@ -128,7 +144,7 @@ function WorkerDetail(worker) {
                 Total Surveys Completed
               </span>
               <span className="text-[#00ABE0] before:content-[':'] before:mr-4">
-                {surveyData?.taskCompletedCount}
+                {surveyData?.taskCompleted}
               </span>
             </p>
             <p className="mb-2">

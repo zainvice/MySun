@@ -2,11 +2,11 @@ import React from "react";
 import { useNavigate } from "react-router-dom"; // Import useNavigate hook
 import { useTranslation } from "react-i18next";
 import { removeWorkers } from "../api";
-
+import { useWorkers } from "../context/workersContext"
 function WorkersTable({ workers }) {
   const {t}= useTranslation()
   const navigate = useNavigate(); // Initialize the navigate function
-
+  const { setFetch } = useWorkers()
   // Function to navigate to worker detail page when a row is clicked
   const handleRowClick = (_id) => {
     console.log(_id)
@@ -24,6 +24,7 @@ function WorkersTable({ workers }) {
         const data = error?.response?.data;
        
       })
+    setFetch(true)
     window.location.reload()
   }
 

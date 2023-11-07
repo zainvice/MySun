@@ -12,6 +12,7 @@ import WorkerOverlay from "../../../../components/workerOverlay2";
 import { useModal } from "../../../../hooks";
 import { getWorkers } from "../../../../api";
 import { RingLoader } from "react-spinners";
+import Spinner from "../../../../common/spinner";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -84,12 +85,13 @@ function Project() {
   const { isOpen, onOpen, onClose } = useModal();
   const dimension = useDimensions();
   const { id } = useParams();
-  const { projects } = useProjects();
+  const { projects, setFetch, reFetch } = useProjects();
   const [isloading, setloading]= useState(false)
   const project = projects?.filter((project) => project.projectId === id)[0];
   let workersInProject
   let completedTasks= 0
   let remainingTasks= 0
+  
   const [allWorkers, setWorkers]= useState()
   useEffect(() => {
     getWorkers().then((data) => {
@@ -150,7 +152,7 @@ function Project() {
    const handleExport = async (value) => {
     console.log("project", project)
       if (!project) {
-        // If there's no project, return early
+        // If there's no project, return 
         return;
       }
       
@@ -204,7 +206,7 @@ function Project() {
       }
       const tasks = project.tasks
       
-     console.log(projectData)
+     //console.log(projectData)
       // Check if any data to export
       if (projectData?.length === 0) {
         // No data to export, return early
@@ -257,12 +259,10 @@ function Project() {
         },
         supervisor: supervisord
       }
-      setTimeout(4000)
       await createTask({task});
-      setTimeout(4000)
       setMessage("Successfully created!")
-      setTimeout(2000)
       setloading(false)
+      reFetch();
       window.location.reload()
     }catch(error){
       console.log("Error occured!", error)
@@ -273,7 +273,9 @@ function Project() {
   return (
     <>
     <Layout activePageName={`Projects / ${id}`}>
-    {isloading?(
+      {project ? (
+        <>
+        {isloading?(
           <div className="flex flex-col h-full w-full bg-black bg-opacity-40 flex items-center justify-center absolute z-10">
           <RingLoader color="#FFC94A" size={150}/>
           <p className="mt-3 text-[#FFC94A] text-4xl font-bold text-center">{message}</p>
@@ -506,7 +508,14 @@ function Project() {
                   Surveys Completed by{" "}
                   <span className="text-[#34F5C5]">{worker.fullName}</span>
                 </span>
-                <span className="before:content-[':'] before:mr-4">XXX</span>
+                <span className="before:content-[':'] before:mr-4">{project?.tasks.filter(task=> {
+                  if(task.status==="Fully Mapped"){
+                   
+                    const editBy = task.editedBy?.filter(edit=> edit.email===worker.email)
+                    if(editBy?.length>0){
+                      return task
+                    }
+                  }})?.length}</span>
               </p>
             ))
           ) : (
@@ -573,6 +582,12 @@ function Project() {
         </div>
         
       </Container>
+        </>
+      ): (
+       
+        <Spinner />
+        
+      )}
       
     </Layout>
     <Modal isOpen={isOpen} onClose={onClose}>

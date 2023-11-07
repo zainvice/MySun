@@ -7,39 +7,41 @@ import Container from "../../common/container";
 import ProjectCard, { VARIANTS } from "../../components/projectCard";
 import { useTranslation } from "react-i18next";
 import { useEffect, useState } from "react";
-import { getProjects } from "../../api";
+
 import Spinner from "../../common/spinner";
 import { useProjects } from "../../context/projectsContext";
 import { useSelector } from 'react-redux';
 import { selectCurrentToken } from "../../features/auth/authSlice";
 import jwtDecode from "jwt-decode";
 import Notification from "../../components/taskNotification";
+
 function AssignedTasks() {
   const { t } = useTranslation();
   const [isloading, setloading] = useState(true);
-  const { projects, setProjects } = useProjects();
+  const { projects } = useProjects();
+  const [projectsForWorker, setProjects] = useState()
   const token = useSelector(selectCurrentToken);
   const userInfo = jwtDecode(token);
   const {role}= userInfo.UserInfo
   const[taskTonotify, setTaskNote]= useState([]);
   useEffect(() => {     
-    getProjects()
-      .then((data) => {
+    
+    if(projects){
         let filteredProjects
         const {projects}= userInfo.UserInfo
         const assignedProjects = projects
         //console.log("assignedProje", assignedProjects)
         for(let i=0; i<assignedProjects.length; i++){
           //console.log("Project",assignedProjects[i])
-          filteredProjects= data.filter(project=>project._id===assignedProjects[i])
+          filteredProjects= projects.filter(project=>project._id===assignedProjects[i])
         }
-        setTaskNote(filteredProjects?.flatMap((project) => project?.tasks?.filter((task) => task.status === "Coordination Letter")))
+        setTaskNote(filteredProjects?.flatMap((project) => project?.tasks?.filter((task) => task.status === "Coordination Letter 1")))
         //console.log("filtered Projects",filteredProjects)
         setProjects(filteredProjects);
-        localStorage.setItem("projects", JSON.stringify(data));
-      })
-      .catch(() => localStorage.removeItem("projects"))
-      .finally(() => setloading(false));
+        
+        setloading(false)
+    }
+        
   }, []);
 
   const notificationMessages = taskTonotify?.map((task) => {
@@ -91,8 +93,8 @@ function AssignedTasks() {
         ) : (
           
           <div className="relative mt-4 grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-4">
-            {projects?.length > 0 ? (
-              projects?.map((project, index) => (
+            {projectsForWorker?.length > 0 ? (
+              projectsForWorker?.map((project, index) => (
                 <Link
                   key={project?.projectId}
                   to={role === "worker" ? `/manage-projects/${project?.projectId}/tasks` : `/manage-projects/${project?.projectId}`}

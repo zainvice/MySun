@@ -6,7 +6,7 @@ import WorkerCard from "../../components/workerCard";
 import WorkerDetail from "../worker/workerDetail";
 import { useTranslation } from "react-i18next";
 import { useEffect, useState } from "react";
-import { getProjects } from "../../api";
+import { useWorkers } from "../../context/workersContext";
 import Spinner from "../../common/spinner";
 import { useProjects } from "../../context/projectsContext";
 import jwtDecode from "jwt-decode";
@@ -35,8 +35,8 @@ function findProjectByWorker(worker, projects) {
 function Dashboard() {
   const { t } = useTranslation();
   const[notes, setNotes]= useState("No notes!")
-  const { projects, setProjects } = useProjects();
-  const [workers, setWorkers] = useState([]);
+  const { projects } = useProjects();
+  const {workers } = useWorkers();
   const [isloading, setloading] = useState(true);
   const [project, toDisplay]= useState();
   const [workerNo1, setWorkerNo1] = useState(null);
@@ -55,14 +55,14 @@ function Dashboard() {
   useEffect(() => {
     setPLoading(true);
     console.log('IM here')
-    getProjects()
-    .then((data) => {
-      setProjects(data);
+    if(projects){
+      
+      
       setTaskNote(
-        data
+        projects
           .flatMap((project) => project?.tasks?.filter((task) => task.status === "Coordination Letter 1"))
       );
-      const filteredData = data.filter((project) => {
+      const filteredData = projects.filter((project) => {
         const projectDate = new Date(project.startDate); 
         const currentDate = new Date();
         
@@ -95,9 +95,8 @@ function Dashboard() {
         console.log('filered', filteredProjects)
         toDisplay(filteredData[0])
         setPLoading(false)
-    })
-    .catch(() => localStorage.removeItem("projects"))
-    .finally(() => setloading(false));
+        setloading(false)
+    }
     
   
     //setPLoading(false);
@@ -106,10 +105,9 @@ function Dashboard() {
   
   useEffect(() => {
     if (projects) {
-      getWorkers()
-        .then((data) => {
-   
-          const workerList = data.filter((worker) => worker.role === "worker");
+      
+        if(workers){
+          const workerList = workers.filter((worker) => worker.role === "worker");
         
          
           workerList?.forEach((worker) => {
@@ -150,14 +148,11 @@ function Dashboard() {
           if(workerNo2){
 
           }
-          setWorkers(data);
+          
           setloading(false);
           setwLoading(false)
           setPLoading(false)
-        })
-        .catch((error) => {
-          console.error("Error fetching workers:", error);
-        });
+        }
     }
     if(projects){
       let totalIncompleteTasks = 0;
@@ -218,13 +213,12 @@ function Dashboard() {
   
 
   useEffect(() => {     
-    getProjects()
-      .then((data) => {
-        setProjects(data);
+    
         
-  
+    if(projects){
+          
         // Sort the projects by the 'updatedOn' field in descending order
-        const sortedProjects = data.sort((a, b) => {
+        const sortedProjects = projects?.sort((a, b) => {
           const dateA = new Date(a.updatedOn);
           const dateB = new Date(b.updatedOn);
           return dateB - dateA;
@@ -234,10 +228,10 @@ function Dashboard() {
         const latestUpdatedProject = sortedProjects[0];
         toDisplay(latestUpdatedProject)
         
-      })
-      .catch(() => localStorage.removeItem("projects"))
-      .finally(() => setloading(false));
-  }, []);
+      
+    }
+      
+  }, [projects]);
 
   
   const [saved, isSaved]= useState(false)

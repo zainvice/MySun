@@ -26,6 +26,7 @@ import Auth from "./auth/authorize";
 import Authenticate from "./auth/authenticate";
 import { useEffect } from "react";
 import { ProjectsProvider } from "./context/projectsContext";
+import { WorkersProvider } from "./context/workersContext";
 
 function App() {
   useEffect(() => {
@@ -94,6 +95,7 @@ function App() {
     <div className="App">
       <I18nextProvider i18n={i18n}>
         <ProjectsProvider>
+        <WorkersProvider>
           <Router>
             <Routes>
               <Route path="/" element={<Login />} />
@@ -181,6 +183,7 @@ function App() {
               
             </Routes>
           </Router>
+        </WorkersProvider>
         </ProjectsProvider>
       </I18nextProvider>
     </div>

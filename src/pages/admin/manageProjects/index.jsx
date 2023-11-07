@@ -15,8 +15,8 @@ import { selectCurrentToken } from "../../../features/auth/authSlice";
 import jwtDecode from "jwt-decode";
 function ManageProjects() {
   const { t } = useTranslation();
-  const [isloading, setloading] = useState(true);
-  const { projects, setProjects } = useProjects();
+  let isloading = true
+  const { projects } = useProjects();
   const token = useSelector(selectCurrentToken);
   const userInfo = jwtDecode(token);
   const {role}= userInfo.UserInfo
@@ -28,16 +28,10 @@ function ManageProjects() {
     else  
       setView(true)
   }
-  useEffect(() => {     
-    getProjects()
-      .then((data) => {
-        setProjects(data);
-        localStorage.setItem("projects", JSON.stringify(data));
-        setloading(false)
-      })
-      .catch(() => localStorage.removeItem("projects"))
-      .finally(() => setloading(false));
-  }, []);
+  if(projects){
+    isloading = false
+  }
+  
 
   return (
     <Layout activePageName={t("projectsHeading")}>

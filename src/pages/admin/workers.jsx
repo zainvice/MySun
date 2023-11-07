@@ -10,22 +10,20 @@ import { getWorkers } from "../../api";
 import { useModal } from "../../hooks";
 import Spinner from "../../common/spinner";
 import { useTranslation } from "react-i18next";
-
+import { useWorkers } from "../../context/workersContext";
 function Workers() {
   const {t} = useTranslation()
-  const [workers, setWorkers] = useState([]);
+  
   const { isOpen, onOpen, onClose } = useModal();
   const [isloading, setloading] = useState(true);
-
+  const { workers } = useWorkers()
   useEffect(() => {
     if (!isOpen) {
-      getWorkers().then((data) => {
-        const filteredWorkers = data.filter((worker) => worker.role !== "admin");
-        setWorkers(filteredWorkers);
-        setloading(false);
-      });
+      if(workers){
+        setloading(false)
+      }
     }
-  }, [isOpen]);
+  }, [isOpen, workers]);
 
   return (
     <>
@@ -40,7 +38,7 @@ function Workers() {
             <>
             {workers.length>0?(
               <>
-              <WorkersTable workers={workers} />
+              <WorkersTable workers={workers.filter(worker=>worker.role.toLowerCase()==="worker")} />
                 </>
             ): (
               <>

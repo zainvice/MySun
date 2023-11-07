@@ -15,11 +15,25 @@ import { getProjects } from "../../api";
 import { getTaskById } from "../../api";
 import ResetModal from "../../components/ResetModal";
 import { exportToExcel } from "../../global";
+import jwtDecode from "jwt-decode";
+import { useSelector } from "react-redux/es/hooks/useSelector";
+import { selectCurrentToken } from "../../features/auth/authSlice";
+import { useProjects } from "../../context/projectsContext";
 
 function NewTaskAssigned() {
   const {t}= useTranslation()
   const [status, setStatus] = useState(); // Initialize the status state variable
   const [floor, setFloor]= useState()
+  const token = useSelector(selectCurrentToken);
+  const [userInfo, setUserInfo] = useState()
+  const {setFetch} = useProjects
+  useEffect(()=>{
+    try{
+      setUserInfo(jwtDecode(token))
+    }catch(error){
+      console.log("Error Occurred")
+    }
+  },[token])
   const handleFloorChange = (e)=> setFloor(e.target.value)
   const [classification, setClassification]= useState()
   const handleClassificationChange = (e) => {
@@ -86,6 +100,7 @@ function NewTaskAssigned() {
           //console.log("MAKING IS LOADING FALSE")
           setloading(false);
           setMessage("Successfully saved to database!")
+          setFetch(true)
           window.location.reload()
         } catch (error) {
           const data = error?.response?.data;
@@ -339,7 +354,7 @@ function NewTaskAssigned() {
       setMessage("Please stop the timer first!")
     }else{ */
       setMessage("Saving...")
-      const taskData = {_id: display?._id, taskData: inputValues, timeTaken: timeTaken, status: status, classification: classification, propertyType: propertyType, stats: stats, floor: floor, projectId: projectToCompare?.projectId, buildingData: searchTerm}
+      const taskData = {_id: display?._id, taskData: inputValues, editedBy: userInfo?.UserInfo.email, timeTaken: timeTaken, status: status, classification: classification, propertyType: propertyType, stats: stats, floor: floor, projectId: projectToCompare?.projectId, buildingData: searchTerm}
       const updatedTasks = [...offlineTasks, taskData ];
       setOfflineTasks(updatedTasks);
       localStorage.setItem("offlineTasks", JSON.stringify(updatedTasks));

@@ -83,12 +83,39 @@ function Tasks() {
      
       const buildingNumberCounts = {};
       const taske = tasksAS?.map((task) => {
-        let history="No History Found!"
-        if(task?.statusHistory?.length>0){
-          const latestStatusHistory = task?.statusHistory[task?.statusHistory?.length - 1];
-          history = `Changed from ${latestStatusHistory?.changedFrom} to ${latestStatusHistory?.changedTo} on ${new Date(latestStatusHistory?.changedOn).toLocaleDateString()}`
+       let history = "No History Found!";
+       let historyDate = "No Change"
+       let classificationHistory = "No History";
+       let classificationHistoryDate = "No Change"
+     
+       if (task?.statusHistory?.length > 0) {
+         const latestStatusHistory = task.statusHistory[task.statusHistory.length - 1];
+         history = `Changed from ${latestStatusHistory?.changedFrom} to ${latestStatusHistory?.changedTo} on ${new Date(latestStatusHistory?.changedOn).toLocaleDateString()}`;
+         historyDate = `${new Date(latestStatusHistory?.changedOn).toLocaleDateString()}`
+       }
+     
+       if (task?.classificationHistory?.length > 0) {
+         const latestClassificationHistory = task.classificationHistory[task.classificationHistory.length - 1];
+         classificationHistory = `Changed from ${latestClassificationHistory?.changedFrom} to ${latestClassificationHistory?.changedTo} on ${new Date(latestClassificationHistory?.changedOn).toLocaleDateString()}`;
+         classificationHistoryDate= `${new Date(latestClassificationHistory?.changedOn).toLocaleDateString()}`
         }
-          return { ...task.taskData, "Status": task.status, "Latest Status Change": history};
+     
+       
+       return  {
+           ...task.taskData,
+           "Status": task.status,
+           "Classification": task.classification,
+           "Lastest Update On": new Date(task.updatedAt).toLocaleString(),
+           "Property Type": task.propertyType?.join(', '),
+           "Stats": task.stats?.join(', '),
+           "Latest Status Change": history,
+           "Status Change Date": historyDate,
+           "Latest Classification Change": classificationHistory,
+           "Classification Change Date": classificationHistoryDate
+           
+         }
+       
+          
       });
       console.log("TASKS", taske);
       
@@ -110,7 +137,14 @@ function Tasks() {
       // Create a download link and trigger the download
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement("a");
-      const fier = filter.join(", ")
+      let fier = "filtered"
+
+      for (const item of filter) {
+        if (item.selectedValue) {
+          fier = item.selectedValue;
+          break; 
+        }
+      }
       a.href = url;
       a.download = `tasks_${fier}.xlsx`;
       a.click();
@@ -125,6 +159,9 @@ function Tasks() {
 
 
   //ROWS MANAGEMENT
+  const [loadMore, setLoadMore] = useState(false);
+
+  const tableContainerRef = React.useRef(null);
   const [visibleRows, setVisibleRows] = useState(12); // Initial number of rows
   const [allRows, setAllRows] = useState(tasksAS); // All rows data
 
@@ -133,6 +170,29 @@ function Tasks() {
     const nextVisibleRows = visibleRows + 12; // Increase the number of visible rows
     setVisibleRows(nextVisibleRows);
   };
+  
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            loadMoreRows()
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    if (tableContainerRef.current) {
+      observer.observe(tableContainerRef.current);
+    }
+
+    return () => {
+      if (tableContainerRef.current) {
+        observer.unobserve(tableContainerRef.current);
+      }
+    };
+  }, []);
 
   useEffect(() => {
     // Update the visible rows when tasksAS or other data changes.
@@ -459,6 +519,18 @@ function Tasks() {
       }
       
     }
+    if (filter.some(item => item.selectedValue === "manual")) {
+      
+      if(sortedTasks.length>0){
+        
+        const newtasks = sortedTasks.filter(task=> task?.manual===true)
+        sortedTasks = newtasks
+      }else{
+        console.log(tasksCopy)
+        sortedTasks = tasksCopy.filter(task=> task?.manual===true)
+      }
+      
+    }
 
 
 
@@ -637,6 +709,9 @@ tasksBN?.sort((a, b) => {
                 <option value={!viewAs ? "latest update" : "latest update"}>
                   {!viewAs ? "Latest Update" : "Latest Update"}
                 </option>
+                <option value={!viewAs ? "manual" : "manual"}>
+                  {!viewAs ? "Manually Entered" : "Manually Entered"}
+                </option>
               </select>
 
 
@@ -694,7 +769,7 @@ tasksBN?.sort((a, b) => {
             </div>
              )}
               {!viewAs? (
-                <table className="w-full bg-white border-separate border-spacing-y-3">
+                <table className="w-full bg-white border-separate border-spacing-y-3" ref={tableContainerRef}>
                 <thead>
                   <tr className="bg-white text-gray-800 text-sm font-thin">
                     <th className="px-3 text-lg">Status</th>
