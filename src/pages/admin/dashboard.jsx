@@ -308,7 +308,7 @@ function Dashboard() {
                 </li>
                 <li className="mt-1 sm:mt-2 line-clamp-1">
                   <p>
-                    {averageTimeTaken}{" "}
+                    {averageTimeTaken.toFixed(2)}{" "}
                     <span className="text-[#00FFD3]">
                       {t("dashboard.statistics.averageTimeSpent")}{avarageTime}
                     </span>{" "}

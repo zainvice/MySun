@@ -37,9 +37,9 @@
                   "clarityMessage": "Provide some workers with more clarity for the upcoming projects"
                 },
                 "statistics": {
-                  "surveysCompleted": "surveys completed on",
-                  "surveysRemaining": "surveys remaining on",
-                  "averageTimeSpent": "seconds average time spent on surveys on"
+                  "surveysCompleted": "surveys completed from",
+                  "surveysRemaining": "surveys remaining from",
+                  "averageTimeSpent": "seconds average time spent on surveys from"
                 }
               },
               "workerCard": {

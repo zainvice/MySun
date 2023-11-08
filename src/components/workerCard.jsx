@@ -1,6 +1,6 @@
 import { publicUrl } from "../utils";
 import { useTranslation } from 'react-i18next';
-
+import { useProjects } from "../context/projectsContext";
 function formatTimeDifference(lastLogin) {
   const now = new Date();
   const timeDifference = now - lastLogin;
@@ -31,6 +31,17 @@ function WorkerCard(workers) {
   const { t } = useTranslation();
   const lastLogin = new Date(worker?.lastLogin)
   const formattedTimeDifference = formatTimeDifference(lastLogin);
+  const {projects } = useProjects()
+  const tasksDone = projects.map(project=> {
+    return project?.tasks.filter(task=> {
+      if(task.status==="Fully Mapped"){
+       
+        const editBy = task.editedBy?.filter(edit=> edit.email===worker.email)
+        if(editBy?.length>0){
+          return task
+        }
+      }})?.length
+  })
   //const startedOn = new Date(worker?.createdAt)
   
   return (
@@ -52,7 +63,7 @@ function WorkerCard(workers) {
       </div>
       <div>
      
-      <p className="mt-2">{worker?.completedTasksCount} {t('workerCard.projectsCompleted')}</p>
+      <p className="mt-2">{tasksDone.length>0 ? tasksDone[0]: "0"} {t('workerCard.projectsCompleted')}</p>
 
         <p className="mt-2 flex items-center gap-2 text-sm">
           <span className="font-semibold">{t('workerCard.startedOnLabel')}: </span>
@@ -61,7 +72,7 @@ function WorkerCard(workers) {
         </p>
         <p className="mt-2 flex items-center gap-2 text-sm">
           <span className="font-semibold">{t('workerCard.latestProjectLabel')}: </span>
-          <span>{worker?.assignedProject?.projectName}</span>
+          <span>{worker?.projects[worker?.projects?.length-1].projectName}</span>
         </p>
       </div>
     </div>

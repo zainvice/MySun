@@ -226,7 +226,7 @@ function Project() {
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = "project_data.xlsx";
+      a.download = `${project?.projectName}_data_${value}.xlsx`;
       a.click();
       window.URL.revokeObjectURL(url);
      }

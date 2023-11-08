@@ -55,16 +55,24 @@ function WorkerDetail(worker) {
   useEffect(() => {
     if(projects){
       let completed = 0;
-      console.log("projects", projects, "mail", workerData?.email)
+      let inprogress = 0;
+      let remaining = 0;
       projects.map(project => {
-        console.log("got inside project", project)
+        
         project?.tasks.forEach(task => {
           console.log("tasks", task.status)
           if (task.status === "Fully Mapped") {
-            console.log("COMPLETED", task)
+            
             const editBy = task.editedBy?.filter(edit => edit.email === workerData?.email);
             if (editBy?.length > 0) {
               completed++;
+            }
+          }
+          if (task.status !== "Fully Mapped") {
+            
+            const editBy = task.editedBy?.filter(edit => edit.email === workerData?.email);
+            if (editBy?.length > 0) {
+              inprogress++;
             }
           }
         });
@@ -72,6 +80,8 @@ function WorkerDetail(worker) {
 
       setSurveys({
         taskCompleted: completed,
+        taskInProgress: inprogress,
+        taskIncomplete: remaining,
       });
 
     }
@@ -161,7 +171,7 @@ function WorkerDetail(worker) {
                 Surverys in Progress
               </span>
               <span className="text-[#FFC94A] before:content-[':'] before:mr-4">
-              {surveyData?.taskIncomplete}
+              {surveyData?.taskInProgress}
               </span>
             </p>
           </div>
