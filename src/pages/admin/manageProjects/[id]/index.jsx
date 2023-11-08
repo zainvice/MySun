@@ -204,6 +204,11 @@ function Project() {
             return {buildingNumber: task.taskData["building number"]}
           })
       }
+      if(value==="unassigned"){
+          projectData = project?.projectData?.tasks.map(task=>{
+            return {...task}
+          })
+      }
       const tasks = project.tasks
       
      //console.log(projectData)
@@ -326,7 +331,7 @@ function Project() {
           <NavLink to={`/manage-projects/${id}/tasks`}>
             <button
               type="button"
-              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+              className="block px-2 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
               role="menuitem"
 
             >
@@ -335,7 +340,7 @@ function Project() {
             </NavLink>
             <button
               type="button"
-              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+              className="block px-2 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
               role="menuitem"
               onClick={onOpen}
             >
@@ -343,7 +348,7 @@ function Project() {
             </button>
             <button
               type="button"
-              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+              className="block px-2 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
               role="menuitem"
               onClick={onCreateTask}
               
@@ -353,7 +358,7 @@ function Project() {
            
             <button
               type="button"
-              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+              className="block px-2 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
               role="menuitem"
               onClick={()=>{setValue("updated")}}
               
@@ -362,7 +367,7 @@ function Project() {
             </button>
             <button
               type="button"
-              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+              className="block px-2 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
               role="menuitem"
               onClick={()=>{setValue("original")}}
               
@@ -371,12 +376,21 @@ function Project() {
             </button>
             <button
               type="button"
-              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+              className="block px-2 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
               role="menuitem"
               onClick={()=>{setValue("original-buildings")}}
               
             >
                Download Original Buildings Data
+            </button>
+            <button
+              type="button"
+              className="block px-2 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+              role="menuitem"
+              onClick={()=>{setValue("unassigned")}}
+              
+            >
+               Download Unassigned Data
             </button>
           </div>
         </div>
