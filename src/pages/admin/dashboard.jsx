@@ -60,7 +60,7 @@ function Dashboard() {
       
       setTaskNote(
         projects
-          .flatMap((project) => project?.tasks?.filter((task) => task.status === "Coordination Letter 1"))
+          .flatMap((project) => project?.tasks?.filter((task) => task.classification === "Coordination Letter 1"))
       );
       const filteredData = projects.filter((project) => {
         const projectDate = new Date(project.startDate); 
@@ -195,6 +195,7 @@ function Dashboard() {
   const notificationMessages = taskTonotify?.map((task) => {
     const buildingNumber = task.taskData['building number'];
     const status = task.status;
+    const classification = task.classification
     const timer = new Date(task.timer);
   
     const today = new Date();
@@ -205,7 +206,7 @@ function Dashboard() {
   
     const message = {
       taskId: task._id,
-      message: `The task ${buildingNumber} was assigned status ${status} on ${new Date(task.updatedAt).toLocaleDateString()}. Please complete it ${countdown}.`
+      message: `The task ${buildingNumber} was assigned status ${status} and classification ${classification} on ${new Date(task.updatedAt).toLocaleDateString()}. Please complete it ${countdown}.`
     };
   
     return message;

@@ -1003,7 +1003,18 @@ function NewTaskAssigned() {
                </label>
                </div>
               
-       
+               {display?.classificationHistory?(<>
+            <div className="m-6 ml-3 flex flex-col">
+            <label htmlFor="classificationHistory" className="font-bold">Classification History</label>
+            <ul className="ml-6">
+              {display?.classificationHistory?.map((history, index) => (
+                <li key={index}>
+                  Changed from <strong>{history.changedFrom}</strong> to <strong>{history.changedTo}</strong> on {new Date(history.changedOn).toLocaleString()}
+                </li>
+              ))}
+            </ul>
+          </div>
+          </>):(<></>)}
            
             <p className="m-3 font-bold">Classfication</p>
           <div className="mt-0 sm:mt-8 mx-2 grid grid-cols-2  md:grid-cols-3 lg:grid-cols-4 justify-center items-center">

@@ -17,11 +17,17 @@ const Notification = ({ messages }) => {
       </span>
 
       {isOpen && (
-        <div className="absolute lg:w-[100%] w-[150%] z-10 h-60">
-            <h2 className="text-xl font-bold ">Task Notifications</h2>
-          {messages?.map((message, index) => (
-            <NotificationItem key={index} message={message} index={index} />
-          ))}
+        <div className="absolute top-11 lg:w-[100%] w-[150%] z-10 h-60 bg-white border-2 border-gray-300 rounded">
+            <h2 className="text-left text-sm font-bold text-gray-600 ml-4">Task Notifications</h2>
+          {messages? (
+            <>
+            {messages?.map((message, index) => (
+              <NotificationItem key={index} message={message} index={index} />
+            ))}
+            </>
+          ):(
+            <h2 className="text-sm font-bold text-gray-600 ml-4">No New Notifications</h2>
+          )}
         </div>
       )}
     </div>
@@ -39,7 +45,7 @@ const NotificationItem = ({ message, index }) => {
   return (
     showNotification && (
       <div
-        className="p-4 shadow-lg rounded-lg bg-gradient-to-b from-[#00FFD3] from-60% to-[#37C19F] text-white lg:left-[45%] sm:left-[0%] hover:bg-red-400 hover:ease-in-out duration-300 cursor-pointer md:left-[0%] lg:left-[0%] border-2 border-gray-400"
+        className="p-4 text-gray-800 bg-white lg:left-[45%] sm:left-[0%] hover:bg-green-400 hover:ease-in-out duration-300 cursor-pointer md:left-[0%] lg:left-[0%] border-2 border-gray-400"
         style={{ top: `${5 + index * 10}rem`, right: '5rem', transition: '0.2s' }}
       >
         <button
