@@ -329,8 +329,8 @@ function NewTaskAssigned() {
        
       }
 
-      //console.log("Displaying Task:", display)
-      setSearchTerm(filteredTasks?.taskData?.["building number"])
+      console.log("Displaying Task:", display)
+      setSearchTerm(filteredTasks?.taskData?.["building number"]?filteredTasks?.taskData?.["building number"]:filteredTasks?.taskData?.["buildingNumber"])
       if(filteredTasks)
           setloading(false);
           setInital(id)
