@@ -38,7 +38,7 @@ function Workers() {
             <>
             {workers.length>0?(
               <>
-              <WorkersTable workers={workers.filter(worker=>worker.role.toLowerCase()==="worker")} />
+              <WorkersTable workers={workers.filter(worker=>worker.role.toLowerCase()!=="admin")} />
                 </>
             ): (
               <>
