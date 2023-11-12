@@ -12,7 +12,7 @@ import * as xlsx from "xlsx";
 import Message from "../../common/message";
 import jwtDecode from "jwt-decode";
 import Spinner from "../../common/spinner";
-
+import { useProjects } from "../../context/projectsContext";
 function NewProject() {
   const { isOpen, onOpen, onClose } = useModal();
   const [inputValues, setInputValues] = useState({});
@@ -23,6 +23,7 @@ function NewProject() {
   const [fileName, setFileName] = useState("");
   const [file2Name, setFile2Name] = useState("");
   const [message, setMessage] = useState("");
+  const {reFetch} = useProjects()
   const {
     isOpen: openMessage,
     onOpen: onOpenMessage,
@@ -139,6 +140,7 @@ function NewProject() {
       admin: userInfo.email,
     })
       .then(() => {
+        reFetch();
         setFileName("");
         setFile2Name("");
         setInputValues({});

@@ -23,8 +23,11 @@ function Sidebar({ isSidebarOpen, onSidebarClose }) {
       ["accessToken", "Name", "Role"].map((key) => {
         sessionStorage.removeItem(key);
       });
+
       navigate("/", { replace: true });
+      //window.location.reload()
       onClose();
+      
     });
   };
   const { currentLanguage, changeLanguage } = useLanguageSwitcher();

@@ -24,17 +24,22 @@ function AssignedTasks() {
   const userInfo = jwtDecode(token);
   const {role}= userInfo.UserInfo
   const[taskTonotify, setTaskNote]= useState([]);
+  console.log(projects)
   useEffect(() => {     
     
     if(projects){
-        let filteredProjects
-        const {projects}= userInfo.UserInfo
-        const assignedProjects = projects
+        let filteredProjects = []
+        const {projects: project3}= userInfo.UserInfo
+        console.log("User", userInfo.UserInfo)
+        const assignedProjects = project3
         //console.log("assignedProje", assignedProjects)
-        for(let i=0; i<assignedProjects.length; i++){
+        for(let i=0; i<assignedProjects?.length; i++){
           //console.log("Project",assignedProjects[i])
-          filteredProjects= projects.filter(project=>project._id===assignedProjects[i])
+          const filter = projects.find(project=>project._id===assignedProjects[i])
+          if(filter)
+            filteredProjects.push(filter)
         }
+        console.log("filtered", filteredProjects)
         setTaskNote(filteredProjects?.flatMap((project) => project?.tasks?.filter((task) => task.status === "Coordination Letter 1")))
         //console.log("filtered Projects",filteredProjects)
         setProjects(filteredProjects);
@@ -42,12 +47,12 @@ function AssignedTasks() {
         setloading(false)
     }
         
-  }, []);
+  }, [projects]);
 
   const notificationMessages = taskTonotify?.map((task) => {
-    const buildingNumber = task.taskData['building number'];
-    const status = task.status;
-    const timer = new Date(task.timer);
+    const buildingNumber = task?.taskData['building number'];
+    const status = task?.status;
+    const timer = new Date(task?.timer);
   
     const today = new Date();
     
@@ -56,8 +61,8 @@ function AssignedTasks() {
     const countdown = daysRemaining >= 1 ? `in ${daysRemaining} day${daysRemaining > 1 ? 's' : ''}` : 'today';
   
     const message = {
-      taskId: task._id,
-      message: `The task ${buildingNumber} was assigned status ${status} on ${new Date(task.updatedAt).toLocaleDateString()}. Please complete it ${countdown}.`
+      taskId: task?._id,
+      message: `The task ${buildingNumber} was assigned status ${status} on ${new Date(task?.updatedAt).toLocaleDateString()}. Please complete it ${countdown}.`
     };
   
     return message;
