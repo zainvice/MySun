@@ -216,7 +216,6 @@ function NewProject() {
                   <div className="w-full">
                     <DateInput
                       onChange={onChange}
-                      required
                       value={inputValues?.endDate ?? ""}
                       placeholder={"Choose end date of project"}
                       additonalProps={{

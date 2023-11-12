@@ -208,7 +208,8 @@ function Tasks() {
 
   useEffect(()=>{
     setloading(true);
-    const tasksCopy = [...project?.tasks];
+    if(project?.tasks){
+      const tasksCopy = [...project?.tasks];
     let sortedTasks = [];
     /* console.log(filter)
     if(filter==="assigned"){
@@ -537,15 +538,16 @@ function Tasks() {
 
 
     setTasks(sortedTasks)
+    }
     setloading(false)
   },[filter])
   useEffect(()=>{
     ////console.log("Displaying",project?.tasks)
      // Filter the tasks based on the searchTerm
     const filteredTasks = project?.tasks?.filter((task) => {
-    const buildingNumber = task.taskData["building number"];
+    const buildingNumberr = task.taskData["building number"]|| task.taskData["buildingNumber"];
     // Convert buildingNumber to a string for comparison
-    const buildingNumberString = buildingNumber.toString();
+    const buildingNumberString = buildingNumberr.toString();
     return buildingNumberString.includes(searchTerm.toUpperCase());
     });
     ////console.log("Filtered Tasks:", filteredTasks);
@@ -556,14 +558,14 @@ function Tasks() {
   const tasksBN = tasksAS?.map((task) => {
   return task.taskData
 });
-//console.log(tasksBN)
-//console.log(tasksAS)
+
 tasksBN?.sort((a, b) => {
-  const buildingNumberA = a["building number"];
-  const buildingNumberB = b["building number"];
+  const buildingNumberA = a["building number"]||a["buildingNumber"];
+  const buildingNumberB = b["building number"]||b["buildingNumber"];
   
   return buildingNumberA.localeCompare(buildingNumberB);
 });
+
   return (
     <>
       <Layout activePageName={`Projects / ${id} / Tasks`}>
@@ -844,7 +846,7 @@ tasksBN?.sort((a, b) => {
                   </p>
                 )}
                 {/* "Load More" button */}
-                {visibleRows < allRows.length && (
+                {visibleRows < allRows?.length && (
                   <>
                   <div></div>
                   <div className="text-center mt-4 w-full">
