@@ -1,4 +1,4 @@
-const CACHE_NAME = 'my-sun-app-v15'; // Updated cache name
+const CACHE_NAME = 'my-sun-app-v10'; // Updated cache name
 
 
 const cacheableUrls = [
@@ -42,24 +42,18 @@ self.addEventListener('install', (event) => {
 self.addEventListener('fetch', (event) => {
   event.respondWith(
     caches.match(event.request).then((response) => {
-      const fetchPromise = fetch(event.request).then((fetchResponse) => {
-        if (!fetchResponse || fetchResponse.status !== 200) {
-          return response;
+      return response || fetch(event.request).then((fetchResponse) => {
+        if (fetchResponse.status === 200 && cacheableUrls.includes(event.request.url)) {
+          const clone = fetchResponse.clone();
+          caches.open(CACHE_NAME).then((cache) => {
+            cache.put(event.request, clone);
+          });
         }
-
-        const clone = fetchResponse.clone();
-        caches.open(CACHE_NAME).then((cache) => {
-          cache.put(event.request, clone);
-        });
-
         return fetchResponse;
       });
-
-      return response || fetchPromise;
     })
   );
 });
-
 
 self.addEventListener('activate', (event) => {
   event.waitUntil(
