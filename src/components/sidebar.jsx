@@ -8,6 +8,7 @@ import Modal from "../common/modal";
 import Spinner from "../common/spinner";
 import { useSelector } from "react-redux/es/hooks/useSelector";
 import { selectCurrentToken } from "../features/auth/authSlice";
+import { useSendLogoutMutation } from "../features/auth/authApiSlice";
 function Sidebar({ isSidebarOpen, onSidebarClose }) {
   const navigate = useNavigate();
   const token = useSelector(selectCurrentToken);
@@ -16,10 +17,10 @@ function Sidebar({ isSidebarOpen, onSidebarClose }) {
   const { isOpen, onOpen, onClose } = useModal();
   const isAdmin = sessionStorage.getItem("Role") === "admin";
   const isSupervisor = sessionStorage.getItem("Role") === "supervisor";
-
+  const [sendLogout, { isLoading, isSuccess, isError, error }] = useSendLogoutMutation();
   const onLogout = () => {
     onOpen();
-    logoutUser().then(() => {
+    /* logoutUser().then(() => {
       ["accessToken", "Name", "Role"].map((key) => {
         sessionStorage.removeItem(key);
       });
@@ -28,7 +29,9 @@ function Sidebar({ isSidebarOpen, onSidebarClose }) {
       //window.location.reload()
       onClose();
       
-    });
+    }); */
+    sendLogout();
+    onClose()
   };
   const { currentLanguage, changeLanguage } = useLanguageSwitcher();
 
