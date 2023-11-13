@@ -1,5 +1,6 @@
-const CACHE_NAME = 'my-sun-app-v10'; // Updated cache name
+importScripts('https://storage.googleapis.com/workbox-cdn/releases/6.3.0/workbox-sw.js');
 
+const CACHE_NAME = 'my-sun-app-v11';
 
 const cacheableUrls = [
   '/',
@@ -29,31 +30,60 @@ const cacheableUrls = [
   '/new-task-assigned'
 ];
 
-self.addEventListener('install', (event) => {
-  event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(cacheableUrls);
-    }).catch((error) => {
-      console.error('Cache.addAll failed:', error);
-    })
-  );
-});
+workbox.precaching.precacheAndRoute(cacheableUrls);
 
-self.addEventListener('fetch', (event) => {
-  event.respondWith(
-    caches.match(event.request).then((response) => {
-      return response || fetch(event.request).then((fetchResponse) => {
-        if (fetchResponse.status === 200 && cacheableUrls.includes(event.request.url)) {
-          const clone = fetchResponse.clone();
-          caches.open(CACHE_NAME).then((cache) => {
-            cache.put(event.request, clone);
-          });
-        }
-        return fetchResponse;
-      });
-    })
-  );
-});
+workbox.routing.registerRoute(
+  new RegExp('/static/js/.*\\.js'),
+  new workbox.strategies.StaleWhileRevalidate({
+    cacheName: 'js-cache',
+  })
+);
+
+workbox.routing.registerRoute(
+  /\.(?:png|gif|jpg|jpeg|svg)$/,
+  new workbox.strategies.CacheFirst({
+    cacheName: 'image-cache',
+    plugins: [
+      new workbox.expiration.ExpirationPlugin({
+        maxEntries: 50,
+        maxAgeSeconds: 24 * 60 * 60, // 1 Days
+      }),
+    ],
+  })
+);
+
+workbox.routing.registerRoute(
+  /\.(?:css)$/,
+  new workbox.strategies.CacheFirst({
+    cacheName: 'css-cache',
+    plugins: [
+      new workbox.expiration.ExpirationPlugin({
+        maxEntries: 20,
+        maxAgeSeconds: 24 * 60 * 60, // 1 Days
+      }),
+    ],
+  })
+);
+
+workbox.routing.registerRoute(
+  new RegExp('/manifest.json'),
+  new workbox.strategies.StaleWhileRevalidate({
+    cacheName: 'manifest-cache',
+  })
+);
+
+workbox.routing.registerRoute(
+  ({url}) => url.origin,
+  new workbox.strategies.NetworkFirst({
+    cacheName: 'others-cache',
+    plugins: [
+      new workbox.expiration.ExpirationPlugin({
+        maxEntries: 10,
+        maxAgeSeconds: 24 * 60 * 60, // 1 Day
+      }),
+    ],
+  })
+);
 
 self.addEventListener('activate', (event) => {
   event.waitUntil(
