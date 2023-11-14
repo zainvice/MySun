@@ -43,7 +43,7 @@ function Tasks() {
   const originalTasks = project?.tasks
   useEffect(()=>{
     ////console.log("Displaying",project?.tasks)
-    if(projects!==null){
+    if(projects!==null&&project?.tasks){
       setloading(false)
     }
     if(project?.tasks){
@@ -252,8 +252,8 @@ function Tasks() {
       });
     
       // Update the state with the sorted tasks
-      setTasks(sortedTasks);
-      setloading(false)
+      setTasks(sortedTasks)
+      
     }
     if (filter.some(item => item.selectedValue === "latest update")) {
       console.log("SORTING BY", filter)
@@ -267,7 +267,7 @@ function Tasks() {
     
       // Update the state with the sorted tasks
       setTasks(sortedTasks);
-      setloading(false)
+      
     }
 
 
@@ -452,6 +452,16 @@ function Tasks() {
         sortedTasks = tasksCopy.filter((task) => task?.stats?.includes("Ariel Mapped"));
       }
       
+    } else if (filter.some(item => item.selectedValue === "missing physical number")) {
+      
+      if(sortedTasks.length>0){
+        
+        const newtasks = sortedTasks.filter((task) => task?.stats?.includes("Missing Physical Number"));
+        sortedTasks = newtasks
+      }else{
+        sortedTasks = tasksCopy.filter((task) => task?.stats?.includes("Missing Physical Number"));
+      }
+      
     } else if (filter.some(item => item.selectedValue === "pending")&& filter.some(item => item.optgroup === "Stats")) {
       
       if(sortedTasks.length>0){
@@ -538,8 +548,11 @@ function Tasks() {
 
 
     setTasks(sortedTasks)
+    if(sortedTasks.length>0)
+        setloading(false)
     }
-    setloading(false)
+    
+        
   },[filter])
   useEffect(()=>{
     ////console.log("Displaying",project?.tasks)
@@ -547,8 +560,8 @@ function Tasks() {
     const filteredTasks = project?.tasks?.filter((task) => {
     const buildingNumberr = task.taskData["building number"]|| task.taskData["buildingNumber"];
     // Convert buildingNumber to a string for comparison
-    const buildingNumberString = buildingNumberr.toString();
-    return buildingNumberString.includes(searchTerm.toUpperCase());
+    const buildingNumberString = buildingNumberr?.toString();
+    return buildingNumberString?.includes(searchTerm.toUpperCase());
     });
     ////console.log("Filtered Tasks:", filteredTasks);
     setTasks(filteredTasks)
@@ -683,6 +696,9 @@ tasksBN?.sort((a, b) => {
                   </option>
                   <option value="missing information" selected={filter.some(item => item.selectedValue === 'missing information')}>
                     Missing Information {filter.some(item => item.selectedValue === 'missing information') && '✓'}
+                  </option>
+                  <option value="missing physical number" selected={filter.some(item => item.selectedValue === 'missing physical number')}>
+                    Missing Physical Number {filter.some(item => item.selectedValue === 'missing physical number') && '✓'}
                   </option>
                   <option value="pending" selected={filter.some(item => item.selectedValue === 'pending')}>
                     Pending {filter.some(item => item.selectedValue === 'pending') && '✓'}

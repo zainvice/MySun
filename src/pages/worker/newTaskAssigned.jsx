@@ -379,10 +379,11 @@ function NewTaskAssigned() {
           //console.log("MAKING IS LOADING FALSE")
           setloading(false);
           setMessage("Successfully saved to database!")
+          navigate(`/manage-projects/${projectId}/tasks`)
           window.location.reload()
         } catch (error) {
           const data = error?.response?.data;
-          //console.log("MAKING IS LOADING FALSE")
+          console.log("MAKING IS LOADING FALSE", error)
           setloading(false);
           setMessage("Something went wrong, try again in a moment!")
         }
@@ -1257,6 +1258,27 @@ function NewTaskAssigned() {
               Missing Information 
             </span>
           </label>
+          {/* Checkbox button for "Missing Physical Number" */}
+          <label className="inline-flex items-center mb-2 sm:mb-5">
+            <input
+              name="stats"
+              type="checkbox"
+              className="hidden peer"
+              value="Missing Physical Number"
+              onChange={handleStatsChange} // Add onChange handler
+              checked={stats?.length>0 && stats?.includes("Missing Physical Number")} // Check if this checkbox button is selected
+              defaultChecked
+              
+            />
+            <span className="w-5 h-5 border rounded-full border-gray-800 mr-1 peer-checked:bg-gray-800 flex justify-center items-center">
+              <span className="material-symbols-outlined text-sm font-bold text-white peer-checked:inline-block">
+                done
+              </span>
+            </span>
+            <span className="text-gray-700 text-base sm:text-lg">
+              Missing Physical Number 
+            </span>
+          </label>
           </div>  
        
             </>
@@ -1271,7 +1293,7 @@ function NewTaskAssigned() {
         )}
         
        
-        {role==="supervisor"?(
+        {role==="suprvisor"?(
                 <>
                 <div className="mt-8 flex flex-col">
                 <textarea

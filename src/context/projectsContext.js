@@ -11,6 +11,9 @@ export function ProjectsProvider({ children }) {
   const [projects, setProjects] = useState(null);
   const [loading, setLoading] = useState(true);
   const [refetch, setFetch] = useState(false)
+  useEffect(()=>{
+    localStorage.removeItem('projects')
+  },[])
   useEffect(() => {
     // Check if projects are already available in localStorage
     const projectsList = JSON.parse(localStorage.getItem('projects'));
