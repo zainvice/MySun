@@ -13,6 +13,7 @@ import { useModal } from "../../../../hooks";
 import { getWorkers } from "../../../../api";
 import { RingLoader } from "react-spinners";
 import Spinner from "../../../../common/spinner";
+import AddTaskModal from "../../../../components/AddTaskModal";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -144,10 +145,36 @@ function Project() {
     ?.map((worker) => worker?.fullName)
     ?.join(", ");
 
+  //ADD TASK MODAL
+  const [isAddTaskModalOpen, setIsAddTaskModalOpen] = useState(false);  
+  const [tasktoAdd, setTaskToAdd] = useState()
+  const openAddTaskModal = () => {
+    console.log("OPENED")
+    setIsAddTaskModalOpen(true);
+  };
+
+  const closeAddTaskModal = () => {
+    console.log("CLOSED")
+    setIsAddTaskModalOpen(false);
+    setValue("no")
+  };
+
+
+
+
   const [value, setValue]= useState()
+
+
+
+
   useEffect(()=>{
     console.log("exporting")
     handleExport(value)
+    console.log(value)
+    if(value==="Add New"){
+      
+      openAddTaskModal()
+    }
   }, [value])
    const handleExport = async (value) => {
     console.log("project", project)
@@ -247,20 +274,26 @@ function Project() {
       setIsOpen2(true)
   };
 
+  useEffect(()=>{
+    console.log(tasktoAdd, "Adding Task")
+    if(tasktoAdd){
+      onCreateTask()
+    }
+  }, [tasktoAdd])
   const nextBuildingNumber = getNextBuildingNumber(project?.tasks)
 
   const onCreateTask = async() =>{
     setloading(true)
-    setMessage(`Please wait, creating task ${nextBuildingNumber} in ${project?.projectName}`)
+    setMessage(`Please wait, creating task ${tasktoAdd} in ${project?.projectName}`)
     const supervisord = project?.workers.find((worker)=> worker.role==='supervisor')
   
-    console.log("BUILDING NUMBER", nextBuildingNumber)
+    console.log("BUILDING NUMBER", tasktoAdd)
     try{
       const task = {
 
         projectId: project?._id,
         taskData:{
-          "building number": nextBuildingNumber
+          "building number": tasktoAdd
         },
         supervisor: supervisord
       }
@@ -350,7 +383,7 @@ function Project() {
               type="button"
               className="block px-2 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
               role="menuitem"
-              onClick={onCreateTask}
+              onClick={()=>{setValue("Add New")}}
               
             >
                Add A New Task
@@ -594,7 +627,12 @@ function Project() {
             onClick={()=>{setValue("updated")}}
           />
         </div>
-        
+        <AddTaskModal
+        isOpen={isAddTaskModalOpen}
+        onRequestClose={closeAddTaskModal}
+        setTaskToAdd={setTaskToAdd}
+        tasks={project?.tasks}
+       /> 
       </Container>
         </>
       ): (

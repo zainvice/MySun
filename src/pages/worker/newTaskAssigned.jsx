@@ -314,6 +314,7 @@ function NewTaskAssigned() {
       setStats(filteredTasks?.stats)
       setProject(projectId)
       setFloor(filteredTasks?.floor)
+      setManual(filteredTasks?.manual)
       handleStartClick()
       if (filteredTasks?.taskData) {
         const taskDataKeys = Object.keys(filteredTasks?.taskData);
@@ -758,7 +759,13 @@ function NewTaskAssigned() {
           {Object.keys(tasktoDisplay?.taskData || {}).map((key) => (
               <div className="relative" key={key}>
                 <label className="text-gray-400 absolute top-0 left-3 -mt-6">
-                  {key}
+                {key === "property type" ? (
+                    <>{"GOSH"}</>
+                  ) : key === "general type" ? (
+                    <>{"HELKA"}</>
+                  ) : (
+                    <>{key}</>
+                  )}
                 </label>
                 <input
                   type="text"
@@ -773,11 +780,14 @@ function NewTaskAssigned() {
                   className="rounded-full bg-gray-200 text-black px-4 h-12 w-full"
                   onChange={onChange}
                   disabled={
-                    (key === "phyiscal number" && tasktoDisplay?.taskData[key]!=='') ||
-                    (key === "building number" && !!tasktoDisplay?.taskData[key])
+                    (key === "phyiscal number" && tasktoDisplay?.taskData[key]!=='' && !manual) ||
+                    (key === "building number" && !!tasktoDisplay?.taskData[key]) 
+                    
                   }
                   required = {manual ? true : false}
                 />
+                {console.log("key", key, manual)}
+                {key === "phyiscal number" && manual && tasktoDisplay?.taskData["phyiscal number"]!==''?(<p className="text-red-600 ml-3">Warning! You might edit physical number.</p>): (<p className="color-red-600"></p>)}
               </div>
             ))}
           
