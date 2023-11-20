@@ -54,7 +54,7 @@ function NewProject() {
   const onFileSelect = (e) => {
     const file = e?.target?.files[0];
     setFileName(file?.name);
-
+  
     if (file) {
       const reader = new FileReader();
       reader.readAsBinaryString(file);
@@ -65,23 +65,26 @@ function NewProject() {
         const worksheets = readedData.Sheets[workSheetNames];
         const data = xlsx.utils.sheet_to_json(worksheets, { header: 1 });
         const header = data[0];
-        const rows = data.slice(1, data.length - 1);
-
+        const rows = data.slice(1);
+  
         const tasks = rows.map((row) => {
           const task = Object.create(null);
-          row.map((data, index) => {
-            Object.assign(task, { [header[index]]: data });
+          header.forEach((headerItem, index) => {
+            const data = row[index] || ''; // Handle empty values
+            Object.assign(task, { [headerItem]: data });
           });
           return task;
         });
-
+  
         setInputValues((prev) => ({
           ...prev,
           projectData: { tasks, completionPercentage: 0 },
         }));
       };
+      console.log("SHOWING INPUT VALUES",inputValues)
     }
   };
+  console.log("SHOWING INPUT VALUES",inputValues)
 
   const onFile2Select = (e) => {
     const file = e?.target?.files[0];

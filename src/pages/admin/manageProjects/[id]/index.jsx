@@ -228,7 +228,7 @@ function Project() {
           projectData = project?.originalData?.tasks
       if(value==="original-buildings"){
           projectData = project?.tasks.map(task=>{
-            return {buildingNumber: task.taskData["building number"]}
+            return {"building number": task.taskData["building number"]}
           })
       }
       if(value==="unassigned"){
@@ -236,6 +236,10 @@ function Project() {
             return {...task}
           })
       }
+      if(value==="building"){
+        projectData =[{"building number": ""}]
+          
+     }
       const tasks = project.tasks
       
      //console.log(projectData)
@@ -424,6 +428,15 @@ function Project() {
               
             >
                Download Unassigned Data
+            </button>
+            <button
+              type="button"
+              className="block px-2 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+              role="menuitem"
+              onClick={()=>{setValue("building")}}
+              
+            >
+               Download Empty Building Data
             </button>
           </div>
         </div>
