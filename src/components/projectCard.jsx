@@ -65,9 +65,10 @@ function ProjectCard({ variant, project }) {
           className="w-18"
           src={`/images/${
             VARIANTS.GREEN === variant ? "taskIcon.png" : "taskIcon1.png"
-          }`}
+          }`} 
         />
         <div>
+         
           <h2 className="font-semibold text-3xl line-clamp-1">
             {project?.projectName}
           </h2>

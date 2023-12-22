@@ -27,6 +27,10 @@ code {
 body {
   font-family: "Inria Sans", sans-serif;
 }
+::-webkit-scrollbar {
+  display: none;
+}
+
 
 input[type="date"]:not(.has-value)::before {
   color: white;

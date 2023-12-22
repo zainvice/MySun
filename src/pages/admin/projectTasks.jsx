@@ -32,12 +32,33 @@ function Tasks() {
     return prevKeys > currentKeys ? prevTask : currentTask;
 }, {});
   const [headings, setHeadings] = useState([]);
+  const [isFilterPopupOpen, setIsFilterPopupOpen] = useState(false);
+
+  const toggleFilterPopup = () => {
+    setIsFilterPopupOpen(!isFilterPopupOpen);
+  };
   //console.log("TASK", tasksAS)
   useEffect(()=>{
     if(taskWithMostKeys!==undefined&&taskWithMostKeys!==null&&!isEmpty(taskWithMostKeys)){
            setHeadings(Object.keys(taskWithMostKeys?.taskData));
      }
   }, [taskWithMostKeys])
+  tasksAS?.sort((a, b) => {
+    const buildingNumberA = a.taskData["building number"];
+    const buildingNumberB = b.taskData["building number"];
+
+    
+    const [letterA, numberA] = buildingNumberA.match(/[a-zA-Z]+|[0-9]+/g);
+    const [letterB, numberB] = buildingNumberB.match(/[a-zA-Z]+|[0-9]+/g);
+
+    
+    if (letterA !== letterB) {
+        return letterA.localeCompare(letterB);
+    }
+
+    
+    return parseInt(numberA) - parseInt(numberB);
+  });
   //console.log("headings", headings)
   const [Loading, setloading]= useState(true)
   const originalTasks = project?.tasks
@@ -442,14 +463,14 @@ function Tasks() {
         sortedTasks = tasksCopy.filter((task) => task?.stats?.includes("Under Construction"));
       }
       
-    } else if (filter.some(item => item.selectedValue === "ariel mapped")) {
+    } else if (filter.some(item => item.selectedValue === "Aerial Mapped")) {
       
       if(sortedTasks.length>0){
         
-        const newtasks = sortedTasks.filter((task) => task?.stats?.includes("Ariel Mapped"));
+        const newtasks = sortedTasks.filter((task) => task?.stats?.includes("Aerial Mapped"));
         sortedTasks = newtasks
       }else{
-        sortedTasks = tasksCopy.filter((task) => task?.stats?.includes("Ariel Mapped"));
+        sortedTasks = tasksCopy.filter((task) => task?.stats?.includes("Aerial Mapped"));
       }
       
     } else if (filter.some(item => item.selectedValue === "missing physical number")) {
@@ -588,8 +609,34 @@ tasksBN?.sort((a, b) => {
             <Heading title={"Project Tasks"}></Heading>
              
               <div className="flex flex-row">
+              <button
+                onClick={toggleFilterPopup}
+                className="w-2/3 border-2 border-[#00FFD3] text-[#00FFD3] p-2 rounded-full focus-within:outline-none transform transition-transform hover:bg-[#00FFD3] hover:text-white"
+              >Filter</button>
+              {isFilterPopupOpen && (
+                <div
+                  className="fixed z-10 top-[20%] right-0 md:w-[92%] w-full h-[80%] bg-gray-800 bg-opacity-50 flex justify-center"
+                  style={{
+                    scrollbarWidth: 'thin', // For Firefox
+                    scrollbarColor: '#4CAF50 #f1f1f1', // For Firefox
+                
+                    // For WebKit browsers
+                    WebkitOverflowScrolling: 'touch',
+                    '&::-webkit-scrollbar': {
+                      width: '12px',
+                    },
+                    '&::-webkit-scrollbar-thumb': {
+                      backgroundColor: '#4CAF50',
+                      borderRadius: '6px',
+                    },
+                    '&::-webkit-scrollbar-track': {
+                      backgroundColor: '#f1f1f1',
+                    },
+                  }}
+                >
+                  
               <select
-              value={"Default"} // Assuming filter is a state variable
+              value={"Default"} 
               onChange={(e) => {
                 const selectedValue = e.target.value;
                 if (selectedValue === "assignment") {
@@ -623,11 +670,29 @@ tasksBN?.sort((a, b) => {
                 }
                 setloading(true);
               }}
-                className="w-2/3 h-[65%] lg:h-[100%] border-2 border-[#00FFD3] text-[#00FFD3] p-2 rounded-full focus-within:outline-none transform transition-transform hover:bg-[#00FFD3] hover:text-white"
+                className="absolute z-10 w-[95%] h-full lg:h-full border-2 border-[#00FFD3] text-[#00FFD3] p-2 rounded focus-within:outline-none transform transition-transform hover:bg-[#00FFD3] hover:text-white scrollbar-thin scrollbar-thumb-[#00FFD3] scrollbar-track-gray-300"
+                size={9}
+                style={{
+                  scrollbarWidth: 'thin', // For Firefox
+                  scrollbarColor: '#4CAF50 #f1f1f1', // For Firefox
+              
+                  // For WebKit browsers
+                  WebkitOverflowScrolling: 'touch',
+                  '&::-webkit-scrollbar': {
+                    display: 'none',
+                  },
+                  '&::-webkit-scrollbar-thumb': {
+                    backgroundColor: '#4CAF50',
+                    borderRadius: '6px',
+                  },
+                  '&::-webkit-scrollbar-track': {
+                    backgroundColor: '#f1f1f1',
+                  },
+                }}
               >
                 <option value={filter.map(item => item.selectedValue).join(', ')} selected={""}>{filter.length>0? filter.map(item => item.selectedValue.toUpperCase()).join(', ').toUpperCase(): "Default".toUpperCase()}</option>
                 <option value={"assignment"} selected={filter?.includes('assignment')}>{"Default"}</option>
-                <optgroup label={"Status"}>
+                <optgroup label={"-Status-"}>
                   <option value="fully mapped" selected={filter.some(item => item.selectedValue === 'fully mapped')}>
                     Fully Mapped {filter.some(item => item.selectedValue === 'fully mapped') && '✓'}
                   </option>
@@ -650,7 +715,7 @@ tasksBN?.sort((a, b) => {
                     Pending {filter.some(item => item.selectedValue === 'pending') && '✓'}
                   </option>
                 </optgroup>
-                <optgroup label={"Property Type"}>
+                <optgroup label={"-Property Type-"}>
                   <option value="residential" selected={filter.some(item => item.selectedValue === 'residential')}>
                     Residential {filter.some(item => item.selectedValue === 'residential') && '✓'}
                   </option>
@@ -667,7 +732,7 @@ tasksBN?.sort((a, b) => {
                     Government{filter.some(item => item.selectedValue === 'government') && '✓'}
                   </option>
                 </optgroup>
-                <optgroup label={"Classification"}>
+                <optgroup label={"-Classification-"}>
                   <option value="coordination letter 1" selected={filter.some(item => item.selectedValue === 'coordination letter 1')}>
                     Coordination Letter 1 {filter.some(item => item.selectedValue === 'coordination letter 1') && '✓'}
                   </option>
@@ -687,12 +752,12 @@ tasksBN?.sort((a, b) => {
                     Pending {filter.some(item => item.selectedValue === 'pending') && '✓'}
                   </option>
                 </optgroup>
-                <optgroup label={"Stats"}>
+                <optgroup label={"-Stats-"}>
                   <option value="under construction" selected={filter.some(item => item.selectedValue === 'under construction')}>
                     Under Construction {filter.some(item => item.selectedValue === 'under construction') && '✓'}
                   </option>
-                  <option value="ariel mapped" selected={filter.some(item => item.selectedValue === 'ariel mapped')}>
-                    Ariel Mapped {filter.some(item => item.selectedValue === 'ariel mapped') && '✓'}
+                  <option value="Aerial Mapped" selected={filter.some(item => item.selectedValue === 'Aerial Mapped')}>
+                    Aerial Mapped {filter.some(item => item.selectedValue === 'Aerial Mapped') && '✓'}
                   </option>
                   <option value="missing information" selected={filter.some(item => item.selectedValue === 'missing information')}>
                     Missing Information {filter.some(item => item.selectedValue === 'missing information') && '✓'}
@@ -704,7 +769,7 @@ tasksBN?.sort((a, b) => {
                     Pending {filter.some(item => item.selectedValue === 'pending') && '✓'}
                   </option>
                 </optgroup>
-                <optgroup label={!viewAs ? "Building Number" : "Building Number"}>
+                <optgroup label={"-Building Number-"}>
                   <option value="a" selected={filter.some(item => item.selectedValue === 'a')}>
                     A1-AX {filter.some(item => item.selectedValue === 'a') && '✓'}
                   </option>
@@ -731,7 +796,8 @@ tasksBN?.sort((a, b) => {
                   {!viewAs ? "Manually Entered" : "Manually Entered"}
                 </option>
               </select>
-
+              </div>
+            )}
 
               
 
@@ -770,7 +836,7 @@ tasksBN?.sort((a, b) => {
               <>
             
             <div className="my-4 ">
-            {!viewAs?(<></>):(
+           
               <div className="flex items-center justify-center">
                {/*   <label className="mr-5 font-bold text-1xl">Search: </label> */}
               <div className="h-10 rounded-full bg-gray-200 text-black px-4 lg:w-1/4 sm:w-1/3 sm:mr-4">
@@ -785,12 +851,15 @@ tasksBN?.sort((a, b) => {
               </div>
               <Button additionalClasses={"text-sm"} title={filter.length>0 ? "Export Filtered Tasks": "Export Tasks"} onClick={() => { handleExport(); }} />
             </div>
-             )}
+            
               {!viewAs? (
                 <table className="w-full bg-white border-separate border-spacing-y-3" ref={tableContainerRef}>
                 <thead>
                   <tr className="bg-white text-gray-800 text-sm font-thin">
                     <th className="px-3 text-lg">Status</th>
+                    <th className="px-3 text-lg">Classification</th>
+                    <th className="px-3 text-lg">Property Type</th>
+                    <th className="px-3 text-lg">Stats</th>
                     {headings?.length > 0 &&
                       headings?.map((heading) => (
                         <th key={heading} className="px-3 text-lg">
@@ -805,6 +874,15 @@ tasksBN?.sort((a, b) => {
                       <tr className="bg-gray-200 w-[60%]" key={index}>
                         <td className="p4 pl-8 rounded-l-full ">
                           <NavLink to={`/task/${task._id}`}>{task?.status}</NavLink>
+                        </td>
+                        <td className="p3">
+                          <NavLink to={`/task/${task._id}`}>{task?.classification}</NavLink>
+                        </td>
+                        <td className="p3">
+                          <NavLink to={`/task/${task._id}`}>{task?.propertyType}</NavLink>
+                        </td>
+                        <td className="p3">
+                          <NavLink to={`/task/${task._id}`}>{task?.stats}</NavLink>
                         </td>
                         {headings?.map((heading, index) => (
                           <td

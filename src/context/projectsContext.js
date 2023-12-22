@@ -16,7 +16,7 @@ export function ProjectsProvider({ children }) {
   },[])
   useEffect(() => {
     // Check if projects are already available in localStorage
-    const projectsList = JSON.parse(localStorage.getItem('projects'));
+    const projectsList = JSON?.parse(localStorage?.getItem('projects'));
     if(refetch){
       console.log("REMOVING PROJECTS FROM LOCAL STORAGE")
       localStorage.removeItem('projects')

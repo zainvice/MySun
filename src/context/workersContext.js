@@ -13,7 +13,10 @@ export function WorkersProvider({ children }) {
   const [refetch, setFetch] = useState(false)
   useEffect(() => {
     // Check if workers are already available in localStorage
-    const workersList = JSON?.parse(localStorage?.getItem('workers'));
+    let workersList
+    if(localStorage?.getItem('workers')){
+        workersList = JSON?.parse(localStorage?.getItem('workers'));
+    }
     if(refetch){
       localStorage.removeItem('workers')
       setFetch(false)

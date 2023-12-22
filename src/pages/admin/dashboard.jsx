@@ -35,7 +35,7 @@ function findProjectByWorker(worker, projects) {
 function Dashboard() {
   const { t } = useTranslation();
   const[notes, setNotes]= useState("No notes!")
-  const { projects } = useProjects();
+  const { projects } = useProjects() || {};
   const {workers } = useWorkers();
   const [isloading, setloading] = useState(true);
   const [project, toDisplay]= useState();
@@ -45,6 +45,7 @@ function Dashboard() {
   const token = useSelector(selectCurrentToken);
   const userInfo = jwtDecode(token);
   const [avarageTime, setAverge]= useState("")
+
   const [completed, setCompleted]= useState()
   const [isPLoading, setPLoading]= useState(true)
   const [iswLoading, setwLoading]= useState(true)
@@ -60,7 +61,7 @@ function Dashboard() {
       
       setTaskNote(
         projects
-          .flatMap((project) => project?.tasks?.filter((task) => task.classification === "Coordination Letter 1"))
+          .flatMap((project) => project?.tasks?.filter((task) => task.classification === "Coordination Letter 1 Expired"||task.classification === "Coordination Letter 2 Expired"))
       );
       const filteredData = projects.filter((project) => {
         const projectDate = new Date(project.startDate); 
@@ -192,32 +193,62 @@ function Dashboard() {
   
     
   }, [projects]);
+  const [timerDuration, setTimerDuration] = useState(7 * 24 * 60 * 60 * 1000);
   const notificationMessages = taskTonotify?.map((task) => {
     const buildingNumber = task.taskData['building number'];
-    const status = task.status;
-    const classification = task.classification
-    const timer = new Date(task.timer);
+    let message = "";
   
-    const today = new Date();
-    
+   /*  const coordinationLetterHistory = task?.classificationHistory?.filter(
+      (history) => history.changedTo === 'Coordination Letter 1' || history.changedTo === 'Coordination Letter 2'
+    );
   
-    const daysRemaining = Math.ceil((timer - today) / (1000 * 60 * 60 * 24));
-    const countdown = daysRemaining >= 1 ? `in ${daysRemaining} day${daysRemaining > 1 ? 's' : ''}` : 'today';
+    const latestCoordinationHistory = coordinationLetterHistory?.reduce((latest, history) =>
+      new Date(history.changedOn).getTime() > new Date(latest.changedOn).getTime() ? history : latest
+    );
   
-    const message = {
+    if (latestCoordinationHistory) {
+      const changedOnTimestamp = new Date(latestCoordinationHistory.changedOn).getTime();
+      const targetTime = changedOnTimestamp + timerDuration;
+  
+      
+      const currentTime = Date.now();
+      const timeDifference = targetTime - currentTime;
+
+      if (timeDifference > 0) {
+        const days = Math.floor(timeDifference / (24 * 60 * 60 * 1000));
+        const hours = Math.floor((timeDifference % (24 * 60 * 60 * 1000)) / (60 * 60 * 1000));
+        const minutes = Math.floor((timeDifference % (60 * 60 * 1000)) / (60 * 1000));
+        const seconds = Math.floor((timeDifference % (60 * 1000)) / 1000);
+
+        //message = `${days}d ${hours}h ${minutes}m ${seconds}s remaining!`;
+      } else {
+        //console.log("it's expired, I'm here!");
+        message = {
+          taskId: task._id,
+          message: `The task ${buildingNumber} Coordination Letter has expired!`
+        };
+      }
+      
+      
+  
+      //const timerId = setInterval(updateRemainingTime, 1000);
+      console.log("Sending Notification", message);
+      if(message!='')
+        return message;
+    } */
+    return message = {
       taskId: task._id,
-      message: `The task ${buildingNumber} was assigned status ${status} and classification ${classification} on ${new Date(task.updatedAt).toLocaleDateString()}. Please complete it ${countdown}.`
+      message: `The task ${buildingNumber} Coordination Letter has expired!`
     };
-  
-    return message;
   });
   
-
+  console.log("TO NOTIFY", taskTonotify)
+  console.log(notificationMessages)
   useEffect(() => {     
     
         
     if(projects){
-          
+        setPLoading(false)
         // Sort the projects by the 'updatedOn' field in descending order
         const sortedProjects = projects?.sort((a, b) => {
           const dateA = new Date(a.updatedOn);
@@ -249,7 +280,7 @@ function Dashboard() {
   
   
   return (
-    <Layout activePageName={t("dashboard.title")} notifications={notificationMessages}>
+    <Layout activePageName={t("dashboard.title")} notifications={notificationMessages.filter((message)=> message!==undefined)}>
       
       <Container>
       

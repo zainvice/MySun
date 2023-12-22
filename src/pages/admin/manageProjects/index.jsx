@@ -132,6 +132,8 @@ function ManageProjects() {
             <div className="relative mt-4 grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-4">
             {projects?.length > 0 ? (
               projects?.map((project, index) => (
+                <>
+                 
                 <Link
                   key={project?.projectId}
                   to={`/manage-projects/${project?.projectId}`}
@@ -144,6 +146,7 @@ function ManageProjects() {
                     }
                   />
                 </Link>
+                </>
               ))
             ) : (
               <p className="absolute left-[50%] top-[50%] -translate-x-[50%]">

@@ -14,8 +14,13 @@ import { getWorkers } from "../../../../api";
 import { RingLoader } from "react-spinners";
 import Spinner from "../../../../common/spinner";
 import AddTaskModal from "../../../../components/AddTaskModal";
+import ConfirmModal from "../../../../components/ConfirmModal";
+import ConfirmRWorker from "../../../../components/ConfirmRWorker";
+import { deleteProject } from "../../../../api";
+import { useNavigate } from "react-router-dom";
+import { editRWProject } from "../../../../api";
 import {
-  Chart as ChartJS,
+  Chart as ChartJS, 
   CategoryScale,
   LinearScale,
   BarElement,
@@ -26,7 +31,7 @@ import {
 } from "chart.js";
 import { Doughnut, Bar } from "react-chartjs-2";
 import { useEffect, useState } from "react";
-import { createTask } from "../../../../api";
+import { createWTask } from "../../../../api";
 
 ChartJS.register(
   BarElement,
@@ -83,17 +88,68 @@ function getNextBuildingNumber(tasks) {
 
 
 function Project() {
+  const navigate = useNavigate()
   const { isOpen, onOpen, onClose } = useModal();
+  const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
+  const [isConfirmRModalOpen, setIsConfirmRModalOpen] = useState(false);
   const dimension = useDimensions();
   const { id } = useParams();
   const { projects, setFetch, reFetch } = useProjects();
   const [isloading, setloading]= useState(false)
+  const [deleting, isDeleting] = useState(false)
   const project = projects?.filter((project) => project.projectId === id)[0];
   let workersInProject
   let completedTasks= 0
   let remainingTasks= 0
   
   const [allWorkers, setWorkers]= useState()
+  const [workerToDelete, setWorkerToDelete] = useState(null);
+
+  const handleDeleteWorker = (worker) => {
+    setWorkerToDelete(worker);
+    setIsConfirmRModalOpen(true);
+  };
+  const onDelete = async () =>{
+    try{
+      isDeleting(true)
+      const response = await deleteProject({projectId: project?._id})
+      console.log(response)
+      reFetch()
+      navigate('/dashboard')
+      window.location.reload()
+      
+    }catch(error){
+      console.error(error)
+    }
+  }
+  const openConfirmModal = () => {
+    setIsConfirmModalOpen(true);
+  };
+ 
+
+  const closeConfirmModal = () => {
+    setIsConfirmModalOpen(false);
+  };
+  const closeConfirmRModal = () => {
+    setWorkerToDelete(null);
+    setIsConfirmRModalOpen(false);
+  };
+  const removeWorkerFromProject = async() =>{
+    closeConfirmRModal()
+    //setloading(true)
+    setMessage(`Please wait, removing ${workerToDelete?.fullName} from ${project?.projectName}`)
+    const workersToSend = project?.workers?.filter((worker)=> worker?.email!== workerToDelete.email)
+    try{
+      const response = await editRWProject({ projectId: project?.projectId, workers: workersToSend, removedWorker: workerToDelete })
+      console.log(response)
+      reFetch()
+      //setloading(false)
+      window.location.reload()
+    }catch(error){
+      //setloading(false)
+      console.error(error)
+    }
+  }
   useEffect(() => {
     getWorkers().then((data) => {
       setWorkers(
@@ -141,9 +197,7 @@ function Project() {
   const supervisor = project?.workers?.filter(
     (worker) => worker.role === "supervisor"
   )[0]?.fullName;
-  const workers = project?.workers
-    ?.map((worker) => worker?.fullName)
-    ?.join(", ");
+  
 
   //ADD TASK MODAL
   const [isAddTaskModalOpen, setIsAddTaskModalOpen] = useState(false);  
@@ -279,7 +333,7 @@ function Project() {
   };
 
   useEffect(()=>{
-    console.log(tasktoAdd, "Adding Task")
+    console.log(tasktoAdd, "Adding Tasks")
     if(tasktoAdd){
       onCreateTask()
     }
@@ -288,7 +342,7 @@ function Project() {
 
   const onCreateTask = async() =>{
     setloading(true)
-    setMessage(`Please wait, creating task ${tasktoAdd} in ${project?.projectName}`)
+    setMessage(`Please wait, creating tasks ${tasktoAdd[0]} - ${tasktoAdd[tasktoAdd.length-1]} in ${project?.projectName}`)
     const supervisord = project?.workers.find((worker)=> worker.role==='supervisor')
   
     console.log("BUILDING NUMBER", tasktoAdd)
@@ -297,11 +351,11 @@ function Project() {
 
         projectId: project?._id,
         taskData:{
-          "building number": tasktoAdd
+          "building number": tasktoAdd[0]
         },
         supervisor: supervisord
       }
-      await createTask({task});
+      await createWTask({tasks: tasktoAdd, task});
       setMessage("Successfully created!")
       setloading(false)
       reFetch();
@@ -318,7 +372,7 @@ function Project() {
       {project ? (
         <>
         {isloading?(
-          <div className="flex flex-col h-full w-full bg-black bg-opacity-40 flex items-center justify-center absolute z-10">
+          <div className="flex flex-col bg-black bg-opacity-40 w-full h-full flex items-center justify-center absolute z-10">
           <RingLoader color="#FFC94A" size={150}/>
           <p className="mt-3 text-[#FFC94A] text-4xl font-bold text-center">{message}</p>
         </div>
@@ -353,7 +407,8 @@ function Project() {
                   onClick={onTasksClick}
                 />
               </NavLink> */}
-               <div className="relative inline-block text-left">
+      <div className="flex ">
+               <div className="relative inline-block text-left mr-3">
       <button
         type="button"
         className="inline-flex justify-center items-center w-full px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
@@ -361,6 +416,7 @@ function Project() {
       >
         Options <span class='material-symbols-outlined text-sm'>expand_more</span>
       </button>
+      
 
       {isOpen2 ? (
         <div className="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
@@ -445,7 +501,20 @@ function Project() {
         </>
       )}
     </div>
-              
+    <div onClick={openConfirmModal}>
+    <p
+       
+       className="inline-flex cursor-pointer justify-center items-center w-full px-4 py-2 text-[12px] font-medium hover:ease-in-out transition-300 text-black hover:text-white bg-white border border-gray-300 rounded-md shadow-sm hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+       
+     >
+      
+                 <span class="material-symbols-outlined">
+                     delete
+                     </span>
+                
+     </p>
+    </div>
+    </div>     
              
           </div>
           {/* <div className="flex-1 w-full flex justify-between">
@@ -502,9 +571,20 @@ function Project() {
               <span className="text-[#34F5C5]">{supervisor}</span>
             </p>
 
-            <p className="">
+            <p className="flex">
               <span className="font-bold mr-3">Workers: </span>
-              <span className="text-[#34F5C5]">{workers}</span>
+              <span className="text-[#34F5C5]  flex flex-row  justify-between">{project?.workers?.filter((worker) => worker.role !== 'supervisor').map((worker) => (
+                <>
+                  {'-'}
+                  <div key={worker.id} className="flex ">
+                    <span className="text-[#34F5C5]">{worker.fullName.split(" ")[0]}</span>
+                    
+                      <span className="text-[#34F5C5] material-symbols-outlined text-[14px] hover:text-red-600 transition-300 cursor-pointer" onClick={() => handleDeleteWorker(worker)}>delete</span>
+                    
+                  </div>
+                  
+                  </>
+                ))}</span>
             </p>
           </div>
         </div>
@@ -643,9 +723,21 @@ function Project() {
         <AddTaskModal
         isOpen={isAddTaskModalOpen}
         onRequestClose={closeAddTaskModal}
-        setTaskToAdd={setTaskToAdd}
+        setTaskAdding={setTaskToAdd}
         tasks={project?.tasks}
        /> 
+       <ConfirmModal
+        isOpen={isConfirmModalOpen}
+        onRequestClose={closeConfirmModal}
+        onDelete={onDelete}
+        deleting={deleting}
+       />
+       <ConfirmRWorker
+        isOpen={isConfirmRModalOpen}
+        onRequestClose={closeConfirmRModal}
+        onRemove={removeWorkerFromProject}
+        worker={workerToDelete}
+       />
       </Container>
         </>
       ): (
@@ -657,7 +749,7 @@ function Project() {
     </Layout>
     <Modal isOpen={isOpen} onClose={onClose}>
         <WorkerOverlay
-          workers={allWorkers}
+          
           addedWorkers={project?.workers}
           projectId={id}
         />

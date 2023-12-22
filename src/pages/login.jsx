@@ -45,7 +45,7 @@ const LoginPage = () => {
          navigate('/dashboard')
        if(Role==='supervisor')
          navigate('/dashboard')
-       if(Role==='worker'){
+       if(Role!=='admin'){
           if(!lastLogin){
             navigate('/resetPassword/'+email)
           }else{

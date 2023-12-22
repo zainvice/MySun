@@ -1,17 +1,25 @@
 import { useEffect, useState } from "react";
 import Worker from "./worker";
-import { editProject } from "../api";
+import { editAWProject } from "../api";
+import { useProjects } from "../context/projectsContext";
+import { useWorkers } from "../context/workersContext";
+import Spinner from "../common/spinner";
+
 export default function WorkerOverlay({
-  workers,
+  
   addedWorkers,
   projectId,
 }) {
+  const {workers} = useWorkers()||{}
   const [selectedWorkers, setSelectedWorkers]= useState([])
-  const [workersTodisplay, setWorkers] = useState(workers)
+  const {reFetch} = useProjects()
+  const [workersTodisplay, setWorkers] = useState(workers?.filter((worker)=> worker.role==='worker'))
   const [log, setLog]= useState("ADD TO PROJECT")
+  const [isLoading, setLoading] = useState(false)
   const onAddWorkers = async() =>{
     console.log("ADDING!")
     setLog("ADDING!")
+    setLoading(true)
     console.log("Added Workers", addedWorkers)
     console.log("Selected Workerss", selectedWorkers)
     //const addedWorkerNames = addedWorkers.split(', ').filter(Boolean);
@@ -36,21 +44,26 @@ export default function WorkerOverlay({
     }else{
       console.log("Sending", projectId)
       try{
-        await editProject({projectId, workers: selectedWorkers})
+        await editAWProject({projectId, workers: selectedWorkers})
         setLog("SUCCESSFULLY ADDED!")
-
+        setLoading(false)
+        reFetch();
+        window.location.reload()
       }catch(error){
-
+        setLog("An error occured please try again later!")
+        setLoading(false)
       }
 
     }
   }
   const [email, setEmail]= useState()
+  console.log(workersTodisplay)
   const [message, setMessage]= useState("Not Found")
   const onSearch = () =>{
     console.log("Searching")
     setMessage("Searching")
-    const filtered = workers.filter(worker=>{
+    const shadowCopy = workers?.filter((worker)=> worker.role==='worker')
+    const filtered = shadowCopy.filter(worker=>{
       const searchItem = email.toLowerCase()
       if(worker.email.toLowerCase().includes(searchItem)){
             return worker
@@ -70,7 +83,8 @@ export default function WorkerOverlay({
     if(email){
       console.log("Searching")
       setMessage("Searching.....", email)
-      const filtered = workers.filter(worker=>{
+      const shadowCopy = workers?.filter((worker)=> worker.role==='worker')
+      const filtered = shadowCopy.filter(worker=>{
         const searchItem = email.toLowerCase()
         if(worker.email.toLowerCase().includes(searchItem)){
               return worker
@@ -88,7 +102,7 @@ export default function WorkerOverlay({
       setWorkers(filtered)
     }
     }else{
-      setWorkers(workers)
+      setWorkers(workers?.filter((worker)=> worker.role==='worker'))
     }
   }, [email])
   return (
@@ -113,7 +127,11 @@ export default function WorkerOverlay({
       </div>
 
       <div className="my-4 pb-2 overflow-y-auto h-[calc(100%-2.75rem-0.5rem)] flex flex-col gap-3 animate-fadeIn">
-        {workersTodisplay ?(
+        {isLoading ?(
+            <Spinner/>
+        ): (
+          <>
+          {workersTodisplay ?(
           <>
            {workersTodisplay &&
           workersTodisplay.map((worker) => (
@@ -130,6 +148,8 @@ export default function WorkerOverlay({
             <div className="text-center">
                 <p>{message}</p>
             </div>
+          </>
+        )}
           </>
         )}
       </div>

@@ -19,14 +19,37 @@ import jwtDecode from "jwt-decode";
 import { useSelector } from "react-redux/es/hooks/useSelector";
 import { selectCurrentToken } from "../../features/auth/authSlice";
 import { useProjects } from "../../context/projectsContext";
+import Select from 'react-select';
 
 function NewTaskAssigned() {
   const {t}= useTranslation()
   const [status, setStatus] = useState(); // Initialize the status state variable
-  const [floor, setFloor]= useState()
+  const [floor, setFloor] = useState([]);
+
+  const handleFloorChange = (e) => {
+    const selectedValue = e.target.value;
+
+    if (selectedValue === 'All') {
+      setFloor(['All']);
+    } else {
+      if (floor.includes('All')) {
+        setFloor([selectedValue]);
+      } else {
+        setFloor((prevFloors) => {
+          if (!prevFloors.includes(selectedValue)) {
+            return [...prevFloors, selectedValue];
+          }
+          return prevFloors;
+        });
+      }
+    }
+  };
+
+  
   const token = useSelector(selectCurrentToken);
   const [userInfo, setUserInfo] = useState()
   const {setFetch} = useProjects
+ 
   useEffect(()=>{
     try{
       setUserInfo(jwtDecode(token))
@@ -34,7 +57,6 @@ function NewTaskAssigned() {
       console.log("Error Occurred")
     }
   },[token])
-  const handleFloorChange = (e)=> setFloor(e.target.value)
   const [classification, setClassification]= useState()
   const handleClassificationChange = (e) => {
     console.log(e.target.value)
@@ -237,11 +259,7 @@ function NewTaskAssigned() {
   
   const [tasktoDisplay, setTasktoDisplay]= useState()
   const [inputValues, setInputValues] = useState(tasktoDisplay?.taskData || {});
-  const onChange = (event) => {
-    const target = event.target ?? {};
-    setInputValues((prev) => ({ ...prev, [target.name]: target.value }));
-    //console.log("INPUT VALUES",inputValues)
-  };
+  
   const [already_assigned, setAAssigned]= useState()
   const [timerRunning, setTimerRunning] = useState(false);
   const [seconds, setSeconds] = useState(0);
@@ -259,6 +277,32 @@ function NewTaskAssigned() {
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);
   };
+  const [warning, setWarning] = useState("")
+  const onChange = (event) => {
+    setWarning("")
+    const target = event.target ?? {};
+    if(target.name==="phyiscal number"){
+      let found = false
+      
+      if(manual){
+        projectToCompare.originalData?.tasks?.map((task)=>{
+          if(task["phyiscal number"]===target.value){
+            found= true;
+            target.value= "";
+            setWarning("Physical number already exists in project!")
+          }
+        })
+      }
+      if(found){
+        console.log("Physical number already exists!")
+      }
+    }
+    setInputValues((prev) => ({ ...prev, [target.name]: target.value }));
+    //console.log("INPUT VALUES",inputValues)
+    ///NEED ADDITION HERE
+  };
+  
+  //console.log(projectToCompare)
   //console.log("DISPLAy", display)
   /* const filteredBuildings = projectToCompare?.buildingData?.tasks.filter((building) =>
     building["building number"||"כתובת"].toLowerCase().includes(searchTerm.toLowerCase())
@@ -313,7 +357,8 @@ function NewTaskAssigned() {
       setClassification(filteredTasks?.classification)
       setStats(filteredTasks?.stats)
       setProject(projectId)
-      setFloor(filteredTasks?.floor)
+      if(filteredTasks?.floor)
+        setFloor(filteredTasks?.floor)
       setManual(filteredTasks?.manual)
       handleStartClick()
       if (filteredTasks?.taskData) {
@@ -350,10 +395,12 @@ function NewTaskAssigned() {
   }, [navigator.onLine]);
 
   const addToOfflineTasks = () => {
-   
+    
+    
     /* if(timerRunning){
       setMessage("Please stop the timer first!")
     }else{ */
+   
       setMessage("Saving...")
       const taskData = {_id: display?._id, taskData: inputValues, editedBy: userInfo?.UserInfo.email, timeTaken: timeTaken, status: status, classification: classification, propertyType: propertyType, stats: stats, floor: floor, projectId: projectToCompare?.projectId, buildingData: searchTerm}
       const updatedTasks = [...offlineTasks, taskData ];
@@ -361,6 +408,7 @@ function NewTaskAssigned() {
       localStorage.setItem("offlineTasks", JSON.stringify(updatedTasks));
       //console.log("OFFLINE TASK SAVED!", offlineTasks)
       setMessage("Saved!")
+   
     /* } */
     
   };
@@ -552,6 +600,63 @@ function NewTaskAssigned() {
       setSearchData('')
     }
   }
+  const [timerDuration, setTimerDuration] = useState(7 * 24 * 60 * 60 * 1000); // 7 days in milliseconds
+  const [remainingTime, setRemainingTime] = useState(null);
+  console.log("remaining:", remainingTime)
+
+  useEffect(() => {
+    const coordinationLetter1History = display?.classificationHistory?.find(
+      (history) => history.changedTo === 'Coordination Letter 1'
+    );
+
+    const coordinationLetter2History = display?.classificationHistory?.find(
+      (history) => history.changedTo === 'Coordination Letter 2'
+    );
+
+    let latestCoordinationHistory;
+     
+    if (coordinationLetter1History && coordinationLetter2History) {
+      latestCoordinationHistory =
+        new Date(coordinationLetter1History.changedOn).getTime() > new Date(coordinationLetter2History.changedOn).getTime()
+          ? coordinationLetter1History
+          : coordinationLetter2History;
+    } else {
+      latestCoordinationHistory = coordinationLetter1History || coordinationLetter2History;
+    }
+    console.log(latestCoordinationHistory)
+
+    if (latestCoordinationHistory) {
+      const changedOnTimestamp = new Date(latestCoordinationHistory.changedOn).getTime();
+      console.log(changedOnTimestamp)
+      const targetTime = changedOnTimestamp + timerDuration;
+
+      const updateRemainingTime = () => {
+        const currentTime = Date.now();
+        const timeDifference = targetTime - currentTime;
+
+        if (timeDifference > 0) {
+          const days = Math.floor(timeDifference / (24 * 60 * 60 * 1000));
+          const hours = Math.floor((timeDifference % (24 * 60 * 60 * 1000)) / (60 * 60 * 1000));
+          const minutes = Math.floor((timeDifference % (60 * 60 * 1000)) / (60 * 1000));
+          const seconds = Math.floor((timeDifference % (60 * 1000)) / 1000);
+
+          setRemainingTime(`${days}d ${hours}h ${minutes}m ${seconds}s`);
+          console.log("Remaining")
+        } else {
+          setRemainingTime('Coordination Letter has expired!');
+          console.log("expired")
+        }
+      };
+
+      const timerId = setInterval(updateRemainingTime, 1000);
+
+      return () => {
+        clearInterval(timerId);
+        
+      };
+    }
+  }, [display, timerDuration]);
+  
   useEffect(()=>{
     const task = projectToCompare?.projectData?.tasks.find(task => {
       // Iterate through each property in the task object
@@ -587,6 +692,17 @@ function NewTaskAssigned() {
     }
     //setloading(false)
   },[dataToSearch])
+
+  useEffect(()=>{
+    if(manual&&inputValues["phyiscal number"]){
+      projectToCompare.originalData?.tasks?.map((task)=>{
+        if(task["phyiscal number"]===inputValues["phyiscal number"]){
+          
+          setWarning("Physical number already exists in project!")
+        }
+      })
+    }
+  }, [manual, inputValues])
   //console.log(inputValues)
   //console.log(manual,"MANUAL")
 
@@ -786,8 +902,8 @@ function NewTaskAssigned() {
                   }
                   required = {manual ? true : false}
                 />
-                {console.log("key", key, manual)}
-                {key === "phyiscal number" && manual && tasktoDisplay?.taskData["phyiscal number"]!==''?(<p className="text-red-600 ml-3">Warning! You might edit physical number.</p>): (<p className="color-red-600"></p>)}
+                {key === "phyiscal number"&& warning&& <p className="text-red-600 ml-3">{warning}</p>}
+                {already_assigned && key === "phyiscal number" && manual && tasktoDisplay?.taskData["phyiscal number"]!==''?(<p className="text-red-600 ml-3">Warning! You might edit physical number.</p>): (<p className="color-red-600"></p>)}
               </div>
             ))}
           
@@ -814,8 +930,9 @@ function NewTaskAssigned() {
             <select
               className="rounded-full bg-gray-200 text-black px-4 h-12 w-full lg:w-1/2"
               value={floor}
-              onChange={(e) => setFloor(e.target.value)}
+              onChange={handleFloorChange}
             >
+              <option value={Array.isArray(floor) && floor.length>0? floor.join(","): floor}>{floor.length>0? floor.join(","): ""}</option>
               <option value="All">All</option>
               {Array.from({ length: 21 }, (_, index) => (
                 <option key={index} value={index - 10}>
@@ -1018,11 +1135,18 @@ function NewTaskAssigned() {
             <div className="m-6 ml-3 flex flex-col">
             <label htmlFor="classificationHistory" className="font-bold">Classification History</label>
             <ul className="ml-6">
-              {display?.classificationHistory?.map((history, index) => (
-                <li key={index}>
-                  Changed from <strong>{history.changedFrom}</strong> to <strong>{history.changedTo}</strong> on {new Date(history.changedOn).toLocaleString()}
-                </li>
-              ))}
+            {display?.classificationHistory?.map((history, index) => (
+              <li key={index}>
+                Changed from <strong>{history.changedFrom}</strong> to <strong>{history.changedTo}</strong> on {new Date(history.changedOn).toLocaleString()}
+                {index === display.classificationHistory.length - 1 && ( 
+                    history.changedTo === 'Coordination Letter 1' || history.changedTo === 'Coordination Letter 2' || history.changedTo === 'Coordination Letter 1 Expired' || history.changedTo === 'Coordination Letter 2 Expired' ? (
+                      <span className="ml-2 text-red-600 font-bold">({remainingTime})</span>
+                    ) : (
+                      <></>
+                    )
+                  )}
+              </li>
+            ))}
             </ul>
           </div>
           </>):(<></>)}
@@ -1089,6 +1213,25 @@ function NewTaskAssigned() {
             </span>
             <span className="text-gray-700 text-base sm:text-lg">
               Refused Survey
+            </span>
+          </label>
+          {/* Checkbox button for "Coordinated" */}
+          <label className="inline-flex items-center mb-2 sm:mb-5">
+            <input
+              name="classification"
+              type="checkbox"
+              className="hidden peer"
+              value="Coordinated"
+              onChange={handleClassificationChange} // Add onChange handler
+              checked={classification === "Coordinated"} // Check if this checkbox button is selected
+            />
+            <span className="w-5 h-5 border rounded-full border-gray-800 mr-1 peer-checked:bg-gray-800 flex justify-center items-center">
+              <span className="material-symbols-outlined text-sm font-bold text-white peer-checked:inline-block">
+                done
+              </span>
+            </span>
+            <span className="text-gray-700 text-base sm:text-lg">
+              Coordinated
             </span>
           </label>
   
@@ -1232,9 +1375,9 @@ function NewTaskAssigned() {
               name="stats"
               type="checkbox"
               className="hidden peer"
-              value="Ariel Mapped"
+              value="Aerial Mapped"
               onChange={handleStatsChange} // Add onChange handler
-              checked={stats?.length>0 && stats?.includes("Ariel Mapped")} // Check if this checkbox button is selected
+              checked={stats?.length>0 && stats?.includes("Aerial Mapped")} // Check if this checkbox button is selected
               defaultChecked
               
             />
@@ -1244,7 +1387,7 @@ function NewTaskAssigned() {
               </span>
             </span>
             <span className="text-gray-700 text-base sm:text-lg">
-              Ariel Mapped
+              Aerial Mapped
             </span>
           </label>
           {/* Checkbox button for "Missing Information" */}

@@ -17,6 +17,8 @@ export const loginUser = async ({ email, password }) => {
   });
 };
 
+
+
 export const logoutUser = async () => {
   return await api.post("/auth/logout");
 };
@@ -109,6 +111,18 @@ export const createTask = async ({task}) => {
     return error?.response?.data;
   }
 };
+export const createWTask = async ({tasks, task}) => {
+  try {
+  console.log("I GOT THIS DATA", task)
+  const{projectId, taskData, supervisor}= task
+  console.log("Sending", taskData, projectId, supervisor, task)
+  return await api.post("/tasks/multiple", {
+    taskData, projectId, supervisor, tasks}
+  );}catch(error){
+    if (error?.status === 500) return error.message;
+    return error?.response?.data;
+  }
+};
 
 
 export const createProject = async ({
@@ -156,16 +170,64 @@ export const editProject = async ({
 }) => {
   console.log("I GOT THIS DATA", task)
   const{_id, taskData, status, timeTaken, buildingData}= task
-  console.log("Sending", _id, taskData, status, timeTaken, buildingData, projectId, manual, resetType)
+  console.log("Sending", _id, taskData, status, timeTaken, buildingData, projectId, manual, resetType, workers)
 
   return await api.patch("/projects", {
     projectId, 
     workers,
     buildingData,
     taskData,
+    workers,
     timeTaken,
     manual,
     resetType
+  });
+};
+export const editRWProject = async ({
+  projectId,
+  
+  workers,
+  removedWorker,
+
+}) => {
+  console.log("I GOT THIS DATA", projectId, workers, removedWorker)
+  
+  console.log("Sending", projectId, workers, removedWorker)
+
+  return await api.patch("/projects", {
+    projectId, 
+    workers,
+    removedWorker,
+    updateWorkers: true,
+  });
+};
+export const editAWProject = async ({
+  projectId,
+  workers,
+
+}) => {
+  console.log("I GOT THIS DATA", projectId, workers)
+  
+  console.log("Sending", projectId, workers)
+
+  return await api.patch("/projects", {
+    projectId, 
+    workers,
+    
+  });
+};
+export const deleteProject = async ({
+  projectId,
+  
+}) => {
+  console.log("I GOT THIS DATA", projectId)
+  
+
+  return await api.delete("/projects", {
+    data:{
+      projectId: projectId
+    }
+    
   });
 };
 

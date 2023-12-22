@@ -60,7 +60,7 @@ function Sidebar({ isSidebarOpen, onSidebarClose }) {
         </div>
 
         {/* Logo */}
-        <Link to={isAdmin || isSupervisor ? "/dashboard" : "/assigned-tasks"}>
+        <Link to={isAdmin ? "/dashboard" : "/assigned-tasks"}>
           <img
             src={`${publicUrl}/images/logo1.png`}
             alt="logo"
@@ -109,7 +109,7 @@ function Sidebar({ isSidebarOpen, onSidebarClose }) {
             </NavLink>
           )}
           <NavLink
-            to={isAdmin || isSupervisor ? "/dashboard" : "/assigned-tasks"}
+            to={isAdmin ? "/dashboard" : "/assigned-tasks"}
             className={isActive}
           >
             <span className="material-symbols-outlined  text-2xl sm:text-3xl hover:text-[#2ce6bd] active:text-[#2ce6bd] focus:text-[#2ce6bd]">

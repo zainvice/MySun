@@ -6,17 +6,19 @@ import Heading from "../../common/heading";
 import DateInput from "../../common/dateInput";
 import Button from "../../common/button";
 import Modal from "../../common/modal";
-import { createProject, getWorkers } from "../../api";
+import { createProject} from "../../api";
+import { useWorkers } from "../../context/workersContext";
 import WorkerOverlay from "../../components/workerOverlay";
 import * as xlsx from "xlsx";
 import Message from "../../common/message";
 import jwtDecode from "jwt-decode";
 import Spinner from "../../common/spinner";
 import { useProjects } from "../../context/projectsContext";
+
 function NewProject() {
   const { isOpen, onOpen, onClose } = useModal();
   const [inputValues, setInputValues] = useState({});
-  const [workers, setWorkers] = useState([]);
+  const { workers } = useWorkers()||{};
   const [selectedWorkers, setSelectedWorkers] = useState([]);
   const [isCorrectStartDate, setCorrectStartDate] = useState(true);
   const [isCorrectEndDate, setCorrectEndDate] = useState(true);
@@ -35,13 +37,7 @@ function NewProject() {
     onClose: onCloseLoading,
   } = useModal();
 
-  useEffect(() => {
-    getWorkers().then((data) => {
-      setWorkers(
-        data?.filter((worker) => worker.role.toLowerCase() !== "admin") ?? []
-      );
-    });
-  }, []);
+ 
 
   const onChange = (e) => {
     const target = e.target ?? {};
@@ -150,6 +146,7 @@ function NewProject() {
         setSelectedWorkers([]);
         setMessage("Project created sccessfully!");
         onOpenMessage();
+        window.location.reload()
       })
       .catch((error) => {
         const data = error?.response?.data;
@@ -337,7 +334,7 @@ function NewProject() {
 
       <Modal isOpen={isOpen} onClose={onClose}>
         <WorkerOverlay
-          workers={workers}
+          workers={workers?.filter((worker)=> worker?.role!=='admin')}
           selectedWorkers={selectedWorkers}
           setSelectedWorkers={setSelectedWorkers}
         />

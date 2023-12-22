@@ -1,36 +1,44 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Modal from 'react-modal';
 
-function AddTaskModal({ isOpen, onRequestClose, tasks, onFullReset, setTaskToAdd }) {
+function AddTaskModal({ isOpen, onRequestClose, tasks, onFullReset, setTaskAdding }) {
   const [buildingNumber, setBuildingNumber] = useState("");
+  const [tasksToAdd, setTasksToAdd] = useState([])
+  const [letter, setLetter] = useState("")
   const [message, setMessage] = useState("")
+  const [from, setFrom] = useState()
+  const [to, setTo] = useState()
+  const [inputError, setInputError] = useState(false);
   const Confirm = () => {
     let add = true
-    if(tasks){
-      console.log(tasks)
-      tasks?.map(task=>{
-        
-        if(task.taskData["building number"]===buildingNumber){
-          add = false;
-        }
-      })
+    if (tasks) {
+      console.log(tasks);
+      tasksToAdd?.forEach(newTask => {
+        tasks?.forEach(existingTask => {
+          if (existingTask.taskData["building number"] === newTask) {
+            // If there is a match, set add to false
+            add = false;
+          }
+        });
+      });
     }
+    
     if(add){
       const hasBothParts = /^[A-Z]\d+$/.test(buildingNumber);
 
-      if (hasBothParts) {
-        setTaskToAdd(buildingNumber);
+      if (tasksToAdd.length>1) {
+        setTaskAdding(tasksToAdd);
         onRequestClose();
         setBuildingNumber("")
         setMessage("")
       } else {
-        setMessage(`Building number should have both alphabetical and numerical parts.`);
+        setMessage(`Building numbers should have both to from selected.`);
       }
       /* setTaskToAdd(buildingNumber);
       onRequestClose() */
     }
     if(!add){
-      setMessage(`Task: ${buildingNumber} already exists in project!`)
+      setMessage(`Tasks from ${tasksToAdd.length>0&& tasksToAdd[0]} to ${tasksToAdd.length>0&& tasksToAdd[tasksToAdd.length-1]} already exist in project or some part of them already exist, please reconsider your selection!`)
     }
     //
     //
@@ -42,17 +50,31 @@ function AddTaskModal({ isOpen, onRequestClose, tasks, onFullReset, setTaskToAdd
     setMessage("")
   };
 
-  const handleLetterSelect = (e) => {
-    setBuildingNumber(e.target.value + (buildingNumber[1] || ""));
-    console.log(buildingNumber)
-    setMessage("")
+  useEffect(()=>{
+    if(buildingNumber){
+      setLetter(buildingNumber[0])
+      setFrom(buildingNumber[0]+'1')
+    }
+  }, [buildingNumber])
+  
+  const generateTasksArray = () => {
+    const [column, start] = from.match(/[A-Z]+|[0-9]+/g);
+    const end = to.match(/[0-9]+/g)[0];
+    
+    const tasksArray = [];
+  
+    for (let i = parseInt(start); i <= parseInt(end); i++) {
+      const task = `${column}${i}`;
+      tasksArray.push(task);
+    }
+  
+    setTasksToAdd(tasksArray);
   };
-
-  const handleNumberSelect = (e) => {
-    setBuildingNumber((buildingNumber[0] || "") + e.target.value);
-    console.log(buildingNumber)
-    setMessage("")
-  };
+  useEffect(()=>{
+    if(to&&letter&&from){
+      generateTasksArray()
+    }
+  }, [to, letter, from])
 
   return (
     <Modal
@@ -65,36 +87,69 @@ function AddTaskModal({ isOpen, onRequestClose, tasks, onFullReset, setTaskToAdd
       <>
         <h2 className="text-2xl font-bold mb-4">Add New Task</h2>
         <p className="text-gray-700 mb-4">Choose the building number to add a task</p>
-        <p className='mb-2'>Selected: {buildingNumber}</p>
+        <p className='mb-2'>Selected: {tasksToAdd.length>0&& tasksToAdd[0]}-{tasksToAdd.length>0&& tasksToAdd[tasksToAdd.length-1]}</p>
         <p className='mb-2 text-red-600'>{message}</p>
-        <div className="flex mb-2">
-            <input className='p-3 rounded bg-gray-200 w-full' type="text" placeholder='Write or select building number' value={buildingNumber} onChange={(e)=>{setBuildingNumber(e.target.value.toUpperCase()); setMessage("")}} maxLength={4}/>
+        <div className="flex flex-col mb-2">
+        <input
+          className={`p-3 rounded bg-gray-200 w-full ${inputError ? 'border-red-500' : ''}`}
+          type="text"
+          placeholder='Write a building letter'
+          value={buildingNumber}
+          onChange={(e) => {
+            const inputText = e.target.value.toUpperCase();
+          
+            // Check if the input contains only letters
+            setInputError(!/^[A-Z]*$/.test(inputText));
+          
+            // Update buildingNumber only if it contains letters
+            if (/^[A-Z]*$/.test(inputText)) {
+              setBuildingNumber(inputText);
+              setMessage("");
+            }
+          }}
+          maxLength={4}
+        />
+        {inputError && <p className="text-red-500">Please enter only letters.</p>}
         </div>
         <div className="flex mb-4">
           {/* Select for A-Z letters */}
-          <select className="w-1/2 p-2 mr-2 border" onChange={handleLetterSelect}>
+          <div className='flex flex-col w-1/2'>
+          <label htmlFor="letter" className='text-gray-400'>From</label>
+          <select className="w-full p-2 mr-2 border" onChange={(e) => setFrom(`${letter}${e.target.value}`)}>
             <option key={""} value={""}>
-                {""}
-              </option>
-            {Array.from({ length: 26 }, (_, index) => String.fromCharCode('A'.charCodeAt(0) + index)).map(letter => (
-              <option key={letter} value={letter}>
-                {letter}
+              {from}
+            </option>
+            {Array.from({ length: 1500 }, (_, index) => index + 1).map(number => (
+              <option key={number} value={number}>
+                {letter}{number}
               </option>
             ))}
           </select>
 
-          {/* Select for 1-100 numbers */}
-          <select className="w-1/2 p-2 ml-2 border" onChange={handleNumberSelect}>
-          <option key={""} value={""}>
-                {""}
-              </option>
-            {Array.from({ length: 100 }, (_, index) => index + 1).map(number => (
+          </div>
+          
+            
+                
               
+          
+         
+
+          {/* Select for 1-100 numbers */}
+          <div className='flex flex-col w-1/2'>
+          <label htmlFor="letter" className='ml-3 text-gray-400'>To</label>
+          <select className="w-full p-2 ml-2 border" onChange={(e) => setTo(`${letter}${e.target.value}`)}>
+            <option key={""} value={""}>
+              {""}
+            </option>
+            {Array.from({ length: 1500 }, (_, index) => index + 1).map(number => (
               <option key={number} value={number}>
-                {number}
+                {letter}{number}
               </option>
             ))}
           </select>
+
+          </div>
+         
         </div>
 
         <button

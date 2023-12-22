@@ -1,6 +1,10 @@
 importScripts('https://storage.googleapis.com/workbox-cdn/releases/6.3.0/workbox-sw.js');
 
-const CACHE_NAME = 'my-sun-app-v11';
+workbox.setConfig({
+  debug: false,  
+});
+
+const CACHE_NAME = 'my-sun-app-v15';
 
 const cacheableUrls = [
   '/',

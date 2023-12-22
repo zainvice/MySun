@@ -16,7 +16,7 @@ function Workers() {
   
   const { isOpen, onOpen, onClose } = useModal();
   const [isloading, setloading] = useState(true);
-  const { workers } = useWorkers()
+  const { workers } = useWorkers() || {};
   useEffect(() => {
     if (!isOpen) {
       if(workers){
