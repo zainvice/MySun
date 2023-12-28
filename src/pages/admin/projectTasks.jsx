@@ -11,11 +11,13 @@ import TaskCard from "../../components/taskCard";
 import useAuth from "../../hooks/useAuth";
 import Spinner from "../../common/spinner";
 import { isEmpty } from "lodash";
+import { useWorkers } from "../../context/workersContext";
 import { exportToExcel } from "../../global";
 import Button from "../../common/button";
 const LazyTaskCard = lazy(() => import("../../components/taskCard"));
 function Tasks() {
   const { id } = useParams();
+  const {workers} = useWorkers()
   const { projects } = useProjects();
   const [filter, setSelectedFilter]= useState([])
   const project = projects?.length
@@ -123,16 +125,28 @@ function Tasks() {
      
        
        return  {
-           ...task.taskData,
-           "Status": task.status,
-           "Classification": task.classification,
-           "Lastest Update On": new Date(task.updatedAt).toLocaleString(),
-           "Property Type": task.propertyType?.join(', '),
-           "Stats": task.stats?.join(', '),
-           "Latest Status Change": history,
-           "Status Change Date": historyDate,
-           "Latest Classification Change": classificationHistory,
-           "Classification Change Date": classificationHistoryDate
+            "Building Number": task.taskData["building number"],
+            "Physical Number": task.taskData["phyiscal number"],
+            "Payer Name": task.taskData["payer name"],
+            "Payer Number": task.taskData["payer number"],
+            "Address": task.taskData["payer address"],
+            "Manually Entered": task.manual? "YES": "NO",
+            "Current Status": task.status,
+            "Status History": history,
+            "Classification": task.classification,
+            "Classification History": classificationHistory,
+            "Coordinated": task.classification ? "YES":"NO",
+            "Coordination Letter 1 Expired": task.classification === "Coordination Letter 1 Expired"? "YES":"NO",
+            "Coordination Letter 2 Expired": task.classification === "Coordination Letter 2 Expired"? "YES":"NO",
+            "Refused Survey": task.classification === "Refused Survey"? "YES":"NO",
+            "Under Construction": task.stats.includes("Under Construction")? "YES":"NO",
+            "Aerial Mapped": task.stats.includes("Aerial Mapped")? "YES":"NO",
+            "Missing Information": task.stats.includes("Missing Information")? "YES":"NO",
+            "Missing Physical Number": task.stats.includes("Missing Physical Number")? "YES":"NO",
+            "Created By": workers.filter((worker)=> worker.email===task?.editedBy.email)[0]?.fullName||"System",
+            "Date Created": new Date(task.createdAt).toLocaleString(),
+            "Last edited date": new Date(task.updatedAt).toLocaleString(),
+            "Floor": task?.floor?.join(","),    
            
          }
        

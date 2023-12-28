@@ -248,7 +248,7 @@ function Project() {
               const latestStatusHistory = task?.statusHistory[task?.statusHistory?.length - 1];
               history = `Changed from ${latestStatusHistory?.changedFrom} to ${latestStatusHistory?.changedTo} on ${new Date(latestStatusHistory?.changedOn).toLocaleDateString()}`
             }
-              return { ...task.taskData, "Status": task.status, "Latest Status Change": history};
+              return { ...task.taskData };
           });
           console.log("TASKS", taske);
           const tasksBN = taske?.map((task, index) => {

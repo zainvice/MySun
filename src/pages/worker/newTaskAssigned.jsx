@@ -12,6 +12,7 @@ import { editProject } from "../../api";
 import { useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { getProjects } from "../../api";
+import { useWorkers } from "../../context/workersContext";
 import { getTaskById } from "../../api";
 import ResetModal from "../../components/ResetModal";
 import { exportToExcel } from "../../global";
@@ -25,7 +26,7 @@ function NewTaskAssigned() {
   const {t}= useTranslation()
   const [status, setStatus] = useState(); // Initialize the status state variable
   const [floor, setFloor] = useState([]);
-
+  const {workers} = useWorkers()
   const handleFloorChange = (e) => {
     const selectedValue = e.target.value;
 
@@ -210,18 +211,33 @@ function NewTaskAssigned() {
          const latestClassificationHistory = task[0].classificationHistory[task[0].classificationHistory.length - 1];
          classificationHistory = `Changed from ${latestClassificationHistory?.changedFrom} to ${latestClassificationHistory?.changedTo} on ${new Date(latestClassificationHistory?.changedOn).toLocaleDateString()}`;
        }
-     
+       console.log("WORKERS", workers)
+       const workerToExport = workers.filter((worker)=> worker.email===task[0]?.editedBy[0].email)
+       console.log("WORKER", workerToExport)
        taske = [
          {
-           ...task[0].taskData,
-           "Status": task[0].status,
+           "Building Number": task[0].taskData["building number"],
+           "Physical Number": task[0].taskData["phyiscal number"],
+           "Payer Name": task[0].taskData["payer name"],
+           "Payer Number": task[0].taskData["payer number"],
+           "Address": task[0].taskData["payer address"],
+           "Manually Entered": manual? "YES": "NO",
+           "Current Status": task[0].status,
+           "Status History": history,
            "Classification": task[0].classification,
-           "Lastest Update On": new Date(task[0].updatedAt).toLocaleString(),
-           "Property Type": task[0].propertyType.join(', '),
-           "Stats": task[0].stats.join(', '),
-           "Latest Status Change": history,
-           "Latest Classification Change": classificationHistory
-           
+           "Classification History": classificationHistory,
+           "Coordinated": task[0].classification ? "YES":"NO",
+           "Coordination Letter 1 Expired": task[0].classification === "Coordination Letter 1 Expired"? "YES":"NO",
+           "Coordination Letter 2 Expired": task[0].classification === "Coordination Letter 2 Expired"? "YES":"NO",
+           "Refused Survey": task[0].classification === "Refused Survey"? "YES":"NO",
+           "Under Construction": task[0].stats.includes("Under Construction")? "YES":"NO",
+           "Aerial Mapped": task[0].stats.includes("Aerial Mapped")? "YES":"NO",
+           "Missing Information": task[0].stats.includes("Missing Information")? "YES":"NO",
+           "Missing Physical Number": task[0].stats.includes("Missing Physical Number")? "YES":"NO",
+           "Created By": workers.filter((worker)=> worker.email===task[0]?.editedBy[0].email)[0]?.fullName,
+           "Date Created": new Date(task[0].createdAt).toLocaleString(),
+           "Last edited date": new Date(task[0].updatedAt).toLocaleString(),
+           "Floor": task[0]?.floor?.join(","),          
          },
        ];
      }
@@ -242,7 +258,7 @@ function NewTaskAssigned() {
      if(projectData){
       const blob = await exportToExcel(projectData);
       console.log(blob)
-      const name = projectData[0]["building number"]
+      const name = projectData[0]["Building Number"]
       // Create a download link and trigger the download
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement("a");
@@ -259,7 +275,7 @@ function NewTaskAssigned() {
   
   const [tasktoDisplay, setTasktoDisplay]= useState()
   const [inputValues, setInputValues] = useState(tasktoDisplay?.taskData || {});
-  
+  console.log(tasktoDisplay,"DISPLAYING", stats)
   const [already_assigned, setAAssigned]= useState()
   const [timerRunning, setTimerRunning] = useState(false);
   const [seconds, setSeconds] = useState(0);
@@ -348,7 +364,7 @@ function NewTaskAssigned() {
     async function setTaskToDisplay() {
       const filteredTasks = await fetchData();
      
-      //console.log("TASK FOUND", filteredTasks)
+      console.log("TASK FOUND", filteredTasks)
       //setTasktoDisplay(filteredTasks);
       setDisplay(filteredTasks)
       const projectId = filteredTasks?.projectId
@@ -375,7 +391,7 @@ function NewTaskAssigned() {
        
       }
 
-      console.log("Displaying Task:", display)
+      //console.log("Displaying Task:", display)
       setSearchTerm(filteredTasks?.taskData?.["building number"]?filteredTasks?.taskData?.["building number"]:filteredTasks?.taskData?.["buildingNumber"])
       if(filteredTasks)
           setloading(false);
@@ -432,7 +448,7 @@ function NewTaskAssigned() {
           window.location.reload()
         } catch (error) {
           const data = error?.response?.data;
-          console.log("MAKING IS LOADING FALSE", error)
+          //console.log("MAKING IS LOADING FALSE", error)
           setloading(false);
           setMessage("Something went wrong, try again in a moment!")
         }
@@ -602,7 +618,7 @@ function NewTaskAssigned() {
   }
   const [timerDuration, setTimerDuration] = useState(7 * 24 * 60 * 60 * 1000); // 7 days in milliseconds
   const [remainingTime, setRemainingTime] = useState(null);
-  console.log("remaining:", remainingTime)
+  //console.log("remaining:", remainingTime)
 
   useEffect(() => {
     const coordinationLetter1History = display?.classificationHistory?.find(
@@ -623,11 +639,11 @@ function NewTaskAssigned() {
     } else {
       latestCoordinationHistory = coordinationLetter1History || coordinationLetter2History;
     }
-    console.log(latestCoordinationHistory)
+    //console.log(latestCoordinationHistory)
 
     if (latestCoordinationHistory) {
       const changedOnTimestamp = new Date(latestCoordinationHistory.changedOn).getTime();
-      console.log(changedOnTimestamp)
+      //console.log(changedOnTimestamp)
       const targetTime = changedOnTimestamp + timerDuration;
 
       const updateRemainingTime = () => {
@@ -641,10 +657,10 @@ function NewTaskAssigned() {
           const seconds = Math.floor((timeDifference % (60 * 1000)) / 1000);
 
           setRemainingTime(`${days}d ${hours}h ${minutes}m ${seconds}s`);
-          console.log("Remaining")
+          //console.log("Remaining")
         } else {
           setRemainingTime('Coordination Letter has expired!');
-          console.log("expired")
+          //console.log("expired")
         }
       };
 
