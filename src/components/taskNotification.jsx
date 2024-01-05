@@ -1,11 +1,19 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 
 const Notification = ({ messages }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [notifications, setNotifications] = useState(messages)
+  console.log("MESSAGES", messages)
+  useEffect(()=>{
+    setNotifications(messages)
+  }, [messages, isOpen])
+  useEffect(()=>{
+    setNotifications(messages)
+  }, [])
 
   const handleClose = (event) => {
+     event.preventDefault()
      setNotifications([])
   };
   

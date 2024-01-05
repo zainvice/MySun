@@ -593,9 +593,10 @@ function NewTaskAssigned() {
       const response = await createTask({ task } );
       //console.log(response);
       const { data } = response;
-      /* navigate(`/task/${data._id}`); */
+      /*  */
       setLink(`/task/${data._id}`)
       setloading(false);
+      navigate(`/task/${data._id}`);
       setNextCreated(true)
     } catch (error) {
       //console.log(error);
