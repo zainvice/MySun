@@ -608,12 +608,13 @@ function NewTaskAssigned() {
   const [dataToSearch, setSearchData]= useState()
   const [manual, setManual]= useState(false)
   const onManualClick = (e) => {
-    if(manual===false){
+    console.log("Manual Clicked", manual)
+    if(!manual){
       setManual(true)
-      setSearchData('')
+      setSearchData(' ')
     }else{
       setManual(false)
-      setSearchData('')
+      setSearchData(' ')
     }
   }
   const [timerDuration, setTimerDuration] = useState(7 * 24 * 60 * 60 * 1000); // 7 days in milliseconds
@@ -698,6 +699,7 @@ function NewTaskAssigned() {
         acc[key] = "";
         return acc;
       }, {}) : {};
+      console.log("SETTING TASKDATA", inputValues)
       const taska= {taskData: inputValues}
       setTasktoDisplay(taska)
       setInputValues(inputValues);
@@ -710,7 +712,7 @@ function NewTaskAssigned() {
   },[dataToSearch])
 
   useEffect(()=>{
-    if(manual&&inputValues["phyiscal number"]){
+    if(manual&&inputValues){
       projectToCompare.originalData?.tasks?.map((task)=>{
         if(task["phyiscal number"]===inputValues["phyiscal number"]){
           

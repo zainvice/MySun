@@ -563,7 +563,7 @@ function Project() {
 
             <p className="">
               <span className="font-bold mr-3">Assigned Workers: </span>
-              <span className="text-[#34F5C5]">{project?.workers?.length}</span>
+              <span className="text-[#34F5C5]">{project?.workers?.filter((worker)=> worker.role==="worker").length}</span>
             </p>
 
             <p className="">
