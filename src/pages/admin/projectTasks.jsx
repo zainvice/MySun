@@ -135,7 +135,7 @@ function Tasks() {
             "Status History": history,
             "Classification": task.classification,
             "Classification History": classificationHistory,
-            "Coordinated": task.classification ? "YES":"NO",
+            "Coordinated": task.classification === "Coordinated" ? "YES":"NO",
             "Coordination Letter 1 Expired": task.classification === "Coordination Letter 1 Expired"? "YES":"NO",
             "Coordination Letter 2 Expired": task.classification === "Coordination Letter 2 Expired"? "YES":"NO",
             "Refused Survey": task.classification === "Refused Survey"? "YES":"NO",

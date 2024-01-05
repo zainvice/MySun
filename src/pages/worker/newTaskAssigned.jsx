@@ -226,7 +226,7 @@ function NewTaskAssigned() {
            "Status History": history,
            "Classification": task[0].classification,
            "Classification History": classificationHistory,
-           "Coordinated": task[0].classification ? "YES":"NO",
+           "Coordinated": task[0].classification === "Coordinated" ? "YES":"NO",
            "Coordination Letter 1 Expired": task[0].classification === "Coordination Letter 1 Expired"? "YES":"NO",
            "Coordination Letter 2 Expired": task[0].classification === "Coordination Letter 2 Expired"? "YES":"NO",
            "Refused Survey": task[0].classification === "Refused Survey"? "YES":"NO",
