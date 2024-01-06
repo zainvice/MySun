@@ -563,12 +563,24 @@ function Project() {
 
             <p className="">
               <span className="font-bold mr-3">Assigned Workers: </span>
-              <span className="text-[#34F5C5]">{project?.workers?.filter((worker)=> worker.role==="worker").length}</span>
+              <span className="text-[#34F5C5]">{project?.workers?.filter((worker)=> worker.role!=="admin").length}</span>
             </p>
 
-            <p className="">
+            <p className="flex">
               <span className="font-bold mr-3">Supervisor: </span>
-              <span className="text-[#34F5C5]">{supervisor}</span>
+              <span className="text-[#34F5C5] flex">{project?.workers?.filter((worker) => worker.role === 'supervisor').map((worker) => (
+                <>
+                  {'-'}
+                  <div key={worker.id} className="flex flex-row">
+                    <span className="text-[#34F5C5]">{worker.fullName.split(" ")[0]}</span>
+                    
+                      <span className="text-[#34F5C5] material-symbols-outlined text-[14px] hover:text-red-600 transition-300 cursor-pointer" onClick={() => handleDeleteWorker(worker)}>delete</span>
+                    
+                  </div>
+                  
+                  </>
+                ))}</span>
+            
             </p>
 
             <p className="flex">

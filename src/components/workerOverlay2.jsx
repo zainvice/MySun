@@ -13,9 +13,10 @@ export default function WorkerOverlay({
   const {workers} = useWorkers()||{}
   const [selectedWorkers, setSelectedWorkers]= useState([])
   const {reFetch} = useProjects()
-  const [workersTodisplay, setWorkers] = useState(workers?.filter((worker)=> worker.role==='worker'))
+  const [workersTodisplay, setWorkers] = useState(workers?.filter((worker) => worker.role !== 'admin' && !addedWorkers.some(addedWorker => addedWorker.email === worker.email)))
   const [log, setLog]= useState("ADD TO PROJECT")
   const [isLoading, setLoading] = useState(false)
+  console.log("Added Workers", addedWorkers)
   const onAddWorkers = async() =>{
     console.log("ADDING!")
     setLog("ADDING!")
@@ -62,7 +63,7 @@ export default function WorkerOverlay({
   const onSearch = () =>{
     console.log("Searching")
     setMessage("Searching")
-    const shadowCopy = workers?.filter((worker)=> worker.role==='worker')
+    const shadowCopy = workers?.filter((worker) => worker.role !== 'admin' && !addedWorkers.some(addedWorker => addedWorker.email === worker.email))
     const filtered = shadowCopy.filter(worker=>{
       const searchItem = email.toLowerCase()
       if(worker.email.toLowerCase().includes(searchItem)){
@@ -83,7 +84,7 @@ export default function WorkerOverlay({
     if(email){
       console.log("Searching")
       setMessage("Searching.....", email)
-      const shadowCopy = workers?.filter((worker)=> worker.role==='worker')
+      const shadowCopy = workers?.filter((worker) => worker.role !== 'admin' && !addedWorkers.some(addedWorker => addedWorker.email === worker.email))
       const filtered = shadowCopy.filter(worker=>{
         const searchItem = email.toLowerCase()
         if(worker.email.toLowerCase().includes(searchItem)){
@@ -102,7 +103,7 @@ export default function WorkerOverlay({
       setWorkers(filtered)
     }
     }else{
-      setWorkers(workers?.filter((worker)=> worker.role==='worker'))
+      setWorkers(workers?.filter((worker) => worker.role !== 'admin' && !addedWorkers.some(addedWorker => addedWorker.email === worker.email)))
     }
   }, [email])
   return (
@@ -126,7 +127,7 @@ export default function WorkerOverlay({
         <span className="text-center text-bold">{log}</span>
       </div>
 
-      <div className="my-4 pb-2 overflow-y-auto h-[calc(100%-2.75rem-0.5rem)] flex flex-col gap-3 animate-fadeIn">
+      <div className="my-4 pb-2 overflow-y-auto h-[calc(100%-3rem-2.5rem)] flex flex-col gap-3 animate-fadeIn">
         {isLoading ?(
             <Spinner/>
         ): (
