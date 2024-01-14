@@ -612,10 +612,10 @@ function NewTaskAssigned() {
     console.log("Manual Clicked", manual)
     if(!manual){
       setManual(true)
-      setSearchData(' ')
+      setSearchData('')
     }else{
       setManual(false)
-      setSearchData(' ')
+      setSearchData('')
     }
   }
   const [timerDuration, setTimerDuration] = useState(7 * 24 * 60 * 60 * 1000); // 7 days in milliseconds

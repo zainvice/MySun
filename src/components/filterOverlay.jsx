@@ -263,7 +263,7 @@ function FilterOverlay({setSelectedFilter, filter, viewAs, setloading}) {
                 </select>
                 </div>
                 <div className="w-full">
-                <label htmlFor="select" className='text-gray-600 font-bold'>Status</label>
+                <label htmlFor="select" className='text-gray-600 font-bold'>Building Number</label>
                 <select
               value={"Default"} 
               onChange={(e) => {
