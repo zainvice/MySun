@@ -334,8 +334,8 @@ function Tasks() {
       
       sortedTasks = tasksCopy.filter((task) => task?.status === "Submitted");
  
-    } else if (filter.some(item => item.selectedValue === "pending")&& filter.some(item => item.optgroup === "Status")) {
-      
+    } else if (filter.some(item => item.selectedValue === "pending")&& filter.some(item => item.optgroup === "-Status-")) {
+      console.log("DID PENDING FILTERATION")
       sortedTasks = tasksCopy.filter((task) => task?.status === "Pending");
 
     }
@@ -393,7 +393,7 @@ function Tasks() {
         sortedTasks = tasksCopy.filter((task) => task?.classification === "Refused Survey");
       }
       
-    } else if (filter.some(item => item.selectedValue === "pending")&& filter.some(item => item.optgroup === "Classification")) {
+    } else if (filter.some(item => item.selectedValue === "pending")&& filter.some(item => item.optgroup === "-Classification-")) {
       
       if(sortedTasks.length>0){
         
@@ -446,7 +446,7 @@ function Tasks() {
         sortedTasks = tasksCopy.filter((task) => task?.propertyType?.includes("Agricultural"));
       }
       
-    } else if (filter.some(item => item.selectedValue === "government")&& filter.some(item => item.optgroup === "Property Type")) {
+    } else if (filter.some(item => item.selectedValue === "government")&& filter.some(item => item.optgroup === "-Property Type-")) {
       
       if(sortedTasks.length>0){
         
@@ -499,7 +499,7 @@ function Tasks() {
         sortedTasks = tasksCopy.filter((task) => task?.stats?.includes("Missing Physical Number"));
       }
       
-    } else if (filter.some(item => item.selectedValue === "pending")&& filter.some(item => item.optgroup === "Stats")) {
+    } else if (filter.some(item => item.selectedValue === "pending")&& filter.some(item => item.optgroup === "-Stats-")) {
       
       if(sortedTasks.length>0){
         
