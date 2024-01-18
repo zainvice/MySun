@@ -42,7 +42,10 @@ function AssignedTasks() {
         console.log("filtered", filteredProjects)
         setTaskNote(filteredProjects?.flatMap((project) => project?.tasks?.filter((task) => task.status === "Coordination Letter 1")))
         //console.log("filtered Projects",filteredProjects)
-        setProjects(filteredProjects);
+        const uniqueArray = Array.from(new Set(filteredProjects.map(obj => obj._id))).map(_id => {
+          return filteredProjects.find(obj => obj._id === _id);
+        });
+        setProjects(uniqueArray);
         
         setloading(false)
     }

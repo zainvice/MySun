@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import Heading from "../common/heading";
+import { useTranslation } from "react-i18next";
 import { createWorker } from "../api";
 import Spinner from "../common/spinner";
 
 function NewWorkerOverlay({ onClose }) {
   const [message, setMessage] = useState(null);
+  const { t } = useTranslation();
   const [inputValues, setInputValues] = useState({});
   const [creating, isCreating]= useState(false)
   const onChange = (e) => {
@@ -42,7 +44,7 @@ function NewWorkerOverlay({ onClose }) {
   return (
     <div className="w-[95vw] lg:w-[50vw] max-w-[650px] bg-white rounded-3xl p-3 sm:p-6">
       <div className="flex items-center justify-between">
-        <Heading title={"Adding new Worker"} className="items-center" />
+        <Heading title={t("addingANewWorker.addingANewWorker")} className="items-center" />
         <button
           onClick={onClose}
           className="hover:text-[#21D0B2] transform hover:scale-105 transition-transform duration-300"
@@ -62,61 +64,61 @@ function NewWorkerOverlay({ onClose }) {
           )}
 
           <label className="flex flex-col lg:flex-row gap-1 mb-4">
-            <span className="md:w-1/4 text-lg font-medium">Full Name:</span>
+            <span className="md:w-1/4 text-lg font-medium">{t("addingANewWorker.fullName")}:</span>
             <input
               type="text"
               name="fullName"
               onChange={onChange}
-              placeholder="Enter the name of the Worker"
+              placeholder={t("addingANewWorker.enterFullName")}
               value={inputValues?.fullName ?? ''}
               className="h-10 flex-1 py-2 px-4 rounded-full border-[1px] border-[#8C8C8C] bg-white focus-within:outline-[#21D0B2]"
             />
           </label>
 
           <label className="flex flex-col lg:flex-row gap-1 mb-4">
-            <span className="md:w-1/4 text-lg font-medium">Username:</span>
+            <span className="md:w-1/4 text-lg font-medium">{t("addingANewWorker.username")}:</span>
             <input
               type="text"
               name="username"
               onChange={onChange}
-              placeholder="Enter the username of the Worker"
+              placeholder={t("addingANewWorker.enterUsername")}
               value={inputValues?.username ?? ''}
               className="h-10 flex-1 py-2 px-4 rounded-full border-[1px] border-[#8C8C8C] bg-white focus-within:outline-[#21D0B2]"
             />
           </label>
 
           <label className="flex flex-col lg:flex-row gap-1 mb-4">
-            <span className="md:w-1/4 text-lg font-medium">Phone:</span>
+            <span className="md:w-1/4 text-lg font-medium">{t("addingANewWorker.phone")}:</span>
             <input
               type="tel"
               name="phone"
               onChange={onChange}
-              placeholder="Enter the Phone of the Worker"
+              placeholder={t("addingANewWorker.enterPhone")}
               value={inputValues?.phone ?? ''}
               className="h-10 flex-1 py-2 px-4 rounded-full border-[1px] border-[#8C8C8C] bg-white focus-within:outline-[#21D0B2]"
             />
           </label>
 
           <label className="flex flex-col lg:flex-row gap-1 mb-4">
-            <span className="md:w-1/4 text-lg font-medium">Email:</span>
+            <span className="md:w-1/4 text-lg font-medium">{t("addingANewWorker.email")}:</span>
             <input
               type="email"
               name="email"
               onChange={onChange}
-              placeholder="Enter the email of the Worker"
+              placeholder={t("addingANewWorker.enterEmail")}
               value={inputValues?.email ?? '' }
               className="h-10 flex-1 py-2 px-4 rounded-full border-[1px] border-[#8C8C8C] bg-white focus-within:outline-[#21D0B2]"
             />
           </label>
 
           <label className="flex flex-col lg:flex-row gap-1 mb-4">
-            <span className="md:w-1/4 text-lg font-medium">Password:</span>
+            <span className="md:w-1/4 text-lg font-medium">{t("addingANewWorker.password")}:</span>
             <input
               type="text"
               name="password"
               onChange={onChange}
               value={inputValues?.password ?? '' }
-              placeholder="Enter the password of the Worker"
+              placeholder={t("addingANewWorker.enterPassword")}
               className="h-10 flex-1 py-2 px-4 rounded-full border-[1px] border-[#8C8C8C] bg-white focus-within:outline-[#21D0B2]"
             />
           </label>
@@ -124,11 +126,11 @@ function NewWorkerOverlay({ onClose }) {
             className="ml-auto mt-[-16] text-[#00946f] font-medium hover:underline cursor-pointer transform hover:scale-105 transition-transform duration-300"
             onClick={generateRandomPassword}
           >
-            Generate default
+            {t("addingANewWorker.generateDefault")}
           </span>
 
           <div className="flex sm:items-center flex-col sm:flex-row">
-            <span className="text-lg font-medium mr-4">Choose Role:</span>
+            <span className="text-lg font-medium mr-4">{t("addingANewWorker.chooseRole")}:</span>
             <div className="flex items-center flex-1 gap-4">
               <div className="flex items-center">
                 <input
@@ -138,7 +140,7 @@ function NewWorkerOverlay({ onClose }) {
                   checked={inputValues?.role === 'admin'}
                   onChange={onChange}
                 />
-                <label className="text-lg ml-2">Admin</label>
+                <label className="text-lg ml-2">{t("addingANewWorker.admin")}</label>
               </div>
               <div className="flex items-center">
                 <input
@@ -148,7 +150,7 @@ function NewWorkerOverlay({ onClose }) {
                   checked={inputValues?.role === 'supervisor'}
                   onChange={onChange}
                 />
-                <label className="text-lg ml-2">Supervisor</label>
+                <label className="text-lg ml-2">{t("addingANewWorker.supervisor")}</label>
               </div>
               <div className="flex items-center">
                 <input
@@ -158,7 +160,7 @@ function NewWorkerOverlay({ onClose }) {
                   checked={inputValues?.role === 'worker'}
                   onChange={onChange}
                 />
-                <label className="text-lg ml-2">Worker</label>
+                <label className="text-lg ml-2">{t("addingANewWorker.worker")}</label>
               </div>
             </div>
           </div>
@@ -168,7 +170,7 @@ function NewWorkerOverlay({ onClose }) {
               type="submit"
               className="w-32 h-10 mt-2 xs:mt-auto bg-transparent border-[#2ce6bd] text-[#2ce6bd] border-2 rounded-full focus:outline-none transform hover:scale-105 transition-transform duration-300 hover:bg-[#2ce6bd] hover:text-white"
             >
-              Create Account
+              {t("addingANewWorker.createAccount")}
             </button>
           </div>
         </form>

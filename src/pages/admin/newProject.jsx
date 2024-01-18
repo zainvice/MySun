@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useModal } from "../../hooks";
+import { useTranslation } from "react-i18next";
 import Layout from "../../layout";
 import Container from "../../common/container";
 import Heading from "../../common/heading";
@@ -16,6 +17,7 @@ import Spinner from "../../common/spinner";
 import { useProjects } from "../../context/projectsContext";
 
 function NewProject() {
+  const { t } = useTranslation();
   const { isOpen, onOpen, onClose } = useModal();
   const [inputValues, setInputValues] = useState({});
   const { workers } = useWorkers()||{};
@@ -160,12 +162,12 @@ function NewProject() {
 
   return (
     <>
-      <Layout activePageName={"Creating New Project"}>
+      <Layout activePageName={t("newProject.creatingNewProject")}>
         <Container>
           <div className="h-full grid grid-cols-12 gap-2 sm:gap-4 text-[#505050]">
             <div className="col-span-12  md:col-span-8 h-full">
               <Heading
-                title={"New Project"}
+                title={t("newProject.newProject")}
                 additionalClases={"mb-2 lg:mb-8"}
               />
               <form
@@ -174,7 +176,7 @@ function NewProject() {
               >
                 <label className="flex flex-col lg:flex-row gap-1">
                   <span className="md:w-1/4 text-lg font-medium">
-                    Project Name:
+                    {t("newProject.projectName")}
                   </span>
                   <input
                     type="text"
@@ -182,21 +184,21 @@ function NewProject() {
                     name="projectName"
                     value={inputValues?.projectName ?? ""}
                     onChange={onChange}
-                    placeholder="Enter project name"
+                    placeholder={t("newProject.enterProjectName")}
                     className="h-10 w-full py-2 px-4 rounded-full border-[1px] border-[#8C8C8C] bg-white focus-within:outline-[#21D0B2]"
                   />
                 </label>
 
                 <label className="flex flex-col lg:flex-row gap-1">
                   <span className="md:w-1/4 text-lg font-medium">
-                    Start Date:
+                  {t("newProject.startDate")}:
                   </span>
                   <div className="w-full">
                     <DateInput
                       onChange={onChange}
                       required
                       value={inputValues?.startDate ?? ""}
-                      placeholder={"Choose start date of project"}
+                      placeholder={t("newProject.chooseStartDate")}
                       additonalProps={{
                         name: "startDate",
                       }}
@@ -211,13 +213,13 @@ function NewProject() {
 
                 <label className="flex flex-col lg:flex-row gap-1">
                   <span className="md:w-1/4 text-lg font-medium">
-                    End Date:
+                  {t("newProject.endDate")}:
                   </span>
                   <div className="w-full">
                     <DateInput
                       onChange={onChange}
                       value={inputValues?.endDate ?? ""}
-                      placeholder={"Choose end date of project"}
+                      placeholder={t("newProject.chooseEndDate")}
                       additonalProps={{
                         name: "endDate",
                       }}
@@ -231,7 +233,7 @@ function NewProject() {
                 </label>
 
                 <label className="flex flex-col lg:flex-row gap-1">
-                  <span className="md:w-1/4 text-lg font-medium">Worker:</span>
+                  <span className="md:w-1/4 text-lg font-medium">{t("newProject.workers")}</span>
                   <input
                     readOnly
                     type="text"
@@ -243,19 +245,19 @@ function NewProject() {
                             .join(", ")
                         : ""
                     }
-                    placeholder="Choose the worker for project"
+                    placeholder={t("newProject.chooseWorkers")}
                     className="h-10 w-full py-2 px-4 rounded-full border-[1px] border-[#8C8C8C] bg-white focus-within:outline-[#21D0B2] cursor-pointer"
                   />
                 </label>
 
                 <label className="flex flex-col lg:flex-row gap-1">
                   <span className="md:w-1/4 text-lg font-medium">
-                    Description:
+                  {t("newProject.description")}:
                   </span>
                   <textarea
                     type="text"
                     required
-                    placeholder="Enter project's description"
+                    placeholder={t("newProject.enterProjectsDescription")}
                     rows={4}
                     name="projectDescription"
                     onChange={onChange}
@@ -266,7 +268,7 @@ function NewProject() {
 
                 <div className="flex flex-col lg:flex-row">
                 <span className="w-1/2 text-lg font-medium">
-                    Upload files:
+                {t("newProject.uploadFiles")}:
                   </span>
                 <label className="flex flex-col lg:flex-row gap-1 w-full lg-w-1/3 mr-5">
                   
@@ -285,7 +287,7 @@ function NewProject() {
                       }`}
                       src="./images/uploadFile.png"
                     />
-                    <p>{fileName ? fileName : "Choose property data (.xlsx)"}</p>
+                    <p>{fileName ? fileName : `${t("newProject.choosePropertyData")} (.xlsx)`}</p>
                   </div>
                 </label>
                 <label className="flex flex-col lg:flex-row w-full lg-w-1/3 lg:ml-3">
@@ -305,14 +307,14 @@ function NewProject() {
                       }`}
                       src="./images/uploadFile.png"
                     />
-                    <p>{file2Name ? file2Name : "Choose building data (.xlsx)"}</p>
+                    <p>{file2Name ? file2Name : `${t("newProject.chooseBuildingData")} (.xlsx)`}</p>
                   </div>
                 </label>
                 </div>
 
                 <div className="mb-4 mt-2 lg:mt-0 text-right">
                   <Button
-                    title={"Create Project"}
+                    title={t("newProject.createProject")}
                     additionalClasses={
                       "border-2 transform hover:scale-105 transition-transform duration-300"
                     }

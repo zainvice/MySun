@@ -1,6 +1,7 @@
 import Layout from "../../layout";
 import Heading from "../../common/heading";
 import Container from "../../common/container";
+import { useTranslation } from "react-i18next";
 import { useDimensions } from "../../hooks";
 import { useParams } from "react-router";
 import Spinner from "../../common/spinner";
@@ -18,6 +19,7 @@ function UserDetail(user) {
   const {workers}= useWorkers()
   const [userData, setData]= useState()
   const [surveyData, setSurveys]= useState()
+  const { t } = useTranslation();
   const [isloading, setloading] = useState(true);
   const [password, setPassword] = useState("")
   useEffect(() => {
@@ -49,7 +51,7 @@ function UserDetail(user) {
     }
   }
   return (
-    <Layout activePageName={userData?.fullName+"'s Details"}>
+    <Layout activePageName={userData?.fullName+`${t("userDetails.user")}`}>
       <Container>
         {isloading? (
           <Spinner/>
@@ -57,7 +59,7 @@ function UserDetail(user) {
           <>
           <div className="flex flex-col lg:flex-row lg:items-center gap-4 justify-center">
           <div className="lg:w-1/3 flex justify-between">
-            <Heading title={"User Details"} />
+            <Heading title={t("userDetails.userDetails")} />
           </div>
           <div className="flex-1 w-full flex justify-between">
             
@@ -67,21 +69,21 @@ function UserDetail(user) {
         <div className="py-4">
           <div className="w-full grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-1 gap-3">
             <p className="">
-              <span className="font-bold mr-3">Name: </span>
+              <span className="font-bold mr-3">{t("userDetails.fullName")}: </span>
               <span className="text-[#2CDEB7]">{userData?.fullName}</span>
             </p>
             <p className="">
-              <span className="font-bold mr-3">Email: </span>
+              <span className="font-bold mr-3">{t("userDetails.email")}: </span>
               <span className="text-[#2CDEB7]">{userData?.email}</span>
             </p>
 
             <p className="">
-              <span className="font-bold mr-3">Start Date: </span>
+              <span className="font-bold mr-3">{t("userDetails.startDate")}: </span>
               <span className="text-[#2CDEB7]">{new Date(userData?.createdAt).toLocaleString()}</span>
             </p>
 
             <p className="">
-              <span className="font-bold mr-3">Last Login: </span>
+              <span className="font-bold mr-3">{t("userDetails.lastLogin")}: </span>
               <span className="text-[#2CDEB7]">{new Date(userData?.lastLogin).toLocaleString()}</span>
             </p>
 
@@ -91,7 +93,7 @@ function UserDetail(user) {
             </p> */}
 
             <p className="">
-              <span className="font-bold mr-3">Role: </span>
+              <span className="font-bold mr-3">{t("userDetails.role")}: </span>
               <span className="text-[#2CDEB7]">{userData?.role.toUpperCase()}</span>
             </p>
             
@@ -99,7 +101,7 @@ function UserDetail(user) {
         </div>
         {saved?(
           <p className="">
-          <span className="font-bold mr-3">Status: </span>
+          <span className="font-bold mr-3">{t("userDetails.status")}: </span>
           <span className="text-[#2CDEB7]">{message}</span>
           </p>
         ):(
@@ -108,21 +110,19 @@ function UserDetail(user) {
         <div className="grid md:grid-cols-3 lg:grid-cols-3 sm:gap-4 items-center">
         <div className="relative mt-10 flex flex-col" >
                 <label className="text-gray-800 font-bold absolute top-0 -mt-6">
-                  Change password
+                {t("userDetails.changePassword")}
                 </label>
                 <input
                   type="password"
                   name="password"
                   defaultValue={""}
                   onClick={() => { isSaved(false); }}
-                  placeholder={
-                    "Enter new password"
-                  }
+                  placeholder={t("userDetails.addANewPassword")}
                   className="rounded-full bg-gray-200 text-black px-4 h-12 w-full mb-3"
                   onChange={e=>setPassword(e.target.value)}
                   required
                 />
-                 <Button title={"Change Password"} onClick={() => { changePassword(); }} />
+                 <Button title={t("userDetails.changePassword")} onClick={() => { changePassword(); }} />
               </div>
              
         </div>

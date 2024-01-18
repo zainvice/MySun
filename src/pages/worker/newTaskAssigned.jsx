@@ -974,7 +974,7 @@ function NewTaskAssigned() {
           </>):(<></>)}
           
           
-          {role!=="supervisor"?(
+          {role!=="supervisorss"?(
             <>
             <p className="m-3 font-bold">Status</p>
           <div className="mt-0 sm:mt-8 mx-2 grid grid-cols-2  md:grid-cols-3 lg:grid-cols-4 justify-center items-center">

@@ -95,7 +95,7 @@ function ProjectCard({ variant, project }) {
         </p>
 
         <p className="flex items-center gap-2">
-          <span className="font-semibold">Latest Change </span>
+          <span className="font-semibold">{t("project.latestChange")} </span>
           <span>
             {startDate < Date.now()
               ? timeAgo.format(timeTaken).replace("ago", "ago")
@@ -103,7 +103,7 @@ function ProjectCard({ variant, project }) {
           </span>
         </p>
         <p className="flex items-center gap-2">
-          <span className="font-semibold">Total Time Taken </span>
+          <span className="font-semibold">{t("project.totalTimeTaken")} </span>
           <span>
             {totalTimeTaken
             ? totalTimeTaken > 60
@@ -113,7 +113,7 @@ function ProjectCard({ variant, project }) {
           </span>
         </p>
         <p className="flex items-center gap-2">
-          <span className="font-semibold">Tasks Completed </span>
+          <span className="font-semibold">{t("project.tasksCompleted")} </span>
           <span>
             {project?.tasks?.filter(task => task.status === "Fully Mapped").length}
           </span>
@@ -122,7 +122,7 @@ function ProjectCard({ variant, project }) {
       <div className="mt-4 text-sm">
         <p className="flex items-center justify-end gap-2">
           <span className="font-semibold">
-            {t("taskCard.assignedToLabel")}{" "}
+          {t("project.assignedTo")}{" "}
           </span>
           <span>{supervisor && supervisor[0]?.fullName}</span>
         </p>
