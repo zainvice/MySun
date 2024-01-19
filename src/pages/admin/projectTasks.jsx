@@ -4,6 +4,8 @@ import Container from "../../common/container";
 import Heading from "../../common/heading";
 import { useParams } from "react-router-dom";
 import { isEven } from "../../utils";
+import { useTranslation } from "react-i18next";
+
 import { VARIANTS } from "../../components/projectCard";
 import { useProjects } from "../../context/projectsContext";
 import { NavLink } from "react-router-dom";
@@ -19,6 +21,7 @@ import FilterOverlay from "../../components/filterOverlay";
 const LazyTaskCard = lazy(() => import("../../components/taskCard"));
 function Tasks() {
   const { id } = useParams();
+  const { t } = useTranslation();
   const {workers} = useWorkers()
   const { projects } = useProjects();
   const [filter, setSelectedFilter]= useState([])
@@ -619,11 +622,11 @@ tasksBN?.sort((a, b) => {
 
   return (
     <>
-      <Layout activePageName={`Projects / ${id} / Tasks`}>
+      <Layout activePageName={`${t("projectDetails.projects")} / ${id} / ${t("projectTasks.tasks")}`}>
         <Container>
           <div >
           <div className="flex justify-between mb-2">
-            <Heading title={"Project Tasks"}></Heading>
+            <Heading title={t("projectTasks.projectTasks")}></Heading>
              
               <div className="flex flex-row">
              
@@ -689,13 +692,13 @@ tasksBN?.sort((a, b) => {
                
                 <input
                   type="text"
-                  placeholder="Search..."
+                  placeholder= {`${t("projectTasks.search")}...`}
                   className="bg-gray-200 w-3/4 mr-8 mt-2"
                   value={searchTerm}
                   onChange={handleSearch}
                 />
               </div>
-              <Button additionalClasses={"text-sm"} title={filter.length>0 ? "Export Filtered Tasks": "Export Tasks"} onClick={() => { handleExport(); }} />
+              <Button additionalClasses={"text-sm"} title={filter.length>0 ? `${t("projectTasks.exportFilteredTasks")}`: `${t("projectTasks.exportTasks")}`} onClick={() => { handleExport(); }} />
             </div>
             
               {!viewAs? (
@@ -704,10 +707,10 @@ tasksBN?.sort((a, b) => {
                 <table className="w-full bg-white border-separate border-spacing-y-3" ref={tableContainerRef}>
                 <thead>
                   <tr className="bg-white text-gray-800 text-sm font-thin">
-                    <th className="px-3 text-lg">Status</th>
-                    <th className="px-3 text-lg">Classification</th>
-                    <th className="px-3 text-lg">Property Type</th>
-                    <th className="px-3 text-lg">Stats</th>
+                    <th className="px-3 text-lg">{t("projectTasks.status")}</th>
+                    <th className="px-3 text-lg">{t("projectTasks.classification")}</th>
+                    <th className="px-3 text-lg">{t("projectTasks.propertyType")}</th>
+                    <th className="px-3 text-lg">{t("projectTasks.stats")}</th>
                     {headings?.length > 0 &&
                       headings?.map((heading) => (
                         <th key={heading} className="px-3 text-lg">

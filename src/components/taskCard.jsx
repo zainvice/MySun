@@ -4,6 +4,7 @@ import TimeAgo from "javascript-time-ago";
 import en from "javascript-time-ago/locale/en";
 import { useEffect, useState } from "react";
 
+
 TimeAgo.addDefaultLocale(en);
 
 export const VARIANTS = {
@@ -44,6 +45,7 @@ function preLoadGradient (status) {
 
 function TaskCard({ variant, task }) {
   const project = task?.projectId;
+  const { t } = useTranslation();
   const timeAgo = new TimeAgo("en-US");
   const arrayName = Object.entries(task.taskData)[0]?.[1];
   /* console.log(task?.taskData[arrayName]?.length, "SHOWING"); */
@@ -65,7 +67,7 @@ function TaskCard({ variant, task }) {
         />
         <div>
           <h2 className="font-semibold text-3xl line-clamp-0">
-            {project?.projectName ? <p className="text-sm"> TASK FROM </p> : <p className="text-sm"> TASK INFO </p>}
+            {project?.projectName ? <p className="text-sm"> TASK FROM </p> : <p className="text-sm"> {t("taskInfo.taskInfo")} </p>}
             {project?.projectName || (task?.taskData && Object.entries(task.taskData)[0]?.[1])}          
             </h2>
         </div>
@@ -75,7 +77,7 @@ function TaskCard({ variant, task }) {
       </div>
       <div className="mt-3 text-sm">
         <p className="flex items-center gap-2">
-          <span className="font-semibold">Time Elapsed</span>
+          <span className="font-semibold">{t("taskInfo.timeElapsed")}</span>
           <span className={"line-clamp-1 flex-1 w-full"}>
           {task?.timeTaken
             ? task?.timeTaken > 60
@@ -85,32 +87,32 @@ function TaskCard({ variant, task }) {
           </span>
         </p>
         <p className="flex items-center gap-2">
-          <span className="font-semibold">Status: </span>
+          <span className="font-semibold">{t("taskInfo.status")}: </span>
           <span>{task?.status}</span>
         </p>
         <p className="flex items-center gap-2">
-          <span className="font-semibold">Classification: </span>
+          <span className="font-semibold">{t("taskInfo.classification")}: </span>
           <span>{task?.classification}</span>
         </p>
         <p className="flex items-center gap-2">
-          <span className="font-semibold">Property Type: </span>
+          <span className="font-semibold">{t("taskInfo.propertyType")}: </span>
           <span>{task?.propertyType?.join(', ')}</span>
         </p>
         <p className="flex items-center gap-2">
-          <span className="font-semibold">Stats: </span>
+          <span className="font-semibold">{t("taskInfo.stats")}: </span>
           <span>{task?.stats?.join(', ')}</span>
         </p>
         <p className="flex items-center gap-2">
-          <span className="font-semibold">Manually Entered: </span>
+          <span className="font-semibold">{t("taskInfo.manuallyEntered")}: </span>
           <span>{task?.manual ? "YES" : "NO"} </span>
         </p>
         
         <p className="flex items-center gap-2">
-          <span className="font-semibold">Created On: </span>
+          <span className="font-semibold">{t("taskInfo.createdOn")}: </span>
           <span>{new Date(task?.createdAt).toLocaleString()} </span>
         </p>
         <p className="flex items-center gap-2">
-          <span className="font-semibold">Last Updated On: </span>
+          <span className="font-semibold">{t("taskInfo.lastUpdatedOn")}: </span>
           <span>{new Date(task?.updatedAt).toLocaleString()} </span>
         </p>
       </div>

@@ -1,13 +1,15 @@
 import React from 'react';
+import { useTranslation } from "react-i18next";
 
 function FilterOverlay({setSelectedFilter, filter, viewAs, setloading}) {
     console.log(filter, viewAs, "SHWOING")
+    const { t } = useTranslation();
     return (
         <div className='relative w-full left-0 h-full grid grid-cols-2 lg:grid-cols-3 gap-4'>
           <div className="w-full">
-          <label htmlFor="select" className='text-gray-600 font-bold'>Status</label>
+          <label htmlFor="select" className='text-gray-600 font-bold'>{t("taskInfo.status")}</label>
           <select
-              value={"Default"} 
+              value={t("projectTasks.default")} 
               onChange={(e) => {
                 const selectedValue = e.target.value;
                 if (selectedValue === "assignment") {
@@ -46,7 +48,7 @@ function FilterOverlay({setSelectedFilter, filter, viewAs, setloading}) {
                 
               >
                 <option value={filter?.filter((option) => option.optgroup==="-Status-").map(item => item.selectedValue).join(', ')} selected={""}>{filter.filter((option) => option.optgroup==="-Status-")?.length>0? filter.filter((option) => option.optgroup==="-Status-")?.map(item => item.selectedValue.toUpperCase()).join(', ').toUpperCase(): "Default".toUpperCase()}</option>
-                <option value={"assignment"} selected={filter?.includes('assignment')}>{"Default"}</option>
+                <option value={"assignment"} selected={filter?.includes('assignment')}>{t("projectTasks.default")}</option>
                 
                 <optgroup label={"-Status-"}>
                   <option value="fully mapped" selected={filter?.some(item => item.selectedValue === 'fully mapped')}>
@@ -74,9 +76,9 @@ function FilterOverlay({setSelectedFilter, filter, viewAs, setloading}) {
                 </select>
           </div>
             <div className="w-full">
-            <label htmlFor="select" className='text-gray-600 font-bold'>Property Type</label>
+            <label htmlFor="select" className='text-gray-600 font-bold'>{t("taskInfo.propertyType")}</label>
             <select
-              value={"Default"} 
+              value={t("projectTasks.default")} 
               onChange={(e) => {
                 const selectedValue = e.target.value;
                 if (selectedValue === "assignment") {
@@ -115,7 +117,7 @@ function FilterOverlay({setSelectedFilter, filter, viewAs, setloading}) {
                 
               >
                 <option value={filter.filter((option) => option.optgroup==="-Property Type-")?.map(item => item.selectedValue).join(', ')} selected={""}>{filter.filter((option) => option.optgroup==="-Property Type-")?.length>0? filter.filter((option) => option.optgroup==="-Property Type-")?.map(item => item.selectedValue.toUpperCase()).join(', ').toUpperCase(): "Default".toUpperCase()}</option>
-                <option value={"assignment"} selected={filter?.includes('assignment')}>{"Default"}</option>
+                <option value={"assignment"} selected={filter?.includes('assignment')}>{t("projectTasks.default")}</option>
                 <optgroup label={"-Property Type-"}>
                   <option value="residential" selected={filter?.some(item => item.selectedValue === 'residential')}>
                     Residential {filter?.some(item => item.selectedValue === 'residential') && '✓'}
@@ -136,9 +138,9 @@ function FilterOverlay({setSelectedFilter, filter, viewAs, setloading}) {
                 </select>
             </div>
             <div className="w-full">
-            <label htmlFor="select" className='text-gray-600 font-bold'>Classification</label>
+            <label htmlFor="select" className='text-gray-600 font-bold'>{t("taskInfo.classification")}</label>
             <select
-              value={"Default"} 
+              value={t("projectTasks.default")} 
               onChange={(e) => {
                 const selectedValue = e.target.value;
                 if (selectedValue === "assignment") {
@@ -177,7 +179,7 @@ function FilterOverlay({setSelectedFilter, filter, viewAs, setloading}) {
                 
               >
                 <option value={filter.filter((option) => option.optgroup==="-Classification-")?.map(item => item.selectedValue).join(', ')} selected={""}>{filter.filter((option) => option.optgroup==="-Classification-")?.length>0? filter.filter((option) => option.optgroup==="-Classification-")?.map(item => item.selectedValue.toUpperCase()).join(', ').toUpperCase(): "Default".toUpperCase()}</option>
-                <option value={"assignment"} selected={filter?.includes('assignment')}>{"Default"}</option>
+                <option value={"assignment"} selected={filter?.includes('assignment')}>{t("projectTasks.default")}</option>
                 <optgroup label={"-Classification-"}>
                   <option value="coordination letter 1" selected={filter?.some(item => item.selectedValue === 'coordination letter 1')}>
                     Coordination Letter 1 {filter?.some(item => item.selectedValue === 'coordination letter 1') && '✓'}
@@ -201,9 +203,9 @@ function FilterOverlay({setSelectedFilter, filter, viewAs, setloading}) {
             </select>
             </div>
             <div className="w-full">
-            <label htmlFor="select" className='text-gray-600 font-bold'>Stats</label>
+            <label htmlFor="select" className='text-gray-600 font-bold'>{t("taskInfo.stats")}</label>
             <select
-              value={"Default"} 
+              value={t("projectTasks.default")} 
               onChange={(e) => {
                 const selectedValue = e.target.value;
                 if (selectedValue === "assignment") {
@@ -242,7 +244,7 @@ function FilterOverlay({setSelectedFilter, filter, viewAs, setloading}) {
                 
               >
                 <option value={filter.filter((option) => option.optgroup==="-Stats-")?.map(item => item.selectedValue).join(', ')} selected={""}>{filter.filter((option) => option.optgroup==="-Stats-")?.length>0? filter.filter((option) => option.optgroup==="-Stats-")?.map(item => item.selectedValue.toUpperCase()).join(', ').toUpperCase(): "Default".toUpperCase()}</option>
-                <option value={"assignment"} selected={filter?.includes('assignment')}>{"Default"}</option>
+                <option value={"assignment"} selected={filter?.includes('assignment')}>{t("projectTasks.default")}</option>
                 <optgroup label={"-Stats-"}>
                   <option value="under construction" selected={filter?.some(item => item.selectedValue === 'under construction')}>
                     Under Construction {filter?.some(item => item.selectedValue === 'under construction') && '✓'}
@@ -263,9 +265,9 @@ function FilterOverlay({setSelectedFilter, filter, viewAs, setloading}) {
                 </select>
                 </div>
                 <div className="w-full">
-                <label htmlFor="select" className='text-gray-600 font-bold'>Building Number</label>
+                <label htmlFor="select" className='text-gray-600 font-bold'>{t("projectTasks.buildingNumber")}</label>
                 <select
-              value={"Default"} 
+              value={t("projectTasks.default")} 
               onChange={(e) => {
                 const selectedValue = e.target.value;
                 if (selectedValue === "assignment") {
@@ -304,7 +306,7 @@ function FilterOverlay({setSelectedFilter, filter, viewAs, setloading}) {
                 
               >
                 <option value={filter.filter((option) => option.optgroup==="-Building Number-")?.map(item => item.selectedValue).join(', ')} selected={""}>{filter.filter((option) => option.optgroup==="-Building Number-")?.length>0? filter.filter((option) => option.optgroup==="-Building Number-")?.map(item => item.selectedValue.toUpperCase()).join(', ').toUpperCase(): "Default".toUpperCase()}</option>
-                <option value={"assignment"} selected={filter?.includes('assignment')}>{"Default"}</option>
+                <option value={"assignment"} selected={filter?.includes('assignment')}>{t("projectTasks.default")}</option>
                 <optgroup label={"-Building Number-"}>
                   <option value="a" selected={filter?.some(item => item.selectedValue === 'a')}>
                     A1-AX {filter?.some(item => item.selectedValue === 'a') && '✓'}
@@ -325,9 +327,9 @@ function FilterOverlay({setSelectedFilter, filter, viewAs, setloading}) {
                 </select>
                 </div>
                 <div className="w-full">
-                <label htmlFor="select" className='text-gray-600 font-bold'>Time</label>
+                <label htmlFor="select" className='text-gray-600 font-bold'>{t("projectTasks.time")}</label>
                 <select
-              value={"Default"} 
+              value={t("projectTasks.default")} 
               onChange={(e) => {
                 const selectedValue = e.target.value;
                 if (selectedValue === "assignment") {
@@ -366,7 +368,7 @@ function FilterOverlay({setSelectedFilter, filter, viewAs, setloading}) {
                 
               >
                 <option value={filter.filter((option) => !option.optgroup)?.map(item => item.selectedValue).join(', ')} selected={""}>{filter.filter((option) => !option.optgroup)?.length>0? filter.filter((option) => !option.optgroup)?.map(item => item.selectedValue.toUpperCase()).join(', ').toUpperCase(): "Default".toUpperCase()}</option>
-                <option value={"assignment"} selected={filter?.includes('assignment')}>{"Default"}</option>
+                <option value={"assignment"} selected={filter?.includes('assignment')}>{t("projectTasks.default")}</option>
                 <option value={!viewAs ? "most recent" : "most recent"}>
                   {!viewAs ? "Most Recent" : "Most Recent"}
                 </option>

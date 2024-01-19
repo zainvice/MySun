@@ -176,6 +176,7 @@
         "projectDetails": {
           "projectDetails": "פרטי הפרויקט",
           "projectName": "שם הפרויקט",
+          "projects":"פרויקטים",
           "startDate": "תאריך התחלה",
           "endDate": "תאריך סיום",
           "assignedWorkers": "עובדים מוקצים",
@@ -209,13 +210,18 @@
           "lastUpdatedOn": "עודכן לאחרונה בתאריך"
         },
         "projectTasks": {
+          "tasks":"משימות",
+          "projectTasks":"משימות פרויקט",
           "exportTasks": "ייצוא משימות",
+          "exportFilteredTasks":"ייצוא משימות מסוננות",
           "time": "זמן",
           "status": "סטטוס",
           "classification": "סיווג",
           "propertyType": "סוג נכס",
           "stats": "סטטיסטיקות",
-          "buildingNumber": "מספר בניין"
+          "search":"לחפש",
+          "buildingNumber": "מספר בניין",
+          "default": "בְּרִירַת מֶחדָל"
         }
       
       

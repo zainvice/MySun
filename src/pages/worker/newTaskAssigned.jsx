@@ -1511,8 +1511,16 @@ function NewTaskAssigned() {
           {already_assigned?(
             <>
             <div className="mt-3 flex flex-row w-full justify-end space-x-4">
-            <Button title={"Reset Task"} onClick={() => { openResetModal(); }} />
+            {role!=="worker"?(
+              <>
+               <Button title={"Reset Task"} onClick={() => { openResetModal(); }} />
             <Button title={"Export Task"} onClick={() => { handleExport(); }} />
+              </>
+            ):(
+              <Button title={"Export Task"} onClick={() => { handleExport(); }} />
+            )}
+            
+            
             </div>
           </>
           ):(

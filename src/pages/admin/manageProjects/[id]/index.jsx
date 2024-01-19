@@ -4,6 +4,7 @@ import Button from "../../../../common/button";
 import Container from "../../../../common/container";
 import DateInput from "../../../../common/dateInput";
 import { useDimensions } from "../../../../hooks";
+import { useTranslation } from "react-i18next";
 import { NavLink, useParams } from "react-router-dom";
 import { useProjects } from "../../../../context/projectsContext";
 import { exportToExcel, formatDate } from "../../../../global";
@@ -89,6 +90,7 @@ function getNextBuildingNumber(tasks) {
 
 function Project() {
   const navigate = useNavigate()
+  const { t } = useTranslation();
   const { isOpen, onOpen, onClose } = useModal();
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
   const [isConfirmRModalOpen, setIsConfirmRModalOpen] = useState(false);
@@ -368,7 +370,7 @@ function Project() {
   const [message, setMessage]= useState("")
   return (
     <>
-    <Layout activePageName={`Projects / ${id}`}>
+    <Layout activePageName={`${t("projectDetails.projects")} / ${id}`}>
       {project ? (
         <>
         {isloading?(
@@ -385,7 +387,7 @@ function Project() {
         <div className="flex flex-col lg:flex-row lg:items-center gap-3">
           <div className="lg:w-full flex justify-between">
            
-            <Heading title={"Project Details"} />
+            <Heading title={t("projectDetails.projectDetails")} />
             <p className="text-[#FFC94A] font-bold text-base">{message}</p>
            
                {/*  <Button
@@ -414,7 +416,7 @@ function Project() {
         className="inline-flex justify-center items-center w-full px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
         onClick={toggleDropdown}
       >
-        Options <span class='material-symbols-outlined text-sm'>expand_more</span>
+        {t("projectDetails.options")} <span class='material-symbols-outlined text-sm'>expand_more</span>
       </button>
       
 
@@ -428,7 +430,7 @@ function Project() {
               role="menuitem"
 
             >
-              Show Tasks
+             {t("projectDetails.showTasks")}
             </button>
             </NavLink>
             <button
@@ -437,7 +439,7 @@ function Project() {
               role="menuitem"
               onClick={onOpen}
             >
-              Add A New Worker
+              {t("projectDetails.addMoreWorkers")}
             </button>
             <button
               type="button"
@@ -446,7 +448,7 @@ function Project() {
               onClick={()=>{setValue("Add New")}}
               
             >
-               Add A New Task
+               {t("projectDetails.addMoreTasks")}
             </button>
            
             <button
@@ -456,7 +458,7 @@ function Project() {
               onClick={()=>{setValue("updated")}}
               
             >
-               Download Updated Data
+              {t("projectDetails.downloadUpdatedData")}
             </button>
             <button
               type="button"
@@ -465,7 +467,7 @@ function Project() {
               onClick={()=>{setValue("original")}}
               
             >
-               Download Original Properties Data
+              {t("projectDetails.downloadOriginalPropertiesData")}
             </button>
             <button
               type="button"
@@ -474,7 +476,7 @@ function Project() {
               onClick={()=>{setValue("original-buildings")}}
               
             >
-               Download Original Buildings Data
+               {t("projectDetails.downloadOriginalBuildingsData")}
             </button>
             <button
               type="button"
@@ -483,7 +485,7 @@ function Project() {
               onClick={()=>{setValue("unassigned")}}
               
             >
-               Download Unassigned Data
+               {t("projectDetails.downloadUnassignedData")}
             </button>
             <button
               type="button"
@@ -492,7 +494,7 @@ function Project() {
               onClick={()=>{setValue("building")}}
               
             >
-               Download Empty Building Data
+               {t("projectDetails.downloadEmptyBuildingsData")}
             </button>
           </div>
         </div>
@@ -543,31 +545,31 @@ function Project() {
         <div className="py-4">
           <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
             <p className="">
-              <span className="font-bold mr-3">Project Name: </span>
+              <span className="font-bold mr-3">{t("projectDetails.projectName")}: </span>
               <span className="text-[#34F5C5]">{project?.projectName}</span>
             </p>
 
             <p className="">
-              <span className="font-bold mr-3">Start Date: </span>
+              <span className="font-bold mr-3">{t("projectDetails.startDate")}: </span>
               <span className="text-[#34F5C5]">
                 {formatDate(project?.startDate)}
               </span>
             </p>
 
             <p className="">
-              <span className="font-bold mr-3">End Date: </span>
+              <span className="font-bold mr-3">{t("projectDetails.endDate")}: </span>
               <span className="text-[#34F5C5]">
                 {formatDate(project?.endDate)}
               </span>
             </p>
 
             <p className="">
-              <span className="font-bold mr-3">Assigned Workers: </span>
+              <span className="font-bold mr-3">{t("projectDetails.assignedWorkers")}: </span>
               <span className="text-[#34F5C5]">{project?.workers?.filter((worker)=> worker.role!=="admin").length}</span>
             </p>
 
             <p className="flex">
-              <span className="font-bold mr-3">Supervisor: </span>
+              <span className="font-bold mr-3">{t("projectDetails.supervisors")}: </span>
               <span className="text-[#34F5C5] flex">{project?.workers?.filter((worker) => worker.role === 'supervisor').map((worker) => (
                 <>
                   {'-'}
@@ -584,7 +586,7 @@ function Project() {
             </p>
 
             <p className="flex">
-              <span className="font-bold mr-3">Workers: </span>
+              <span className="font-bold mr-3">{t("projectDetails.workers")}: </span>
               <span className="text-[#34F5C5]  flex flex-row  justify-between">{project?.workers?.filter((worker) => worker.role !== 'supervisor').map((worker) => (
                 <>
                   {'-'}
@@ -605,7 +607,7 @@ function Project() {
           <div>
             <p className="mb-2">
               <span className="text-[#00ABE0] font-bold inline-block w-10/12 md:w-60">
-                Total Surveys Completed
+              {t("projectDetails.totalSurveyCompleted")}
               </span>
               <span className="text-[#00ABE0] font-bold before:content-[':'] before:mr-4">
                 {project?.tasks?.filter(task => task.status === "Fully Mapped").length}
@@ -613,7 +615,7 @@ function Project() {
             </p>
             <p className="mb-2">
               <span className="text-[#FF7258] font-bold inline-block w-10/12 md:w-60">
-                Total surveys remaining
+              {t("projectDetails.surveysRemaining")}
               </span>
               <span className="text-[#FF7258] font-bold before:content-[':'] before:mr-4">
                 {project?.tasks?.filter(task => task.status === "Pending").length}
@@ -622,7 +624,7 @@ function Project() {
 
             <p className="mb-2">
               <span className="text-[#FFC94B] font-bold inline-block w-10/12 md:w-60">
-                Surverys in Progress
+              {t("projectDetails.surveysInProgress")}
               </span>
               <span className="text-[#FFC94B] font-bold before:content-[':'] before:mr-4">
               {project?.tasks?.filter(task => task.status !== "Pending" && task.status !== "Fully Mapped").length}
@@ -657,7 +659,7 @@ function Project() {
             workersInProject.map((worker) => (
               <p className="flex items-center mb-2" key={worker._id}>
                 <span className="w-9/12 md:w-90 line-clamp-1">
-                  Surveys Completed by{" "}
+                {t("projectDetails.surveysCompletedBy")}{" "}
                   <span className="text-[#34F5C5]">{worker.fullName}</span>
                 </span>
                 <span className="before:content-[':'] before:mr-4">{project?.tasks.filter(task=> {
@@ -712,7 +714,7 @@ function Project() {
             workersInProject.map((worker) => (
               <p className="flex items-center mb-2" key={worker._id}>
                 <span className="w-9/12 md:w-96 line-clamp-1">
-                  Hours Completed by{" "}
+                {t("projectDetails.hoursCompletedBy")}{" "}
                   <span className="text-[#34F5C5]">{worker.fullName}</span>
                 </span>
                 <span className="before:content-[':'] before:mr-0">XXX</span>
@@ -726,7 +728,7 @@ function Project() {
         <div className="flex justify-end">
           <Button
             title={
-              'Export to Excel <span class="material-symbols-outlined">chevron_right</span>'
+              `${t("projectDetails.exportToExcel")} <span class="material-symbols-outlined">chevron_right</span>`
             }
             titleClasses={"flex items-center"}
             onClick={()=>{setValue("updated")}}

@@ -18,7 +18,7 @@ function Sidebar({ isSidebarOpen, onSidebarClose }) {
   const isAdmin = sessionStorage.getItem("Role") === "admin";
   const isSupervisor = sessionStorage.getItem("Role") === "supervisor";
   const [sendLogout, { isLoading, isSuccess, isError, error }] = useSendLogoutMutation();
-  const onLogout = () => {
+  const onLogout = async() => {
     onOpen();
     /* logoutUser().then(() => {
       ["accessToken", "Name", "Role"].map((key) => {
@@ -30,7 +30,8 @@ function Sidebar({ isSidebarOpen, onSidebarClose }) {
       onClose();
       
     }); */
-    sendLogout();
+    await sendLogout();
+    navigate("/", { replace: true });
     onClose()
   };
   const { currentLanguage, changeLanguage } = useLanguageSwitcher();

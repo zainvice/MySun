@@ -175,13 +175,14 @@
                 },
                 "projectDetails": {
                   "projectDetails": "Project Details",
+                  "projects":"Projects",
                   "projectName": "Project Name",
                   "startDate": "Start Date",
                   "endDate": "End Date",
                   "assignedWorkers": "Assigned Workers",
                   "supervisors": "Supervisors",
                   "workers": "Workers",
-                  "totalSurveyCompleted": "Total Survey Completed",
+                  "totalSurveyCompleted": "Total Surveys Completed",
                   "surveysRemaining": "Surveys Remaining",
                   "surveysInProgress": "Surveys in Progress",
                   "surveysCompletedBy": "Surveys Completed By",
@@ -209,13 +210,18 @@
                   "lastUpdatedOn": "Last Updated On"
                 },
                 "projectTasks": {
+                  "tasks":"Tasks",
+                  "projectTasks":"Project Tasks",
                   "exportTasks": "Export tasks",
+                  "exportFilteredTasks":"Export Filtered Tasks",
                   "time": "Time",
                   "status": "Status",
                   "classification": "Classification",
                   "propertyType": "Property Type",
                   "stats": "Stats",
-                  "buildingNumber": "Building Number"
+                  "search":"Search",
+                  "buildingNumber": "Building Number",
+                  "default": "Default"
                 }
               
               
