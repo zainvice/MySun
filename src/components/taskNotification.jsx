@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 const Notification = ({ messages }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const {t} = useTranslation()
   const [notifications, setNotifications] = useState(messages)
   console.log("MESSAGES", messages)
   useEffect(()=>{
@@ -31,12 +33,12 @@ const Notification = ({ messages }) => {
 
       {isOpen && (
         <div className="absolute top-11 lg:w-[100%] w-[150%] z-10 h-60 overflow-y-auto bg-white border-2 border-gray-300 rounded">
-            <h2 className="text-left text-sm font-bold text-gray-600 ml-4">Task Notifications</h2>
+            <h2 className="text-left text-sm font-bold text-gray-600 ml-4">{t("taskNotifications.taskNotifications")}</h2>
             <button
           onClick={handleClose}
           className="absolute hover:font-bold top-0 right-2 text-gray-400 hover:text-black hover:ease-in-out duration-300 focus:outline-none text-sm"
         >
-          Clear All
+          {t("taskNotifications.clear")}
         </button>
           {notifications? (
             <>
@@ -45,7 +47,7 @@ const Notification = ({ messages }) => {
             ))}
             </>
           ):(
-            <h2 className="text-sm font-bold text-gray-600 ml-4">No New Notifications</h2>
+            <h2 className="text-sm font-bold text-gray-600 ml-4">{t("taskNotifications.noNot")}</h2>
           )}
         </div>
       )}

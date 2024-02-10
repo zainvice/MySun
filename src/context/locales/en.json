@@ -18,6 +18,7 @@
         "loginButton": "LOG IN",
         "dashboard": {
                 "title": "Dashboard",
+                "welcome":"Welcome! These are the available projects to work on!",
                 "recentUpdates": {
                   "title": "Recent Updates",
                   "showingForLabel": "SHOWING FOR",
@@ -222,8 +223,116 @@
                   "search":"Search",
                   "buildingNumber": "Building Number",
                   "default": "Default"
+                },
+                "editTask": {
+                  "task": "Task",
+                  "taskFrom": "Task From",
+                  "timerStarted": "Timer Started",
+                  "manual":"Enter Data Manually",
+                  "reAutomate": "Automate",
+                  "search": "Search (e.g physical number, address etc)",
+                  "enterData": "Enter data (e.g physical number, address etc)",
+                  "findingFrom": "Finding From",
+                  "assigningTo": "Assigning to",
+                  "create": "Create",
+                  "goTo": "Go to",
+                  "alreadyAssignedTo": "Already assigned to",
+                  "editMode": "Edit Mode",
+                  "floor": "Floor",
+                  "statusHistory": "Status History",
+                  "changedFrom":"Changed From",
+                  "to":"To",
+                  "on":"On",
+                  "status": {
+                    "status": "Status",
+                    "notMapped": "Not Mapped",
+                    "fieldMapped": "Field Mapped",
+                    "drawingReady": "Drawing Ready",
+                    "gisReady": "GIS Ready",
+                    "fullyMapped": "Fully Mapped",
+                    "checked": "Checked",
+                    "submitted": "Submitted",
+                    "uniteAddress": "Unite Address"
+                  },
+                  "classificationHistory": "Classification History",
+                  "classification": {
+                    "classification":"Classification",
+                    "coordinationLetter1": "Coordination Letter 1",
+                    "coordinationLetter2": "Coordination Letter 2",
+                    "refusedSurvey": "Refused Survey",
+                    "coordinated": "Coordinated"
+                  },
+                  
+                  "propertyType": {
+                    "propertyType": "Property Type",
+                    "residential": "Residential",
+                    "government": "Government",
+                    "business": "Business",
+                    "industry": "Industry",
+                    "agricultural": "Agricultural"
+                  },
+                  
+                  "stats": {
+                    "stats": "Stats",
+                    "underConstruction": "Under Construction",
+                    "aerialMapped": "Aerial Mapped",
+                    "missingInformation": "Missing Information",
+                    "missingPhysicalNumber": "Missing Physical Number"
+                  },
+                  "updateProgress": "Update Progress",
+                  "saveOffline": "Save Offline",
+                  "save": "Save",
+                  "resetTask": "Reset Task",
+                  "exportTask": "Export Task"
+                },
+                "addNewTasks": {
+                  "addNewTasks": "Add New Tasks",
+                  "chooseBuildingNumberToAddTasks": "Choose a building number to add tasks.",
+                  "selected": "Selected",
+                  "writeBuildingLetter": "Write a building letter.",
+                  "from": "From",
+                  "to": "To",
+                  "add": "Add",
+                  "cancel": "Cancel",
+                  "buildingNumbersSelectionRequired": "Building Numbers should have both to and from selected",
+                  "enterOnlyLetters": "Please enter only letters"
+                },
+                "addMoreWorkers": {
+                  "addToProject": "Add To Project",
+                  "successfullyAdded": "Successfully Added",
+                  "searchByEmail": "Search By Email"
+                },
+                "removeWorker": {
+                  "removeWorker":"Remove Worker",
+                  "c1": "Are you sure you want to remove",
+                  "c2":"with email",
+                  "c3":"from this project?",
+                  "remove": "Remove ",
+                  "cancel": "Cancel"
+                },
+                "resetTaskOptions": {
+                  "resetOptions": "Reset Options",
+                  "chooseOptionForReset": "Choose an option for reset",
+                  "resetExcelData": "Reset Excel Data",
+                  "confirmation": "Are you sure you want to remove excel data?",
+                  "resetAllFeatures": "Reset All Features",
+                  "resetEverythingConfirmation": "Are you sure about resetting everything?",
+                  "cancel": "Cancel",
+                  "confirm": "Confirm"
+                },
+                "deleteProject":{
+                  "deleteProject":"Delete Project",
+                  "confirmation":"Are you sure you want to delete this project?",
+                  "cancel":"Cancel"
+                },
+                "taskNotifications":{
+                  "taskNotifications":"Task Notifications",
+                  "clear":"Clear All",
+                  "task": "The Task",
+                  "from":"from",
+                  "expired":"it's Coordination Letter has expired!",
+                  "noNot": "No New Notifications!"
                 }
-              
               
  
 }

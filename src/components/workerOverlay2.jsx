@@ -4,6 +4,7 @@ import { editAWProject } from "../api";
 import { useProjects } from "../context/projectsContext";
 import { useWorkers } from "../context/workersContext";
 import Spinner from "../common/spinner";
+import { useTranslation } from "react-i18next";
 
 export default function WorkerOverlay({
   
@@ -11,10 +12,11 @@ export default function WorkerOverlay({
   projectId,
 }) {
   const {workers} = useWorkers()||{}
+  const {t}= useTranslation()
   const [selectedWorkers, setSelectedWorkers]= useState([])
   const {reFetch} = useProjects()
   const [workersTodisplay, setWorkers] = useState(workers?.filter((worker) => worker.role !== 'admin' && !addedWorkers.some(addedWorker => addedWorker.email === worker.email)))
-  const [log, setLog]= useState("ADD TO PROJECT")
+  const [log, setLog]= useState(t("addMoreWorkers.addToProject"))
   const [isLoading, setLoading] = useState(false)
   console.log("Added Workers", addedWorkers)
   const onAddWorkers = async() =>{
@@ -46,7 +48,7 @@ export default function WorkerOverlay({
       console.log("Sending", projectId)
       try{
         await editAWProject({projectId, workers: selectedWorkers})
-        setLog("SUCCESSFULLY ADDED!")
+        setLog(t("addMoreWorkers.successfullyAdded"))
         setLoading(false)
         reFetch();
         window.location.reload()
@@ -112,7 +114,7 @@ export default function WorkerOverlay({
      
       <label className="flex items-center w-full h-11 mt-2 rounded-full bg-white px-3 shadow-sm overflow-hidden">
         <input
-          placeholder="Search By Email"
+          placeholder={t("addMoreWorkers.searchByEmail")}
           className="flex-1 h-full focus-within:outline-none"
           onChange={(e)=>setEmail(e.target.value)}
         />

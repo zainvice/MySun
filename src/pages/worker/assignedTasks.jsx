@@ -92,7 +92,7 @@ function AssignedTasks() {
         </div>
             <div>
             {role==='worker' ? (
-            <p className="text-gray-600 font-bold">Welcome! These are the available projects to work on!</p>):
+            <p className="text-gray-600 font-bold">{t("dashboard.welcome")}</p>):
             (<></>)
             }
             </div>

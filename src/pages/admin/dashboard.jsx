@@ -196,6 +196,8 @@ function Dashboard() {
   const [timerDuration, setTimerDuration] = useState(7 * 24 * 60 * 60 * 1000);
   const notificationMessages = taskTonotify?.map((task) => {
     const buildingNumber = task.taskData['building number'];
+    const project = projects.find(project=> project._id===task.projectId)
+    console.log("PROJECT", project)
     let message = "";
   
    /*  const coordinationLetterHistory = task?.classificationHistory?.filter(
@@ -238,7 +240,7 @@ function Dashboard() {
     } */
     return message = {
       taskId: task._id,
-      message: `The task ${buildingNumber} Coordination Letter has expired!`
+      message: `${t("taskNotifications.task")} "${buildingNumber}" ${t("taskNotifications.from")} "${project.projectName}", ${t("taskNotifications.expired")}`
     };
   });
   
@@ -294,10 +296,10 @@ function Dashboard() {
             onChange={(e) => setSelectedFilter(e.target.value)}
             className="border-2 border-[#00FFD3] text-[#00FFD3] p-2 rounded-full focus-within:outline-none transform transition-transform hover:scale-105 hover:bg-[#00FFD3] hover:text-white"
           >
-            <option value="0">Today</option>
-            <option value="7">7 Days</option>
-            <option value="15">15 Days</option>
-            <option value="30">Last Month</option>
+            <option value="0">{t("dashboard.recentUpdates.todayOption")}</option>
+            <option value="7">{t("dashboard.recentUpdates.sevenDaysOption")}</option>
+            <option value="15">{t("dashboard.recentUpdates.fifteenDaysOption")}</option>
+            <option value="30">{t("dashboard.recentUpdates.lastMonthOption")}</option>
           </select>
         </div>
         <div className="flex flex-col sm:flex-row gap-4 sm:gap-6">

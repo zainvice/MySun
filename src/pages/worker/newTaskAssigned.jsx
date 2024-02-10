@@ -466,7 +466,7 @@ function NewTaskAssigned() {
     let interval;
     
     if (timerRunning) {
-      setMessage("Timer Started!")
+      setMessage(t("editTask.timerStarted"))
       interval = setInterval(() => {
         setSeconds((prevSeconds) => prevSeconds + 1);
       }, 1000);
@@ -726,7 +726,7 @@ function NewTaskAssigned() {
   //console.log(manual,"MANUAL")
 
   return (
-    <Layout activePageName={display?.projectId?.projectName+"'s task"}>
+    <Layout activePageName={`${display?.projectId?.projectName} ${t("editTask.task")}`}>
       <Container>
         {isloading?(
             <Spinner/>
@@ -739,7 +739,7 @@ function NewTaskAssigned() {
               alt="taskIcon"
               className="w-10 h-10 sm:w-14 sm:h-14"
             />
-            <label className="text-lg sm:text-xl font-bold">Task from {display?.projectId?.projectName} </label>
+            <label className="text-lg sm:text-xl font-bold">{t("editTask.taskFrom")} {display?.projectId?.projectName} </label>
           </span>
           <div className=" flex items-center mx-auto">
             
@@ -798,7 +798,7 @@ function NewTaskAssigned() {
            type="text"
            placeholder="Search or Select for a building number"
            className="bg-gray-200 w-full text-center mr-8 mt-2"
-           value={already_assigned ?  `Already Assigned to ${searchTerm} (Edit Mode)` : `Assigning to ${searchTerm}`}
+           value={already_assigned ?  `${t("editTask.alreadyAssignedTo")} ${searchTerm} (${t("editTask.editMode")})` : `${t("editTask.assigningTo")} ${searchTerm}`}
            onChange={handleSearch}
            disabled
          />
@@ -816,11 +816,11 @@ function NewTaskAssigned() {
               
               
               <>
-              {isNextCreated? (<Button className="m-4" title={`GO TO ${newn}` } onClick={onNavC} />):(<Button className="m-4" title={`CREATE ${newn}` } onClick={onCreateNext} />)}
+              {isNextCreated? (<Button className="m-4" title={`GO TO ${newn}` } onClick={onNavC} />):(<Button className="m-4" title={`${t("editTask.create")} ${newn}` } onClick={onCreateNext} />)}
               
               </>
               
-              ):(<Button className="m-4" title={manual?"Re-Automate":"Enter Data Manually"} onClick={onManualClick} />)}
+              ):(<Button className="m-4" title={manual?`${t("editTask.reAutomate")}`:`${t("editTask.manual")}`} onClick={onManualClick} />)}
         </div>
      
     </div>
@@ -833,7 +833,7 @@ function NewTaskAssigned() {
               ):(
                 <div className=" rounded-full bg-gray-200 text-black px-4 relative mt-10 mb-10 w-full" >
                 <label className="text-gray-400 absolute top-0 left-3 -mt-6">
-                  Search  (e.g phyisal number, address etc)
+                 {t("editTask.search")}
                 </label>
                 
                 <input
@@ -843,7 +843,7 @@ function NewTaskAssigned() {
                   value={dataToSearch}
                   /* disabled={!!tasktoDisplay?.taskData[key]} */
                   placeholder={
-                    "Enter data (e.g phyisal number, address etc)"
+                    t("editTask.enterData")
                   }
                   ref={searchRef}
                   className="bg-gray-200 h-12 w-1/2"
@@ -870,7 +870,7 @@ function NewTaskAssigned() {
                 ))}
                </select>
                <label className="text-gray-400 absolute -bottom-5 right-3 -mt-6">
-                  {key?`Finding from ${key}`:""}
+                  {key?`${t("editTask.findingFrom")} ${key}`:""}
                 </label>
               
               </div>
@@ -945,7 +945,7 @@ function NewTaskAssigned() {
   
           </div>
           <div className="ml-3 mt-8 flex flex-row items-center text-left text-black ">
-            <label className="mr-2 font-bold">Floor:</label>
+            <label className="mr-2 font-bold">{t("editTask.floor")}</label>
             <select
               className="rounded-full bg-gray-200 text-black px-4 h-12 w-full lg:w-1/2"
               value={floor}
@@ -962,11 +962,11 @@ function NewTaskAssigned() {
           </div>
           {display?.statusHistory?(<>
             <div className="m-6 ml-3 flex flex-col">
-            <label htmlFor="statusHistory" className="font-bold">Status History</label>
+            <label htmlFor="statusHistory" className="font-bold">{t("editTask.statusHistory")}</label>
             <ul className="ml-6">
               {display?.statusHistory?.map((history, index) => (
                 <li key={index}>
-                  Changed from <strong>{history.changedFrom}</strong> to <strong>{history.changedTo}</strong> on {new Date(history.changedOn).toLocaleString()}
+                  {t("editTask.changedFrom")} <strong>{history.changedFrom}</strong> {t("editTask.to")} <strong>{history.changedTo}</strong> {t("editTask.on")} {new Date(history.changedOn).toLocaleString()}
                 </li>
               ))}
             </ul>
@@ -976,7 +976,7 @@ function NewTaskAssigned() {
           
           {role!=="supervisorss"?(
             <>
-            <p className="m-3 font-bold">Status</p>
+            <p className="m-3 font-bold">{t("editTask.status.status")}</p>
           <div className="mt-0 sm:mt-8 mx-2 grid grid-cols-2  md:grid-cols-3 lg:grid-cols-4 justify-center items-center">
             {/* Radio button for "Fully Mapped" */}
             <label className="inline-flex items-center mb-2 sm:mb-5">
@@ -996,7 +996,7 @@ function NewTaskAssigned() {
               </span>
             </span>
             <span className="text-gray-700 text-base sm:text-lg">
-              Not Mapped 
+            {t("editTask.status.notMapped")} 
             </span>
           </label>
           {/* Radio button for "Field Mapped" */}
@@ -1017,7 +1017,7 @@ function NewTaskAssigned() {
               </span>
             </span>
             <span className="text-gray-700 text-base sm:text-lg">
-              Field Mapped 
+            {t("editTask.status.fieldMapped")} 
             </span>
           </label>
            {/* Radio button for "Coordination Letter" */}
@@ -1036,7 +1036,7 @@ function NewTaskAssigned() {
               </span>
             </span>
             <span className="text-gray-700 text-base sm:text-lg">
-              Drawing Ready 
+            {t("editTask.status.drawingReady")}
             </span>
           </label>
   
@@ -1056,7 +1056,7 @@ function NewTaskAssigned() {
               </span>
             </span>
             <span className="text-gray-700 text-base sm:text-lg">
-              Fully Mapped
+            {t("editTask.status.fullyMapped")}
             </span>
           </label>
   
@@ -1078,7 +1078,7 @@ function NewTaskAssigned() {
               </span>
             </span>
             <span className="text-gray-700 text-base sm:text-lg">
-              GIS Ready
+            {t("editTask.status.gisReady")}
             </span>
             </label>
             {role!=="worker"?(
@@ -1099,7 +1099,7 @@ function NewTaskAssigned() {
                    </span>
                  </span>
                  <span className="text-gray-700 text-base sm:text-lg">
-                   Checked
+                 {t("editTask.status.checked")}
                  </span>
                </label>
                       
@@ -1119,7 +1119,7 @@ function NewTaskAssigned() {
                    </span>
                  </span>
                  <span className="text-gray-700 text-base sm:text-lg">
-                   Submitted
+                 {t("editTask.status.submitted")}
                  </span>
                </label>
                    
@@ -1145,18 +1145,18 @@ function NewTaskAssigned() {
                    </span>
                  </span>
                  <span className="text-gray-700 text-base sm:text-lg">
-                   Unite Address
+                 {t("editTask.status.uniteAddress")}
                  </span>
                </label>
                </div>
               
                {display?.classificationHistory?(<>
             <div className="m-6 ml-3 flex flex-col">
-            <label htmlFor="classificationHistory" className="font-bold">Classification History</label>
+            <label htmlFor="classificationHistory" className="font-bold">{t("editTask.classificationHistory")}</label>
             <ul className="ml-6">
             {display?.classificationHistory?.map((history, index) => (
               <li key={index}>
-                Changed from <strong>{history.changedFrom}</strong> to <strong>{history.changedTo}</strong> on {new Date(history.changedOn).toLocaleString()}
+                {t("editTask.classification.classification")} <strong>{history.changedFrom}</strong> to <strong>{history.changedTo}</strong> on {new Date(history.changedOn).toLocaleString()}
                 {index === display.classificationHistory.length - 1 && ( 
                     history.changedTo === 'Coordination Letter 1' || history.changedTo === 'Coordination Letter 2' || history.changedTo === 'Coordination Letter 1 Expired' || history.changedTo === 'Coordination Letter 2 Expired' ? (
                       <span className="ml-2 text-red-600 font-bold">({remainingTime})</span>
@@ -1170,7 +1170,7 @@ function NewTaskAssigned() {
           </div>
           </>):(<></>)}
            
-            <p className="m-3 font-bold">Classfication</p>
+            <p className="m-3 font-bold">{t("editTask.classification.classification")} </p>
           <div className="mt-0 sm:mt-8 mx-2 grid grid-cols-2  md:grid-cols-3 lg:grid-cols-4 justify-center items-center">
             {/* Radio button for "Coordination Letter 1" */}
             <label className="inline-flex items-center mb-2 sm:mb-5">
@@ -1190,7 +1190,7 @@ function NewTaskAssigned() {
               </span>
             </span>
             <span className="text-gray-700 text-base sm:text-lg">
-              Coordination Letter 1 
+            {t("editTask.classification.coordinationLetter1")}
             </span>
           </label>
           {/* Checkbox button for "Coordination Letter 2" */}
@@ -1211,7 +1211,7 @@ function NewTaskAssigned() {
               </span>
             </span>
             <span className="text-gray-700 text-base sm:text-lg">
-              Coordination Letter 2 
+            {t("editTask.classification.coordinationLetter2")} 
             </span>
           </label>
           
@@ -1231,7 +1231,7 @@ function NewTaskAssigned() {
               </span>
             </span>
             <span className="text-gray-700 text-base sm:text-lg">
-              Refused Survey
+            {t("editTask.classification.refusedSurvey")}
             </span>
           </label>
           {/* Checkbox button for "Coordinated" */}
@@ -1250,7 +1250,7 @@ function NewTaskAssigned() {
               </span>
             </span>
             <span className="text-gray-700 text-base sm:text-lg">
-              Coordinated
+            {t("editTask.classification.coordinated")}
             </span>
           </label>
   
@@ -1260,7 +1260,7 @@ function NewTaskAssigned() {
               
                </div>
               
-            <p className="m-3 font-bold">Property Type</p>
+            <p className="m-3 font-bold">{t("editTask.propertyType.propertyType")}</p>
           <div className="mt-0 sm:mt-8 mx-2 grid grid-cols-2  md:grid-cols-3 lg:grid-cols-4 justify-center items-center">
             {/* Checkbox button for "Residential" */}
             <label className="inline-flex items-center mb-2 sm:mb-5">
@@ -1280,7 +1280,7 @@ function NewTaskAssigned() {
               </span>
             </span>
             <span className="text-gray-700 text-base sm:text-lg">
-              Residential
+            {t("editTask.propertyType.residential")}
             </span>
           </label>
             <label className="inline-flex items-center mb-2 sm:mb-5">
@@ -1300,7 +1300,7 @@ function NewTaskAssigned() {
               </span>
             </span>
             <span className="text-gray-700 text-base sm:text-lg">
-              Business
+            {t("editTask.propertyType.business")}
             </span>
           </label>
           {/* Checkbox button for "Field Mapped" */}
@@ -1321,7 +1321,7 @@ function NewTaskAssigned() {
               </span>
             </span>
             <span className="text-gray-700 text-base sm:text-lg">
-              Industry 
+            {t("editTask.propertyType.industry")}
             </span>
           </label>
            {/* Checkbox button for "Agricultural" */}
@@ -1340,7 +1340,7 @@ function NewTaskAssigned() {
               </span>
             </span>
             <span className="text-gray-700 text-base sm:text-lg">
-              Agricultural 
+            {t("editTask.propertyType.agricultural")}
             </span>
           </label>
   
@@ -1360,13 +1360,13 @@ function NewTaskAssigned() {
               </span>
             </span>
             <span className="text-gray-700 text-base sm:text-lg">
-              Goverment
+            {t("editTask.propertyType.government")}
             </span>
           </label>
           
          
                </div>
-               <p className="m-3 font-bold">Stats</p>
+               <p className="m-3 font-bold">{t("editTask.stats.stats")}</p>
           <div className="mt-0 sm:mt-8 mx-2 grid grid-cols-2  md:grid-cols-3 lg:grid-cols-4 justify-center items-center">
             {/* Checkbox button for "Under Construction" */}
             <label className="inline-flex items-center mb-2 sm:mb-5">
@@ -1386,7 +1386,7 @@ function NewTaskAssigned() {
               </span>
             </span>
             <span className="text-gray-700 text-base sm:text-lg">
-              Under Construction
+            {t("editTask.stats.underConstruction")}
             </span>
           </label>
             <label className="inline-flex items-center mb-2 sm:mb-5">
@@ -1406,7 +1406,7 @@ function NewTaskAssigned() {
               </span>
             </span>
             <span className="text-gray-700 text-base sm:text-lg">
-              Aerial Mapped
+            {t("editTask.stats.aerialMapped")}
             </span>
           </label>
           {/* Checkbox button for "Missing Information" */}
@@ -1427,7 +1427,7 @@ function NewTaskAssigned() {
               </span>
             </span>
             <span className="text-gray-700 text-base sm:text-lg">
-              Missing Information 
+            {t("editTask.stats.missingInformation")}
             </span>
           </label>
           {/* Checkbox button for "Missing Physical Number" */}
@@ -1448,7 +1448,7 @@ function NewTaskAssigned() {
               </span>
             </span>
             <span className="text-gray-700 text-base sm:text-lg">
-              Missing Physical Number 
+            {t("editTask.stats.missingPhysicalNumber")} 
             </span>
           </label>
           </div>  
@@ -1500,12 +1500,12 @@ function NewTaskAssigned() {
         )}
         {role!=="worker"?(
           <div className="mt-3 flex flex-row w-full">
-           <Button className="m-4" title={"Update Progress"} onClick={() => { handleStopClick(); addToOfflineTasks(); sendOfflineTasksToDatabase(); }} />
+           <Button className="m-4" title={t("editTask.updateProgress")} onClick={() => { handleStopClick(); addToOfflineTasks(); sendOfflineTasksToDatabase(); }} />
            </div>
         ):(
           <div className="mt-3 flex flex-row w-full">
-        <Button  title={"Save Offline"} onClick={()=> {handleStopClick(); addToOfflineTasks();}} />
-        <Button className="ml-4" title={"Save"} onClick={()=>{ handleStopClick(); addToOfflineTasks(); sendOfflineTasksToDatabase();}} />
+        <Button  title={t("editTask.saveOffline")} onClick={()=> {handleStopClick(); addToOfflineTasks();}} />
+        <Button className="ml-4" title={t("editTask.save")} onClick={()=>{ handleStopClick(); addToOfflineTasks(); sendOfflineTasksToDatabase();}} />
         </div>
         )}
           {already_assigned?(
@@ -1513,11 +1513,11 @@ function NewTaskAssigned() {
             <div className="mt-3 flex flex-row w-full justify-end space-x-4">
             {role!=="worker"?(
               <>
-               <Button title={"Reset Task"} onClick={() => { openResetModal(); }} />
-            <Button title={"Export Task"} onClick={() => { handleExport(); }} />
+               <Button title={t("editTask.resetTask")} onClick={() => { openResetModal(); }} />
+            <Button title={t("editTask.exportTask")} onClick={() => { handleExport(); }} />
               </>
             ):(
-              <Button title={"Export Task"} onClick={() => { handleExport(); }} />
+              <Button title={t("editTask.exportTask")} onClick={() => { handleExport(); }} />
             )}
             
             

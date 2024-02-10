@@ -24,7 +24,7 @@ function Header({ onSidebarOpen, activePageName, notifications }) {
             <span className="text-[#00C191] font-medium">{username}</span>
           </h1>
         </div>
-        {activePageName==="Dashboard"?(<Notification messages={notifications}/>):(<></>)}
+        {activePageName==="Dashboard"||activePageName==="לוח המחוונים"?(<Notification messages={notifications}/>):(<></>)}
         
       </div>
     </div>

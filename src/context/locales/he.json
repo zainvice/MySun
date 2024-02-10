@@ -18,6 +18,7 @@
         "loginButton": "כניסה",
       "dashboard": {
         "title": "לוח המחוונים",
+        "welcome":"ברוך הבא! אלה הפרויקטים הזמינים לעבוד עליהם!",
     "recentUpdates": {
       "title": "עדכונים אחרונים",
       "showingForLabel": "מציג עבור",
@@ -222,6 +223,116 @@
           "search":"לחפש",
           "buildingNumber": "מספר בניין",
           "default": "בְּרִירַת מֶחדָל"
+        },
+        "editTask": {
+          "task": "משימה",
+          "taskFrom": "משימה מאת",
+          "timerStarted": "טיימר הופעל",
+          "manual": "הזן נתונים ידנית",
+          "reAutomate": "לְמַכֵּן",
+          "search": "חיפוש (למשל מספר פיזי, כתובת וכו')",
+          "enterData": "הזן נתונים (למשל מספר פיזי, כתובת וכו')",
+          "findingFrom": "חיפוש מ",
+          "assigningTo": "הקצאה ל",
+          "create": "צור",
+          "goTo": "עבור אל",
+          "alreadyAssignedTo": "כבר הוקצה ל",
+          "editMode": "מצב עריכה",
+          "floor": "קומה",
+          "statusHistory": "היסטוריית סטטוסים",
+          "changedFrom":"השתנה מ",
+          "to":"ל",
+          "on":"עַל",
+          "status": {
+            "status":"סטטוס",
+            "notMapped": "לא נמדד",
+            "fieldMapped": "נמדד בשטח",
+            "drawingReady": "שרטוט מוכן",
+            "gisReady": "GIS  מוכן",
+            "fullyMapped": "נמדד במלאה",
+            "checked": "נבדק",
+            "submitted": "נשלח",
+            "uniteAddress": "כתובת מאוחדת"
+          },
+          "classificationHistory": "היסטוריית סיווגים",
+          "classification": {
+            "classification": "סיווג",
+            "coordinationLetter1": "מכתב תיאום 1",
+            "coordinationLetter2": "מכתב תיאום 2",
+            "refusedSurvey": "סרבן",
+            "coordinated": "תואם מועד"
+          },
+          
+          "propertyType": {
+            "propertyType": "סוג נכס",
+            "residential": "מגורים",
+            "government": "מבנה עיריה",
+            "business": "עסק",
+            "industry": "תעשייה",
+            "agricultural": "חקלאי"
+          },
+          
+          "stats": {
+            "stats": "סטאטס",
+            "underConstruction": "בבניה",
+            "aerialMapped": "מדידה לפי צילום אוויר",
+            "missingInformation": "חסר פרטים",
+            "missingPhysicalNumber": "חסר מספר פיזי"
+          },
+          "updateProgress": "עדכון התקדמות",
+          "saveOffline": "שמור במצב לא מקוון",
+          "save": "שמור",
+          "resetTask": "איפוס משימה",
+          "exportTask": "ייצוא משימה"
+        },
+        "addNewTasks": {
+          "addNewTasks": "הוסף משימות חדשות",
+          "chooseBuildingNumberToAddTasks": "בחר מספר בניין להוספת משימות",
+          "selected": "נבחר",
+          "writeBuildingLetter": "הזן אות למבנה",
+          "from": "מ",
+          "to": "ל",
+          "add": "הוספה",
+          "cancel": "ביטול",
+          "buildingNumbersSelectionRequired": "חייב להזין מאיזה מספר מבנה לאיזה מספר מבנה ליצור",
+          "enterOnlyLetters": "נא להזין רק אותיות"
+        },
+        "addMoreWorkers": {
+          "addToProject": "הוספה לפרויקט",
+          "successfullyAdded": "נוסף בהצלחה",
+          "searchByEmail": "חפש לפי אימייל"
+        },
+        "removeWorker": {
+          "removeWorker":"הסר את העובד",
+          "c1": "אתה בטוח שאתה רוצה להסיר",
+          "c2":"עם דוא\"ל",
+          "c3":"מהפרויקט הזה?",
+          "remove": "הסר את ",
+          "cancel": "ביטול"
+        },
+        "resetTaskOptions": {
+          "resetOptions": "איפוס אפשרויות",
+          "chooseOptionForReset": "בחר אפשרות לאיפוס",
+          "resetExcelData": "איפוס נתוני  Excel",
+          "confirmation": "האם אתה בטוח שברצונך להסיר את נתוני האקסל?",
+          "resetAllFeatures": "אפס את כל התכונות",
+          "resetEverythingConfirmation": "האם אתה בטוח לגבי איפוס הכל?",
+          "cancel": "ביטול",
+          "confirm": "אישור"
+        },
+        "deleteProject":{
+          "deleteProject":"מחק פרויקט",
+          "confirmation":"האם אתה בטוח שאתה רוצה למחוק את הפרויקט הזה?",
+          "cancel":"ביטול"
+        },
+        "taskNotifications":{
+          "taskNotifications":"התראות משימות",
+          "clear":"ברור א",
+          "task": "המשימה",
+          "from":"מ",
+          "expired":"מכתב התיאום הזה פג!",
+          "noNot":"אין התראות חדשות!"
+
         }
       
       
