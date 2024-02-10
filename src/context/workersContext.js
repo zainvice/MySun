@@ -41,6 +41,16 @@ export function WorkersProvider({ children }) {
         });
     }
   }, []);
+  useEffect(() => {
+    // Check if workers are already available in localStorage
+    
+    if(refetch){
+      localStorage.removeItem('workers')
+      setFetch(false)
+      console.log("workers removed from localstorage")
+    }
+    
+  }, [refetch]);
 
   /* if (loading) {
     // You can add a loading indicator here if needed
