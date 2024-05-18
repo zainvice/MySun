@@ -212,7 +212,7 @@ function WorkerDetail(worker) {
               datasets: [
                 {
                   label: workerData?.fullName,
-                  data: [3, 4, 6, 8, 2],
+                  data: [0, 0, 0, 0, 0],
                   backgroundColor: "#23F08A",
                 }
               ],
@@ -222,10 +222,10 @@ function WorkerDetail(worker) {
           <div className="mx-auto sm:w-fit">
             <p className="flex items-center mb-2">
               <span className="w-9/12 md:w-96 line-clamp-1">
-                Hours Completed by{" "}
+                To Date Hours Completed by{" "}
                 <span className="text-[#2CDEB7]">{workerData?.fullName}</span>
               </span>
-              <span className="before:content-[':'] before:mr-4">Hours HHHH</span>
+              <span className="before:content-[':'] before:mr-4">{(workerData?.workhours / 3600).toFixed(2)} hrs</span>
             </p>
           </div>
         </div>
