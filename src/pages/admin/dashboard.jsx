@@ -108,22 +108,14 @@ function Dashboard() {
     if (projects) {
       
         if(workers){
-          const workerList = workers.filter((worker) => worker.role === "worker");
+          const workerList = workers.filter((worker) => worker.role === "worker" || worker.role === "supervisor");
         
-         
-          workerList?.forEach((worker) => {
-            const completedTasks = worker.tasks.filter((task) => task.status==="Fully Mapped");
-            worker.completedTasksCount = completedTasks.length;
-            
-          });
+         console.log("WORKERS", workers)
+         const topWorkers =  workerList?.filter((worker) =>  worker?.workhours > 0);
         
-          
-          const sortedWorkers = workerList?.sort(
-            (a, b) => b.completedTasksCount - a.completedTasksCount
-          );
-          
-          
-          const topTwoWorkers = sortedWorkers.slice(0, 2);
+         const sortedTopWorkers = topWorkers?.sort((a, b) => b.workhours - a.workhours);
+
+         const topTwoWorkers = sortedTopWorkers?.slice(0, 2);
 
           if (topTwoWorkers.length > 0) {
             setWorkerNo1(topTwoWorkers[0]);

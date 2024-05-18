@@ -72,7 +72,7 @@ function WorkerCard(workers) {
         </p>
         <p className="mt-2 flex items-center gap-2 text-sm">
           <span className="font-semibold">{t('workerCard.latestProjectLabel')}: </span>
-          <span>{worker?.projects[worker?.projects?.length-1].projectName}</span>
+          <span>{worker?.projects[worker?.projects?.length-1]?.projectName}</span>
         </p>
       </div>
     </div>
