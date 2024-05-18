@@ -679,7 +679,7 @@ function Project() {
         </div>
 
         <div className="mt-8 md:w-8/12 max-w-[700px] mx-auto">
-          <Bar
+         {/*  <Bar
             options={{
               responsive: true,
               maintainAspectRatio: true,
@@ -707,7 +707,7 @@ function Project() {
                 },
               ],
             }}
-          />
+          /> */}
 
           <div className="mx-auto sm:w-fit">
           {Array.isArray(workersInProject) ? (
