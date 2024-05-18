@@ -116,7 +116,7 @@ function NewProject() {
     }
   };
 
-  const onSubmit = (e) => {
+  const onSubmit = async(e) => {
     e?.preventDefault();
     const currentDate = new Date(Date.now());
     const startDate = new Date(inputValues?.startDate);
@@ -135,29 +135,39 @@ function NewProject() {
 
     onOpenLoading();
     const userInfo = jwtDecode(sessionStorage.getItem("accessToken"));
-    createProject({
-      ...inputValues,
-      workers: selectedWorkers,
-      admin: userInfo.email,
-    })
-      .then(() => {
-        reFetch();
-        setFileName("");
-        setFile2Name("");
-        setInputValues({});
-        setSelectedWorkers([]);
-        setMessage("Project created sccessfully!");
-        onOpenMessage();
-        window.location.reload()
+    try {
+      await createProject({
+        ...inputValues,
+        workers: selectedWorkers,
+        admin: userInfo.email,
       })
-      .catch((error) => {
+      const tasks = inputValues.buildingData.tasks;
+      /* onCloseLoading();
+      onOpenMessage();
+      setMessage(`PROJECT CREATED NOW, CREATING TASKS, PLEASE HOLD!`);
+      for (let i = 0; i < tasks.length; i++) {
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        setMessage(`Creating tasks: Task ${i + 1} of ${tasks.length}!`);
+      } */
+      reFetch();
+      setFileName("");
+      setFile2Name("");
+      setInputValues({});
+      setSelectedWorkers([]);
+      setMessage("Project created sccessfully!");
+      onOpenMessage();
+      onCloseLoading();
+      window.location.reload()
+    } catch (error) {
         const data = error?.response?.data;
         setMessage(data?.error ?? "Something went wrong!");
         onOpenMessage();
-      })
-      .finally(() => {
         onCloseLoading();
-      });
+    }
+    
+     
+     
+     
   };
 
   return (
@@ -198,7 +208,7 @@ function NewProject() {
                       onChange={onChange}
                       required
                       value={inputValues?.startDate ?? ""}
-                      placeholder={t("newProject.chooseStartDate")}
+                      placeholder=''
                       additonalProps={{
                         name: "startDate",
                       }}
@@ -219,7 +229,7 @@ function NewProject() {
                     <DateInput
                       onChange={onChange}
                       value={inputValues?.endDate ?? ""}
-                      placeholder={t("newProject.chooseEndDate")}
+                      placeholder=''
                       additonalProps={{
                         name: "endDate",
                       }}

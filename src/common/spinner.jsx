@@ -12,7 +12,7 @@ function Spinner({message}) {
         </span>
         
       </div>
-      <p className="absolute mt-20 mr-0 text-gray-600 font-bold">{message ||"Please hold!"}</p>
+      <p className="absolute mt-20 mr-0 text-gray-300 font-bold">{message ||"Please hold!"}</p>
     </div>
   );
 }
