@@ -166,7 +166,7 @@ function Project() {
   if (project) {
     const completedTask = project.projectData.tasks.filter(task => task.completed);
     
-    const workerInProject = project.workers.filter(worker => worker.role !== 'supervisor');
+    const workerInProject = project.workers;
     
     workersInProject= workerInProject
     const workerTasksCount = {};
@@ -717,7 +717,7 @@ function Project() {
                 {t("projectDetails.hoursCompletedBy")}{" "}
                   <span className="text-[#34F5C5]">{worker.fullName}</span>
                 </span>
-                <span className="before:content-[':'] before:mr-0">XXX</span>
+                <span className="before:content-[':'] before:mr-0">{(worker?.workhours / 3600).toFixed(2)} hrs</span>
               </p>
             ))
           ) : (
