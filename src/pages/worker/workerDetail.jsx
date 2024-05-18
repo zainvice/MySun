@@ -182,7 +182,7 @@ function WorkerDetail(worker) {
                 datasets: [
                   {
                     label: "# of tasks",
-                    data: [surveyData?.taskCompletedCount, surveyData?.taskIncomplete, surveyData?.taskIncomplete],
+                    data: [surveyData?.taskCompleted, surveyData?.taskIncomplete, surveyData?.taskInProgress],
                     weight: 2,
                     clip: 4,
                     backgroundColor: ["#00ABE0", "#FF7258", "#FFC94A"],
