@@ -1,6 +1,8 @@
 import { publicUrl } from "../utils";
 import { useTranslation } from 'react-i18next';
 import { useProjects } from "../context/projectsContext";
+import { useState, useEffect } from "react";
+
 function formatTimeDifference(lastLogin) {
   const now = new Date();
   const timeDifference = now - lastLogin;
@@ -32,17 +34,41 @@ function WorkerCard(workers) {
   const lastLogin = new Date(worker?.lastLogin)
   const formattedTimeDifference = formatTimeDifference(lastLogin);
   const {projects } = useProjects()
-  const tasksDone = projects.map(project=> {
-    return project?.tasks.filter(task=> {
-      if(task.status==="Fully Mapped"){
-       
-        const editBy = task.editedBy?.filter(edit=> edit.email===worker.email)
-        if(editBy?.length>0){
-          return task
-        }
-      }})?.length
-  })
-  //const startedOn = new Date(worker?.createdAt)
+  const [surveyData, setSurveys]= useState()
+  useEffect(() => {
+    if(projects){
+      let completed = 0;
+      let inprogress = 0;
+      let remaining = 0;
+      projects.map(project => {
+        
+        project?.tasks.forEach(task => {
+          console.log("tasks", task.status)
+          if (task.status === "Fully Mapped") {
+            
+            const editBy = task.editedBy?.filter(edit => edit.email === worker?.email);
+            if (editBy?.length > 0) {
+              completed++;
+            }
+          }
+          if (task.status !== "Fully Mapped") {
+            
+            const editBy = task.editedBy?.filter(edit => edit.email === worker?.email);
+            if (editBy?.length > 0) {
+              inprogress++;
+            }
+          }
+        });
+      });
+
+      setSurveys({
+        taskCompleted: completed,
+        taskInProgress: inprogress,
+        taskIncomplete: remaining,
+      });
+
+    }
+  }, [worker])
   
   return (
     <>
@@ -63,7 +89,7 @@ function WorkerCard(workers) {
       </div>
       <div>
      
-      <p className="mt-2">{tasksDone.length>0 ? tasksDone[0]: "0"} {t('workerCard.projectsCompleted')}</p>
+      <p className="mt-2">{surveyData?.taskCompleted} {t('workerCard.projectsCompleted')}</p>
 
         <p className="mt-2 flex items-center gap-2 text-sm">
           <span className="font-semibold">{t('workerCard.startedOnLabel')}: </span>
