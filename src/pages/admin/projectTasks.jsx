@@ -601,7 +601,7 @@ function Tasks() {
     const filteredTasks = project?.tasks?.filter((task) => {
     const buildingNumberr = task.taskData["building number"]|| task.taskData["buildingNumber"];
     // Convert buildingNumber to a string for comparison
-    const buildingNumberString = buildingNumberr?.toString();
+    const buildingNumberString = buildingNumberr?.toString()?.toUpperCase();
     return buildingNumberString?.includes(searchTerm.toUpperCase());
     });
     ////console.log("Filtered Tasks:", filteredTasks);
